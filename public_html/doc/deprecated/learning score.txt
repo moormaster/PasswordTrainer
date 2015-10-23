@@ -1,0 +1,80 @@
+This document describes how the learning score of a password is being determined
+from the training data of the user.
+
+The learning score is a float number from [0..1] describing how well the
+password is currently being trained.
+
+
+                n
+                --
+                \   i * (time_i - time_1)^3 * success_i / dtime_i 
+                /
+                --
+                i=1
+                
+pscore(n) =     ------------------------------------------------
+
+                n
+                --
+                \   i * (time_i - time_1)^3 / dtime_i 
+                /
+                --
+                i=1
+            
+
+where
+    time_i      - is the timestamp of ith attempt to enter the password
+    dtime_i     - dtime_1 = 1
+                  dtime_i = time(time_i - time_{i-1})
+    success_i   - 1 or 0 depending on the success of the ith attempt
+
+-> sooner attempts are weighted lower than later ones
+-> higher count of attempts is weighted higher
+-> lower timespan between attempts is weighted higher
+
+
+The full list of timestamps time_1, ..., time_n shall not be stored
+
+let
+
+                n
+                --
+pactual(n) =    \   i * (time_i - time_1)^3 * success_i / dtime_i
+                /
+                --
+                i=1
+
+                n
+                --
+psuccess(n) =   \   i * (time_i - time_1)^3 / dtime_i
+                /
+                --
+                i=1
+
+-> pscore(n) = pactual(n) / psuccess(n)
+
+
+with
+    pactual(1) = success_1
+    pactual(n) = pactual(n-1) + n*(time_n - time_1)^3 * success_n / (time_n - time_{n-1})
+
+    psuccess(1) = 1
+    psuccess(n) = psuccess(n-1) + n*(time_n - time_1)^3 / (time_n - time_{n-1})
+
+we get
+                pactual(n-1) + n*(time_n - time_1)^3 * success_n / (time_n - time_{n-1})
+    pscore(n) = ----------------------------------------------------------------------
+                psuccess(n-1) + n*(time_n - time_1)^3 / (time_n - time_{n-1})
+
+-> What needs to be stored per password after the (n-1) th attempt is
+    n-1
+    pactual(n-1)
+    psuccess(n-1)
+    time_1
+    time_{n-1}
+-> so for the n-th password we need to save values for
+    n
+    pactual(n)
+    psuccess(n)
+    time_1
+    time_{n}

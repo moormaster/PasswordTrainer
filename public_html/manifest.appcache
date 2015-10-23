@@ -1,0 +1,18 @@
+CACHE MANIFEST
+
+CACHE:
+# 2015-10-22 21:38
+
+index.html
+css/LearningScore.css
+js/libs/jquery/jquery.js
+js/libs/jquerymobile/jquery.mobile.js
+js/libs/jquerymobile/css/jquery.mobile.css
+js/libs/jqueryui/jquery-ui.js
+js/libs/jqueryui/css/base/jquery-ui.css
+js/App.js
+js/JQPasswordRegistration.js
+js/JQPasswordRegistrationList.js
+js/JQPasswordTrainer.js
+js/LearningScore.js
+

@@ -1,0 +1,10 @@
+#1  [done]          design icon
+#2  [in progress]   design app draft
+#3  [in progress]   protoype app draft
+#4  [in progress]   ensure offline usage
+#5                  implement new scoring system
+#6                  jquery-ui element for password score
+#7                  administration for registering / deleting passwords
+#8                  training page which always shows the password with minimal
+                    lock time & maximum punish score first
+#9                  ...

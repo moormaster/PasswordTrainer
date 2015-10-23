@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>LearningScore Table</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id="lsdiv"></div>
+    </body>
+    
+    <script src="../js/LearningScore.js"></script>
+    <script>
+        var nAttempts = [1, 3, 5, 10, 50, 100, 500, 1000];
+        var nDays = [1, 2, 4, 7, 14, 30, 60, 90, 180, 365, 730, 1460];
+        var dates = [];
+        
+        var firstAttemptDate = new Date("2015-01-01 00:00");
+        for (var i=0;i<nDays.length;i++)
+            dates[i] = new Date(firstAttemptDate.getTime() + 1000*60*60*24*nDays[i]);
+        
+        var table = document.createElement("table");
+        
+        var tableline = table.appendChild(document.createElement("tr"));
+        var tablecell = tableline.appendChild(document.createElement("th"));
+        tablecell.innerHTML = firstAttemptDate.toLocaleDateString();
+            
+        for (var j=0;j<nDays.length;j++) {
+            var tablecell = tableline.appendChild(document.createElement("th"));
+            tablecell.innerHTML = nDays[j] + " Days (" + dates[j].toLocaleDateString() + ")";
+        }
+
+        for (var i=0;i<nAttempts.length;i++) {
+            var learningScore = new LearningScore(firstAttemptDate);
+            
+            for (var k=0;k<nAttempts[i];k++)
+                learningScore.addAttempt(1, new Date(learningScore.firstAttemptDate.getTime() + 1000*60*(k+1)))
+            
+            var tableline = table.appendChild(document.createElement("tr"));
+            var tablecell = tableline.appendChild(document.createElement("td"));
+            tablecell.innerHTML = nAttempts[i] + " Attempts";
+            
+            for (var j=0;j<nDays.length;j++) {
+                var tablecell = tableline.appendChild(document.createElement("td"));
+                tablecell.innerHTML = learningScore.getScoreToday(dates[j]);
+            }
+        }
+        
+        document.getElementById("lsdiv").appendChild(table);
+    </script>
+</html>
