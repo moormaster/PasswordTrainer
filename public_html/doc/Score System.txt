@@ -11,18 +11,20 @@ Rules:
     - after the [lock time] each hour that passes decreases the score by [fee]
 
 
-score below     level   fee/h   lock time (h)
-1               1       1       1
-2               2       1/2     2
-3               3       1/3     3
-5               4       1/5     5
-8               5       1/8     8
-13              6       1/13    13
-21              7       1/21    21
-34              8       1/34    34
-55              9       1/55    55
-89              10      1/89    89
-...             ...     ...     ...
+score below     level   fee/h       lock time (h)
+1               1       -           -
+2               2       1/2         1
+3               3       1/3         2
+5               4       1/5         3
+8               5       1/8         5
+13              6       1/13        8
+21              7       1/21        13
+34              8       1/34        21
+55              9       1/55        34
+89              10      1/89        55
+...             ...     ...         ...
+
+fib(i+1)        i       1/fib(i+1)  fib(i)
 
 
 -> The score object only needs to store values
