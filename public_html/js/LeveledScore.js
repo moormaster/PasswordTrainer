@@ -1,30 +1,65 @@
-function LeveledScore() {
-    this.scoreDate = null;    
-    this.lastSuccessScore = null;
-    this.lastSuccessTimestamp = null;
-
-    this.reset = function() {
-        this.lastSuccessScore = null;
-        this.lastSuccessTimestamp = null;
-    }
-    
-    this.addSuccessfulAttempt = function() {
-        if (this.lockHoursLeft > 0)
+function LeveledScore(data) {
+    this.reset = function(data) {
+        this.data = {
+            lastSuccessScore:   null,
+            lastSuccessTimestamp:  null
+        };
+        
+        if (data != null) {
+            this.data.lastSuccessScore = data.lastSuccessScore;
+            this.data.lastSuccessTimestamp = data.lastSuccessTimestamp;
+        }
+    };
+        
+    this.addSuccessfulAttempt = function(dateOfAttempt) {
+        var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
+        var lockHoursLeft = getLockHoursLeft(lastSuccessLevel, this.data.lastSuccessTimestamp, dateOfAttempt);
+        
+        if (lockHoursLeft > 0)
             return false;
 
-        d = this.scoreDate;
+        if (dateOfAttempt == null)
+            dateOfAttempt = new Date();
         
-        if (d == null)
-            d = new Date();
+        var lastScore = this.getScore(dateOfAttempt);
         
-        this.lastSuccessScore = this.score+1;
-        this.lastSuccessTimestamp = d;
+        this.data.lastSuccessScore = lastScore+1;
+        this.data.lastSuccessTimestamp = dateOfAttempt;
         
         return true;
     }
     
-    this.setScoreDate = function(d) {
-        this.scoreDate = d;
+    this.getScore = function(readDate) {
+        if (this.data.lastSuccessTimestamp == null)
+            return 0;
+        
+        var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
+        var feeHoursPassed = getFeeHoursPassed(lastSuccessLevel, this.data.lastSuccessTimestamp, readDate);
+
+        if (feeHoursPassed == 0)
+            return this.data.lastSuccessScore;
+
+        var score = this.data.lastSuccessScore - Math.floor(feeHoursPassed)*this.feePerHour;
+        if (score < 0)
+            score = 0;
+        
+        return score;
+    }
+    
+    this.getLevel = function(readDate) {
+        return getLevel(this.getScore(readDate));
+    }
+    
+    this.getLockHoursLeft = function(readDate) {
+        var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
+        
+        return getLockHoursLeft(lastSuccessLevel, this.data.lastSuccessTimestamp, readDate);
+    }
+    
+    this.getFeeHoursPassed = function(readDate) {
+        var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
+        
+        return getFeeHoursPassed(lastSuccessLevel, this.lastSuccessTimestamp, readDate);
     }
     
     var fib = function(i) {
@@ -68,88 +103,91 @@ function LeveledScore() {
         return k-1;
     }
     
+    var getLevel = function(score) {
+        if (score < 1 )
+            return 1;
+
+        return fibinv(score);
+    };
+    
+    var getLockHours = function(level) {
+        if (level <= 1)
+            return 0;
+
+        return fib(level);
+    }
+    
+    var getFeePerHour = function(level) {
+        if (level <= 1)
+            return 0;
+
+        return 1 / fib(level+1);
+    }
+    
+    var getLockHoursLeft = function(level, lastSuccessDate, readDate) {
+        var lockHours = getLockHours(level);
+        
+        var lockHoursLeft = lockHours - (readDate - lastSuccessDate)/(1000*60*60);
+        if (lockHoursLeft < 0)
+            lockHoursLeft = 0;
+
+        return lockHoursLeft;
+    }
+    
+    var getFeeHoursPassed = function(level, lastSuccessDate, readDate) {
+        var lockHours = getLockHours(level);
+        
+        var feeHoursPassed = (readDate - lastSuccessDate)/(1000*60*60) - lockHours;
+        if (feeHoursPassed < 0)
+            feeHoursPassed = 0;
+
+        return feeHoursPassed;
+    }
+    
     Object.defineProperties(
         this, 
         {
             "score": {
                 get:    function() {
-                            if (this.lastSuccessTimestamp == null)
-                                return 0;
-
-                            if (this.feeHoursPassed == 0)
-                                return this.lastSuccessScore;
-
-                            return this.lastSuccessScore - Math.floor(this.feeHoursPassed)*this.feePerHour;
+                            return this.getScore(new Date());
                         }
             },
             
             "lockHoursLeft": {
                 get:    function() {
-                    var d = this.scoreDate;
-                    
-                    if (d == null)
-                        d = new Date();
-                    
-                    var lockHoursLeft = this.lockHours - (d - this.lastSuccessTimestamp)/(1000*60*60);
-                    if (lockHoursLeft < 0)
-                        lockHoursLeft = 0;
-                    
-                    return lockHoursLeft;
-                }
+                            return this.getLockHoursLeft(new Date());
+                        }
             },
             
             "feeHoursPassed": {
                 get:    function() {
-                    var d = this.scoreDate;
-                    
-                    if (d == null)
-                        d = new Date();
-                    
-                    var feeHoursPassed = (d - this.lastSuccessTimestamp)/(1000*60*60) - this.lockHours;
-                    if (feeHoursPassed < 0)
-                        feeHoursPassed = 0;
-                    
-                    return feeHoursPassed;
-                }
+                            return this.getFeeHoursPassed(new Date());
+                        }
             },
             
             "lockHours": {
                 get:    function() {
-                    if (this.lastSuccessLevel <= 1)
-                        return 0;
-                    
-                    return fib(this.lastSuccessLevel);
-                }
+                            var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
+
+                            return getLockHours(lastSuccessLevel);
+                        }
             },
             
             "feePerHour": {
                 get:    function() {
-                    if (this.lastSuccessLevel <= 1)
-                        return 0;
-                    
-                    return 1 / fib(this.lastSuccessLevel+1);
-                }
+                            var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
+
+                            return getFeePerHour(lastSuccessLevel);
+                        }
             },
-            
-            "lastSuccessLevel": {
-                get:    function() {
-                    if (this.lastSuccessScore < 1 )
-                        return 1;
-                    
-                    return fibinv(this.lastSuccessScore);
-                }
-            },
-            
+                        
             "level": {
                 get:    function() {
-                    var score = this.score;
-                    
-                    if (score < 1)
-                        return 1;
-                    
-                    return fibinv(this.score);
+                            return this.getLevel(new Date());
                 }
             }
         }
     );
+
+    this.reset(data);
 }
