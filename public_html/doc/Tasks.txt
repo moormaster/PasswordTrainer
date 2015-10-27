@@ -1,10 +1,12 @@
 #1  [done]          design icon
-#2  [in progress]   design app draft
-#3  [in progress]   protoype app draft
-#4  [in progress]   ensure offline usage
+#2  [done]          design app draft
+#3  [done]          protoype app draft
+#4  [done]          ensure offline usage
 #5  [done]          implement new scoring system
-#6                  jquery-ui element for password score
-#7                  administration for registering / deleting passwords
-#8                  training page which always shows the password with minimal
+#6  [done]          training page which always shows the password with minimal
                     lock time & maximum punish score first
-#9                  ...
+#7                  create reusable ui widget for showing / guessing password
+#8                  convert manage-page into add-dialog
+#9                  buttons for adding / deleting current password
+
+#10 [done]          localStorage persistence

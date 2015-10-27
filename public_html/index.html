@@ -4,7 +4,8 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html manifest="manifest.appcache">
+<!-- <html manifest="manifest.appcache"> -->
+<html>
     <head>
         <title>PasswordTrainer</title>
         <meta charset="UTF-8"/>
@@ -12,42 +13,31 @@ and open the template in the editor.
         
         <link rel="apple-touch-icon-precomposed" href="img/icon.png"/>
         
-        <link rel="stylesheet" type="text/css" href="css/LearningScore.css"/>
-        <link rel="stylesheet" type="text/css" href="css/jqueryui/base/jquery-ui.css"/>
-        <link rel="stylesheet" type="text/css" href="css/jquerymobile/jquery.mobile.css"/>
+        <link rel="stylesheet" type="text/css" href="js/libs/jquerymobile/css/jquery.mobile.css"/>
+        <link rel="stylesheet" type="text/css" href="css/JQPasswordInput.css"/>
         
         <script src="js/libs/jquery/jquery.js"></script>
         <script src="js/libs/jquerymobile/jquery.mobile.js"></script>
         <script src="js/libs/jqueryui/jquery-ui.js"></script>        
         
-        <script src="js/LearningScore.js"></script>
+        <script src="js/MD5.js"></script>
+        <script src="js/LeveledScore.js"></script>
         
         <script src="js/JQPasswordRegistration.js"></script>
-        <script src="js/JQPasswordTrainer.js"></script>
+        <script src="js/JQPasswordInput.js"></script>
         <script src="js/App.js"></script>
     </head>
     <body>
-        <div data-role="page" id="p1">
+        <div data-role="page" id="pageTrainPasswords">
             <div data-role="header">
                 <h1>Train passwords</h1>
             </div>
             
             <div data-role="content">
                     <div id="passwordtrainer">
-                        <div class="password" id="password1">
-                            <input type="password" data-role="none"/> <span class="passwordscore"/>
-                        </div>
-                        <div class="password" id="password2">
-                            <input type="password" data-role="none"/> <span class="passwordscore"/>
-                        </div>
-                        <div class="password" id="password3">
-                            <input type="password" data-role="none"/> <span class="passwordscore"/>
-                        </div>
-                        <div class="password" id="password4">
-                            <input type="password" data-role="none"/> <span class="passwordscore"/>
-                        </div>
-                        <div class="password" id="password5">
-                            <input type="password" data-role="none"/> <span class="passwordscore"/>
+                        <h2 class="passworddescription"></h2>
+                        <div>
+                            <input type="password" class="password" data-role="none"/> <span class="passwordscore"/>
                         </div>
                     </div>                
             </div>
@@ -55,14 +45,14 @@ and open the template in the editor.
             <div data-role="footer">
                 <div data-role="navbar">
                     <ul>
-                        <li><a href="#p1">Train</a></li>
-                        <li><a href="#p2">Manage</a></li>                        
+                        <li><a href="#pageTrainPasswords" class="ui-btn-active ui-state-persist">Train</a></li>
+                        <li><a href="#pageManagePasswords">Manage</a></li>                        
                     </ul>
                 </div>
             </div>
         </div>
         
-        <div data-role="page" id="p2">
+        <div data-role="page" id="pageManagePasswords">
             <div data-role="header">
                 <h1>Manage Passwords</h1>
             </div>
@@ -80,9 +70,9 @@ and open the template in the editor.
                             <td><span class="passwordhash"></span></td>
                         </tr>
                         <tr id="passwordeditor">
-                            <td><input type="text" class="passworddescription"></td>
-                            <td><input type="text" class="password"></td>
-                            <td><input type="text" class="passwordrepeat"></td>
+                            <td><input type="text" data-role="none" class="passworddescription"/></td>
+                            <td><input type="text" data-role="none" class="password"/></td>
+                            <td><input type="text" data-role="none" class="passwordrepeat"/></td>
                         </tr>
                     </table>
                 </div>
@@ -91,8 +81,8 @@ and open the template in the editor.
             <div data-role="footer">
                 <div data-role="navbar">
                     <ul>
-                        <li><a href="#p1">Train</a></li>
-                        <li><a href="#p2">Manage</a></li>                        
+                        <li><a href="#pageTrainPasswords">Train</a></li>
+                        <li><a href="#pageManagePasswords" class="ui-btn-active ui-state-persist">Manage</a></li>                        
                     </ul>
                 </div>
             </div>

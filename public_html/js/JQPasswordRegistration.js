@@ -41,8 +41,6 @@
             this.passwordDescriptionCollection = options['passwordDescription'];
             this.passwordCollection = options['password'];
             this.passwordRepeatCollection = options['passwordRepeat'];
-            this.passwordRegistrationCollection = options['passwordRegistration'];
-            this.passwordRegistrationContainerCollection = options['passwordRegistrationContainer'];
             
             if (!this.passwordDescriptionCollection) {
                 this.passwordDescriptionCollection = this.children(".passworddescription");
@@ -51,14 +49,7 @@
                 this.passwordCollection = this.children(".password");
 
             if (!this.passwordRepeatCollection)
-                this.passwordRepeatCollection = this.children(".passwordrepeat");
-
-            if (!this.passwordRegistrationCollection)
-                this.passwordRegistrationCollection = this.children(".passwordregistration");
-            
-            if (!this.passwordRegistrationContainerCollection)
-                this.passwordRegistrationContainerCollection = this.parent(".passwordregistrationcontainer");
-            
+                this.passwordRepeatCollection = this.children(".passwordrepeat");            
             
             this.passwordDescriptionCollection.val("");
             this.passwordCollection.val("");

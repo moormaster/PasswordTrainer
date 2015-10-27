@@ -1,30 +1,29 @@
 function LeveledScore(data) {
     this.reset = function(data) {
-        this.data = {
-            lastSuccessScore:   null,
-            lastSuccessTimestamp:  null
-        };
+        this.data = data
         
-        if (data != null) {
-            this.data.lastSuccessScore = data.lastSuccessScore;
-            this.data.lastSuccessTimestamp = data.lastSuccessTimestamp;
+        if (this.data == null) {
+            this.data = {
+                lastSuccessScore:   null,
+                lastSuccessTimestamp:  null
+            };
         }
     };
         
     this.addSuccessfulAttempt = function(dateOfAttempt) {
+        if (dateOfAttempt == null)
+            dateOfAttempt = new Date();
+
         var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
         var lockHoursLeft = getLockHoursLeft(lastSuccessLevel, this.data.lastSuccessTimestamp, dateOfAttempt);
         
         if (lockHoursLeft > 0)
             return false;
-
-        if (dateOfAttempt == null)
-            dateOfAttempt = new Date();
         
         var lastScore = this.getScore(dateOfAttempt);
         
         this.data.lastSuccessScore = lastScore+1;
-        this.data.lastSuccessTimestamp = dateOfAttempt;
+        this.data.lastSuccessTimestamp = dateOfAttempt.getTime();
         
         return true;
     }
@@ -44,17 +43,17 @@ function LeveledScore(data) {
             score = 0;
         
         return score;
-    }
+    };
     
     this.getLevel = function(readDate) {
         return getLevel(this.getScore(readDate));
-    }
+    };
     
     this.getLockHoursLeft = function(readDate) {
         var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
         
         return getLockHoursLeft(lastSuccessLevel, this.data.lastSuccessTimestamp, readDate);
-    }
+    };
     
     this.getFeeHoursPassed = function(readDate) {
         var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
@@ -128,7 +127,7 @@ function LeveledScore(data) {
         var lockHours = getLockHours(level);
         
         var lockHoursLeft = lockHours - (readDate - lastSuccessDate)/(1000*60*60);
-        if (lockHoursLeft < 0)
+        if (!lockHoursLeft || lockHoursLeft < 0)
             lockHoursLeft = 0;
 
         return lockHoursLeft;
@@ -138,7 +137,7 @@ function LeveledScore(data) {
         var lockHours = getLockHours(level);
         
         var feeHoursPassed = (readDate - lastSuccessDate)/(1000*60*60) - lockHours;
-        if (feeHoursPassed < 0)
+        if (!feeHoursPassed || feeHoursPassed < 0)
             feeHoursPassed = 0;
 
         return feeHoursPassed;
