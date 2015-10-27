@@ -37,7 +37,8 @@ and open the template in the editor.
                     <div id="passwordtrainer">
                         <h2 class="passworddescription"></h2>
                         <div>
-                            <input type="password" class="password" data-role="none"/> <span class="passwordscore"/>
+                            <input type="password" class="password" data-role="none"/><br>
+                            <span class="passwordscore"/>
                         </div>
                     </div>                
             </div>
@@ -59,19 +60,17 @@ and open the template in the editor.
 
             <div data-role="content">
                 <div id="mainaccordioncontainer">
-                    <table class="passwordregistrationcontainer">
+                    <table id="passwordregistration">
                         <tr>
                             <th>Description:</th>
-                            <th>Password:</th>
-                            <th>Repeat password:</th>
-                        </tr>
-                        <tr class="passwordregistration">
-                            <td><span class="passworddescription"></span></td>
-                            <td><span class="passwordhash"></span></td>
-                        </tr>
-                        <tr id="passwordeditor">
                             <td><input type="text" data-role="none" class="passworddescription"/></td>
+                        </tr>
+                        <tr>
+                            <th>Password:</th>
                             <td><input type="text" data-role="none" class="password"/></td>
+                        </tr>
+                        <tr>
+                            <th>Repeat:</th>
                             <td><input type="text" data-role="none" class="passwordrepeat"/></td>
                         </tr>
                     </table>

@@ -72,18 +72,15 @@ function formatTime(ms) {
             this.pageTrainPasswords = new PagePasswordTrainer(this);
 
             this.init = function() {
-                $('#passwordeditor').JQPasswordRegistration(
+                $('#passwordregistration').JQPasswordRegistration(
                     {
-                        passwordDescription:            $('#passwordeditor .passworddescription'),
-                        password:                       $('#passwordeditor .password'),
-                        passwordRepeat:                 $('#passwordeditor .passwordrepeat'),
-
-                        passwordRegistration:           $('#passwordregistrationcontainer .passwordregistration'),
-                        passwordRegistrationContainer:  $('#passwordregistrationcontainer')
+                        passwordDescription:            $('#passwordregistration .passworddescription'),
+                        password:                       $('#passwordregistration .password'),
+                        passwordRepeat:                 $('#passwordregistration .passwordrepeat'),
                     }
                 );
             
-                $('#passwordeditor').on('passwordEntered', 
+                $('#passwordregistration').on('passwordEntered', 
                     function(e, desc, pwd) {
                         appInstance.addPasswordRegistration(desc, pwd);
                     }
@@ -216,7 +213,7 @@ function formatTime(ms) {
                             function() {
                                 pageInstance.app.updateVisiblePasswordRegistration();
                             },
-                            3000
+                            2000
                         );
                     }
                 );
