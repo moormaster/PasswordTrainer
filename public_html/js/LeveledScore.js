@@ -58,7 +58,7 @@ function LeveledScore(data) {
     this.getFeeHoursPassed = function(readDate) {
         var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
         
-        return getFeeHoursPassed(lastSuccessLevel, this.lastSuccessTimestamp, readDate);
+        return getFeeHoursPassed(lastSuccessLevel, this.data.lastSuccessTimestamp, readDate);
     }
     
     var fib = function(i) {

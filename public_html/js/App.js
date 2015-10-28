@@ -172,12 +172,18 @@ function formatTime(ms) {
             };
 
             this.updateScore = function() {
-                var displayTime = this.currentLeveledScore.feeHoursPassed - this.currentLeveledScore.lockHoursLeft;
+                var displayTime = null;
+                
+                if (this.currentLeveledScore.feeHoursPassed)
+                    displayTime = formatTime(this.currentLeveledScore.feeHoursPassed*60*60*1000) + " fee time";
+                
+                if (this.currentLeveledScore.lockHoursLeft)
+                    displayTime = "locked for " + formatTime(this.currentLeveledScore.lockHoursLeft*60*60*1000);
                 
                 if (!displayTime)
                     $('#passwordtrainer .passwordscore').text("Level " + this.currentLeveledScore.level);
                 else
-                    $('#passwordtrainer .passwordscore').text("Level " + this.currentLeveledScore.level + " (" + formatTime(displayTime*60*60*1000) + ")");
+                    $('#passwordtrainer .passwordscore').text("Level " + this.currentLeveledScore.level + " (" + displayTime + ")");
                     
                     
             };
