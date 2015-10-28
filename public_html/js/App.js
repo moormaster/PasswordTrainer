@@ -181,9 +181,9 @@ function formatTime(ms) {
                     displayTime = "locked for " + formatTime(this.currentLeveledScore.lockHoursLeft*60*60*1000);
                 
                 if (!displayTime)
-                    $('#passwordtrainer .passwordscore').text("Level " + this.currentLeveledScore.level);
+                    $('#passwordtrainer .passwordscore').text("Score " + Math.round(this.currentLeveledScore.score*100)/100 + " / Level " + this.currentLeveledScore.level);
                 else
-                    $('#passwordtrainer .passwordscore').text("Level " + this.currentLeveledScore.level + " (" + displayTime + ")");
+                    $('#passwordtrainer .passwordscore').text("Score " + Math.round(this.currentLeveledScore.score*100)/100 + " / Level " + this.currentLeveledScore.level + " (" + displayTime + ")");
                     
                     
             };
