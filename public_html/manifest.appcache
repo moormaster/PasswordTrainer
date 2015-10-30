@@ -1,9 +1,10 @@
 CACHE MANIFEST
 
 CACHE:
-# 2015-10-28 11:20
+# 2015-10-30 19:07
 
 index.html
+js/libs/cryptojs/md5.js
 js/libs/jquery/jquery.js
 js/libs/jquerymobile/css/jquery.mobile.css
 js/libs/jquerymobile/css/images/ajax-loader.gif
@@ -14,5 +15,4 @@ js/App.js
 js/JQPasswordRegistration.js
 js/JQPasswordInput.js
 js/LeveledScore.js
-js/MD5.js
 

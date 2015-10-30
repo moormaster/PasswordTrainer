@@ -126,6 +126,9 @@ function LeveledScore(data) {
     var getLockHoursLeft = function(level, lastSuccessDate, readDate) {
         var lockHours = getLockHours(level);
         
+        if (!lastSuccessDate)
+            return 0;
+        
         var lockHoursLeft = lockHours - (readDate - lastSuccessDate)/(1000*60*60);
         if (!lockHoursLeft || lockHoursLeft < 0)
             lockHoursLeft = 0;
@@ -135,6 +138,9 @@ function LeveledScore(data) {
     
     var getFeeHoursPassed = function(level, lastSuccessDate, readDate) {
         var lockHours = getLockHours(level);
+        
+        if (!lastSuccessDate)
+            return 0;
         
         var feeHoursPassed = (readDate - lastSuccessDate)/(1000*60*60) - lockHours;
         if (!feeHoursPassed || feeHoursPassed < 0)
