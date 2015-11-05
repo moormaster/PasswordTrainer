@@ -8,16 +8,23 @@ QUnit.module(
     "LevelScore",
     {
         beforeEach: function() {
-            var addAttempt = function(leveledScore) {
+            var addAttempt = function(leveledScore, feeHours) {
+                if (!feeHours)
+                    feeHours = 0;
+                
                 var d = leveledScore.lastSuccessTimestamp;
                 if (d == null)
                     d = new Date(1970, 1, 1, 10, 00);
 
-                var h = leveledScore.getLockHoursLeft(d);
+                var h = leveledScore.getLockHoursLeft(d) + feeHours;
                 
                 
                 return leveledScore.addSuccessfulAttempt(new Date(d.getTime() + 1000*60*60*h));
             }
+            
+            this.assertNumEqual = function(assert, actual, expected, diff, message) {
+                assert.ok(Math.abs(actual - expected) <= diff, message);
+            };
             
             this.score = new LeveledScore();
             
@@ -38,6 +45,24 @@ QUnit.module(
             addAttempt(this.scoreWithFourAttempts);
             addAttempt(this.scoreWithFourAttempts);
             addAttempt(this.scoreWithFourAttempts);
+            
+            this.scoreWithOneAttemptAndOneHourFee = new LeveledScore();
+            addAttempt(this.scoreWithOneAttemptAndOneHourFee, 1);
+
+            this.scoreWithTwoAttemptsAndOneHourFee = new LeveledScore();
+            addAttempt(this.scoreWithTwoAttemptsAndOneHourFee);
+            addAttempt(this.scoreWithTwoAttemptsAndOneHourFee, 1);
+
+            this.scoreWithThreeAttemptsAndOneHourFee = new LeveledScore();
+            addAttempt(this.scoreWithThreeAttemptsAndOneHourFee);
+            addAttempt(this.scoreWithThreeAttemptsAndOneHourFee);
+            addAttempt(this.scoreWithThreeAttemptsAndOneHourFee, 1);
+
+            this.scoreWithFourAttemptsAndOneHourFee = new LeveledScore();
+            addAttempt(this.scoreWithFourAttemptsAndOneHourFee);
+            addAttempt(this.scoreWithFourAttemptsAndOneHourFee);
+            addAttempt(this.scoreWithFourAttemptsAndOneHourFee);
+            addAttempt(this.scoreWithFourAttemptsAndOneHourFee, 1);
         }
     }
 )
@@ -133,4 +158,36 @@ QUnit.test(
     }
 );
 
+QUnit.test(
+    "LevelScore.addSuccessfulAttempt() with one fee hour", 
+    function(assert) {
+        this.assertNumEqual(
+            assert,
+            this.scoreWithOneAttemptAndOneHourFee.getScore(this.scoreWithOneAttemptAndOneHourFee.data.lastSuccessTimestamp),
+            1,  
+            0.001,
+            "score should be 1 after first attempt")
+        
+        this.assertNumEqual(
+            assert,
+            this.scoreWithTwoAttemptsAndOneHourFee.getScore(this.scoreWithTwoAttemptsAndOneHourFee.data.lastSuccessTimestamp),
+            2 - 1.0/2,  
+            0.001,
+            "score should be 1.5 after second attempt and one hour fee time")
+        
+        this.assertNumEqual(
+            assert,
+            this.scoreWithThreeAttemptsAndOneHourFee.getScore(this.scoreWithThreeAttemptsAndOneHourFee.data.lastSuccessTimestamp),
+            3 - 1.0/3,  
+            0.001,
+            "score should be 1.66 after third attempt")
+
+        this.assertNumEqual(
+            assert,
+            this.scoreWithFourAttemptsAndOneHourFee.getScore(this.scoreWithFourAttemptsAndOneHourFee.data.lastSuccessTimestamp),
+            4 - 1.0/5,  
+            0.001,
+            "score should be 1.80 after third attempt")
+    }
+);
 
