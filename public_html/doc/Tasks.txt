@@ -10,3 +10,6 @@
 #9                  buttons for adding / deleting current password
 
 #10 [done]          localStorage persistence
+#11                 display fee points instead of fee time
+#12                 lock input field
+#13                 export/import page (copy & paste from text field)
