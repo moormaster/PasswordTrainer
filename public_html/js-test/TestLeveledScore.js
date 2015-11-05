@@ -23,7 +23,11 @@ QUnit.module(
             }
             
             this.assertNumEqual = function(assert, actual, expected, diff, message) {
-                assert.ok(Math.abs(actual - expected) <= diff, message);
+                if (Math.abs(actual - expected) <= diff)
+                    assert.ok(true, message);
+                else
+                    assert.equal(actual, expected, message);
+                
             };
             
             this.score = new LeveledScore();
@@ -89,6 +93,60 @@ QUnit.test(
 );
 
 QUnit.test(
+    "LevelScore.getFee()", 
+    function(assert) {
+        assert.equal(
+            this.score.getFee(this.score.data.lastSuccessTimestamp),                     
+            0, "should be 0 initialy with no fee time");
+        assert.equal(
+            this.scoreWithOneAttempt.getFee(this.scoreWithOneAttempt.data.lastSuccessTimestamp),       
+            0, "should be 0 after 1 attempt with no fee time");
+        assert.equal(
+            this.scoreWithTwoAttempts.getFee(this.scoreWithTwoAttempts.data.lastSuccessTimestamp),      
+            0, "should be 0 after 2 attempts with no fee time");
+        assert.equal(
+            this.scoreWithThreeAttempts.getFee(this.scoreWithThreeAttempts.data.lastSuccessTimestamp),    
+            0, "should be 0 after 3 attempts with no fee time");
+        assert.equal(
+            this.scoreWithFourAttempts.getFee(this.scoreWithFourAttempts.data.lastSuccessTimestamp),     
+            0, "should be 0 after 4 attempts with no fee time");
+            
+        this.assertNumEqual(assert,
+            this.scoreWithOneAttempt.getFee(
+                this.scoreWithOneAttempt.data.lastSuccessTimestamp 
+                + (this.scoreWithOneAttempt.lockHours+1)*60*60*1000
+            ),
+            1/2.0,
+            0.001,
+            "should be 1/2 after 1 attempt with 1h fee time");
+        this.assertNumEqual(assert,
+            this.scoreWithTwoAttempts.getFee(
+                this.scoreWithTwoAttempts.data.lastSuccessTimestamp 
+                + (this.scoreWithTwoAttempts.lockHours+1)*60*60*1000
+            ),
+            1/3.0,
+            0.001,
+            "should be 1/3 after 2 attempts with 1h fee time");
+        this.assertNumEqual(assert,
+            this.scoreWithThreeAttempts.getFee(
+                this.scoreWithThreeAttempts.data.lastSuccessTimestamp 
+                + (this.scoreWithThreeAttempts.lockHours+1)*60*60*1000
+            ),
+            1/5.0,
+            0.001,
+            "should be 1/5 after 3 attempts with 1h fee time");
+        this.assertNumEqual(assert,
+            this.scoreWithFourAttempts.getFee(
+                this.scoreWithFourAttempts.data.lastSuccessTimestamp 
+                + (this.scoreWithFourAttempts.lockHours+1)*60*60*1000
+            ),
+            1/5.0,
+            0.001,
+            "should be 1/5 after 4 attempts with 1h fee time");
+    }
+);
+
+QUnit.test(
     "LevelScore.getLevel()", 
     function(assert) {
         assert.equal(
@@ -126,8 +184,8 @@ QUnit.test(
         assert.equal(this.score.feePerHour,                     0, "should be 0 in level 1");
         assert.equal(this.scoreWithOneAttempt.feePerHour,       1.0/2, "should be 1/2 in level 2");
         assert.equal(this.scoreWithTwoAttempts.feePerHour,      1.0/3, "should be 1/3 in level 3");
-        assert.equal(this.scoreWithThreeAttempts.feePerHour,    1.0/5, "shuld be 1/5 in level 4");
-        assert.equal(this.scoreWithFourAttempts.feePerHour,     1.0/5, "shuld be 1/5 in level 4");
+        assert.equal(this.scoreWithThreeAttempts.feePerHour,    1.0/5, "should be 1/5 in level 4");
+        assert.equal(this.scoreWithFourAttempts.feePerHour,     1.0/5, "should be 1/5 in level 4");
     }
 );
 

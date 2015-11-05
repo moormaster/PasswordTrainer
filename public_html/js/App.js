@@ -92,18 +92,18 @@ var PagePasswordTrainer;
             }
 
             this.updateScore = function() {
-                var displayTime = null;
+                var statusDisplay = null;
                 
-                if (this.currentLeveledScore.feeHoursPassed)
-                    displayTime = formatTime(this.currentLeveledScore.feeHoursPassed*60*60*1000) + " fee time";
+                if (this.currentLeveledScore.fee)
+                    statusDisplay = formatScore(this.currentLeveledScore.getFee()) + " fee";
                 
                 if (this.currentLeveledScore.lockHoursLeft)
-                    displayTime = "locked for " + formatTime(this.currentLeveledScore.lockHoursLeft*60*60*1000);
+                    statusDisplay = "locked for " + formatTime(this.currentLeveledScore.lockHoursLeft*60*60*1000);
                 
-                if (!displayTime)
-                    $('#passwordtrainer .passwordscore').text("Score " + Math.round(this.currentLeveledScore.score*100)/100 + " / Level " + this.currentLeveledScore.level);
+                if (!statusDisplay)
+                    $('#passwordtrainer .passwordscore').text("Score " + formatScore(this.currentLeveledScore.score) + " / Level " + this.currentLeveledScore.level);
                 else
-                    $('#passwordtrainer .passwordscore').text("Score " + Math.round(this.currentLeveledScore.score*100)/100 + " / Level " + this.currentLeveledScore.level + " (" + displayTime + ")");
+                    $('#passwordtrainer .passwordscore').text("Score " + formatScore(this.currentLeveledScore.score) + " / Level " + this.currentLeveledScore.level + " (" + statusDisplay + ")");
                     
                     
             };
@@ -161,6 +161,10 @@ var PagePasswordTrainer;
                     1000
                 );
             };
+            
+            var formatScore = function(score) {
+                return Math.round(score*100)/100;
+            }
             
             var formatTime = function(ms) {
                 if (ms < 0)

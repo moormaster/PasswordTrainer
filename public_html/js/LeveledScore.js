@@ -28,21 +28,26 @@ function LeveledScore(data) {
         return true;
     }
     
+    this.getFee = function(readDate) {
+        if (this.data.lastSuccessTimestamp == null)
+            return 0;
+
+        var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
+        var feeHoursPassed = Math.floor(getFeeHoursPassed(lastSuccessLevel, this.data.lastSuccessTimestamp, readDate));
+        
+        var fee = feeHoursPassed*this.feePerHour;
+        
+        if (fee > this.data.lastSuccessScore)
+            return this.data.lastSuccessScore;
+        
+        return fee;
+    }
+    
     this.getScore = function(readDate) {
         if (this.data.lastSuccessTimestamp == null)
             return 0;
         
-        var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
-        var feeHoursPassed = getFeeHoursPassed(lastSuccessLevel, this.data.lastSuccessTimestamp, readDate);
-
-        if (feeHoursPassed == 0)
-            return this.data.lastSuccessScore;
-
-        var score = this.data.lastSuccessScore - Math.floor(feeHoursPassed)*this.feePerHour;
-        if (score < 0)
-            score = 0;
-        
-        return score;
+        return this.data.lastSuccessScore - this.getFee(readDate);
     };
     
     this.getLevel = function(readDate) {
@@ -155,6 +160,12 @@ function LeveledScore(data) {
             "score": {
                 get:    function() {
                             return this.getScore(new Date());
+                        }
+            },
+            
+            "fee": {
+                get:    function() {
+                            return this.getFee(new Date());
                         }
             },
             
