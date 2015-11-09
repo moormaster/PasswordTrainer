@@ -6,6 +6,7 @@
 
 var App;
 var PagePasswordTrainer;
+var PageImportExport;
 
 (
     function($) {
@@ -14,6 +15,7 @@ var PagePasswordTrainer;
             this.passwordRegistrations = {};
             
             this.pageTrainPasswords = new PagePasswordTrainer(this);
+            this.pageImportExport = new PageImportExport(this);
 
             this.init = function() {
                 $('#passwordregistration').JQPasswordRegistration(
@@ -31,22 +33,31 @@ var PagePasswordTrainer;
                 );
             
                 this.pageTrainPasswords.init();
+                this.pageImportExport.init();
             };
             
             this.readPasswordRegistrationsFromLocalStorage = function() {
-                var passwordRegistrations = JSON.parse(localStorage['passwordRegistrations']);
-                
-                if (!passwordRegistrations)
-                    return;
-                
-                this.passwordRegistrations = passwordRegistrations;
-                this.pageTrainPasswords.setMostRecentPasswordRegistration();
+                this.importPasswordRegistrations(localStorage['passwordRegistrations']);
             }
             
             this.writePasswordRegistrationsToLocalStorage = function() {
-                localStorage['passwordRegistrations'] = JSON.stringify(this.passwordRegistrations);
+                localStorage['passwordRegistrations'] = this.exportPasswordRegistrations();
+            }
+            
+            this.importPasswordRegistrations = function(json) {
+                var passwordRegistrations = JSON.parse(json);
+                
+                if (!this.isPasswordRegistrationIntegrityOk(passwordRegistrations))
+                    return false;
+                
+                this.passwordRegistrations = passwordRegistrations;
+                this.pageTrainPasswords.setMostRecentPasswordRegistration();
                 
                 return true;
+            }
+            
+            this.exportPasswordRegistrations = function() {
+                return JSON.stringify(this.passwordRegistrations);
             }
             
             this.addPasswordRegistration = function(description, password) {
@@ -60,11 +71,29 @@ var PagePasswordTrainer;
                                         }
                     };
             };
+            
+            this.isPasswordRegistrationIntegrityOk = function(passwordRegistration) {
+                if (!passwordRegistration)
+                    return false;
+                
+                for (var desc in passwordRegistration) {
+                    var currentRegistration = passwordRegistration[desc];
+                    
+                    if (!currentRegistration)
+                        return false;
+                    
+                    if (currentRegistration.description != desc)
+                        return false;
+                    
+                    if (!currentRegistration.scoreData)
+                        return false;
+                }
+                
+                return true;
+            }
         };
                 
         PagePasswordTrainer = function(app) {
-            var pageInstance = this;
-            
             this.appInstance = app;
             this.currentPasswordRegistration;
             this.currentLeveledScore = new LeveledScore();
@@ -126,6 +155,8 @@ var PagePasswordTrainer;
             }
             
             this.init = function() {
+                var pageInstance = this;
+                
                 $('#passwordtrainer .password').JQPasswordInput();
                 $('#passwordtrainer .password').on('passwordEntered',
                     function(e, password) {
@@ -153,7 +184,7 @@ var PagePasswordTrainer;
                         pageInstance.setMostRecentPasswordRegistration();
                     }
                 );
-                
+                        
                 window.setInterval(
                     function() {
                         pageInstance.updateScore()
@@ -246,6 +277,41 @@ var PagePasswordTrainer;
                 return mostRecentInstance;
             };
         }
+        
+        PageImportExport = function(app) {
+            this.appInstance = app;
+            
+            this.init = function() {
+                var pageInstance = this;
+                
+                $('#pageImportExport').on('pageshow',
+                    function(e) {
+                        pageInstance.export();
+                    }
+                );
+        
+                $('#pageImportExport').on('change',
+                    function(e) {
+                        pageInstance.import();
+                    }
+                );
+            };
+            
+            this.export = function() {
+                var json = this.appInstance.exportPasswordRegistrations();
+                
+                $('#importexportfield').val(json);                
+            }
+            
+            this.import = function() {
+                var json = $('#importexportfield').val();
+                
+                if (this.appInstance.importPasswordRegistrations(json)) {
+                    this.appInstance.writePasswordRegistrationsToLocalStorage();
+                    $.mobile.changePage('#pageTrainPasswords')
+                }
+            }
+        } 
         
         var app;
         
