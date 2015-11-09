@@ -2,7 +2,7 @@
 #2  [done]          design app draft
 #3  [done]          protoype app draft
 #4  [done]          ensure offline usage
-#5  [pending]          implement new scoring system
+#5  [done]          implement new scoring system
 #6  [done]          training page which always shows the password with minimal
                     lock time & maximum punish score first
 #7                  create reusable ui widget for showing / guessing password
@@ -13,7 +13,7 @@
 #11 [done]          display fee points instead of fee time
 #12                 lock input field while lock time hours left
 #13                 export/import page (copy & paste from text field)
-#14                 replace test fixtures by test fixture generation method
+#14 [done]          generate test fixtures by generation method
 #15                 display lock time display using cake diagram
 #16                 display fee using cake diagram
 #17                 click on cake diagram should open dialog with input field
