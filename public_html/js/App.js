@@ -124,7 +124,7 @@ var PageImportExport;
                 var statusDisplay = null;
                 
                 if (this.currentLeveledScore.fee)
-                    statusDisplay = formatScore(this.currentLeveledScore.getFee()) + " fee";
+                    statusDisplay = formatScore(this.currentLeveledScore.fee) + " fee";
                 
                 if (this.currentLeveledScore.lockHoursLeft)
                     statusDisplay = "locked for " + formatTime(this.currentLeveledScore.lockHoursLeft*60*60*1000);
