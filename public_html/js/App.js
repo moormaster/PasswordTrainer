@@ -8,7 +8,7 @@ var App;
 (
     function($) {
         App = function() {
-			this.prototype = new IApp();
+            this.prototype = new IApp();
 			
             this.passwordRegistrations = {};
             

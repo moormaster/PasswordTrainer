@@ -9,7 +9,7 @@ var PagePasswordTrainer;
 (
     function($) {
         PagePasswordTrainer = function(app) {
-			this.prototype = new IPagePasswordTrainer();
+            this.prototype = new IPagePasswordTrainer();
 			
             this.appInstance = app;
             this.currentPasswordRegistration;

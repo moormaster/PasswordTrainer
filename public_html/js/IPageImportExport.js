@@ -5,20 +5,20 @@
  */
  
 var IPageImportExport = function() {
-			/*
-			 * initialize jquery ui page
-			 */
-            this.init = function() {};
-            
-			/*
-			 * perform export of password registrations
-			 */
-            this.exportPasswordRegistrations = function() {};
-            
-			/*
-			 * perform import of password registrations
-			 */
-            this.importPasswordRegistrations = function() {};
-        };
+    /*
+     * initialize jquery ui page
+     */
+    this.init = function() {};
+
+    /*
+     * perform export of password registrations
+     */
+    this.exportPasswordRegistrations = function() {};
+
+    /*
+     * perform import of password registrations
+     */
+    this.importPasswordRegistrations = function() {};
+};
 
 
