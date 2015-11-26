@@ -9,13 +9,14 @@ var App;
 (
     function($) {
         App = function() {
-            var appInstance = this;
             this.passwordRegistrations = {};
             
             this.pageTrainPasswords = new PagePasswordTrainer(this);
             this.pageImportExport = new PageImportExport(this);
 
             this.init = function() {
+                var appInstance = this;
+                
                 $('#passwordregistration').JQPasswordRegistration(
                     {
                         passwordDescription:            $('#passwordregistration .passworddescription'),
