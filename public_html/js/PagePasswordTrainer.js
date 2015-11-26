@@ -9,9 +9,52 @@ var PagePasswordTrainer;
 (
     function($) {
         PagePasswordTrainer = function(app) {
+			this.prototype = new IPagePasswordTrainer();
+			
             this.appInstance = app;
             this.currentPasswordRegistration;
             this.currentLeveledScore = new LeveledScore();
+			
+			/*
+			 * initializes widgets and auto page update
+			 */
+			this.init = function() {
+                var pageInstance = this;
+                
+                $('#passwordtrainer .password').JQPasswordInput();
+                $('#passwordtrainer .password').on('passwordEntered',
+                    function(e, password) {
+                        $(this).removeClass('bg_anim_green');
+                        $(this).removeClass('bg_anim_red');
+                        
+                        if (pageInstance.addPasswordAttempt(password))
+                            $(this).addClass('bg_anim_green');
+                        else
+                            $(this).addClass('bg_anim_red');
+                        
+                        $(this).val("");
+                        window.setTimeout(
+                            function() {
+                                pageInstance.setMostRecentPasswordRegistration();                                
+                            },
+                            2000
+                        );
+                    }
+                );
+                
+                $('#pageTrainPasswords').on('pageshow', 
+                    function(e) {
+                        pageInstance.setMostRecentPasswordRegistration();
+                    }
+                );
+                        
+                window.setInterval(
+                    function() {
+                        pageInstance.updateScore();
+                    },
+                    1000
+                );
+            };
             
             this.setPasswordRegistration = function(passwordRegistration) {
                 if (!passwordRegistration)
@@ -34,6 +77,13 @@ var PagePasswordTrainer;
             this.setMostRecentPasswordRegistration = function() {
                 this.setPasswordRegistration(getMostRecentPasswordRegistration(this.appInstance.passwordRegistrations));
             };
+			
+			this.addPasswordAttempt = function(password) {
+                if (!this.appInstance)
+                    return false;
+                
+                return app.addPasswordAttempt(this.currentPasswordRegistration, password);
+            };
 
             this.updateScore = function() {
                 var statusDisplay = null;
@@ -50,62 +100,6 @@ var PagePasswordTrainer;
                     $('#passwordtrainer .passwordscore').text("Score " + formatScore(this.currentLeveledScore.score) + " / Level " + this.currentLeveledScore.level + " (" + statusDisplay + ")");
                     
                     
-            };
-            
-            this.addPasswordAttempt = function(password) {
-                if (!this.currentPasswordRegistration)
-                    return false;
-                
-                var hash = CryptoJS.MD5(password).toString();
-
-                if (hash != this.currentPasswordRegistration.hash)
-                    return false;
-                
-                if (!this.currentLeveledScore.addSuccessfulAttempt())
-                    return false;
-                    
-                app.writePasswordRegistrationsToLocalStorage();
-                
-                return true;
-            };
-            
-            this.init = function() {
-                var pageInstance = this;
-                
-                $('#passwordtrainer .password').JQPasswordInput();
-                $('#passwordtrainer .password').on('passwordEntered',
-                    function(e, password) {
-                        $(this).removeClass('bg_anim_green');
-                        $(this).removeClass('bg_anim_red');
-                        
-                        if (pageInstance.addPasswordAttempt(password))
-                            $(this).addClass('bg_anim_green');
-                            
-                        else
-                            $(this).addClass('bg_anim_red');
-                        
-                        $(this).val("");
-                        window.setTimeout(
-                            function() {
-                                pageInstance.setMostRecentPasswordRegistration();                                
-                            },
-                            2000
-                        );
-                    }
-                );
-                
-                $('#pageTrainPasswords').on('pageshow', 
-                    function(e) {
-                        pageInstance.setMostRecentPasswordRegistration();
-                    }
-                );
-                        
-                window.setInterval(
-                    function() {
-                        pageInstance.updateScore()
-                    },
-                    1000
-                );
             };
             
             var formatScore = function(score) {

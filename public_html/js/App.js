@@ -3,17 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 var App;
 
 (
     function($) {
         App = function() {
+			this.prototype = new IApp();
+			
             this.passwordRegistrations = {};
             
             this.pageTrainPasswords = new PagePasswordTrainer(this);
             this.pageImportExport = new PageImportExport(this);
-
+			
             this.init = function() {
                 var appInstance = this;
                 
@@ -70,6 +71,24 @@ var App;
                                         }
                     };
             };
+			
+			this.addPasswordAttempt = function(passwordRegistration, password) {
+                if (!passwordRegistration)
+                    return false;
+                
+				var leveledScore = new LeveledScore(passwordRegistration.scoreData);
+				
+                var hash = CryptoJS.MD5(password).toString();
+                if (hash != passwordRegistration.hash)
+                    return false;
+                
+                if (!leveledScore.addSuccessfulAttempt())
+                    return false;
+                    
+                this.writePasswordRegistrationsToLocalStorage();
+                
+                return true;
+            };
             
             this.isPasswordRegistrationIntegrityOk = function(passwordRegistration) {
                 if (!passwordRegistration)
@@ -90,6 +109,8 @@ var App;
                 
                 return true;
             };
+			
+			
         };
     }(jQuery)
 );

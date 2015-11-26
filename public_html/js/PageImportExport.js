@@ -9,6 +9,8 @@ var PageImportExport;
 (
     function($) {
         PageImportExport = function(app) {
+			this.prototype = new IPageImportExport();
+			
             this.appInstance = app;
             
             this.init = function() {
@@ -16,31 +18,31 @@ var PageImportExport;
                 
                 $('#pageImportExport').on('pageshow',
                     function(e) {
-                        pageInstance.export();
+                        pageInstance.exportPasswordRegistrations();
                     }
                 );
         
                 $('#pageImportExport').on('change',
                     function(e) {
-                        pageInstance.import();
+                        pageInstance.importPasswordRegistrations();
                     }
                 );
             };
             
-            this.export = function() {
+            this.exportPasswordRegistrations = function() {
                 var json = this.appInstance.exportPasswordRegistrations();
                 
                 $('#importexportfield').val(json);                
-            }
+            };
             
-            this.import = function() {
+            this.importPasswordRegistrations = function() {
                 var json = $('#importexportfield').val();
                 
                 if (this.appInstance.importPasswordRegistrations(json)) {
                     this.appInstance.writePasswordRegistrationsToLocalStorage();
                     $.mobile.changePage('#pageTrainPasswords')
                 }
-            }
-        }
+            };
+        };
     }(jQuery)
 );
