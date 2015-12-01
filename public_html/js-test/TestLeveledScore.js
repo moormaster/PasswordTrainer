@@ -60,12 +60,12 @@ QUnit.test(
     "LevelScore.getScore()", 
     function(assert) {
         assert.equal(
-            this.scores[0].getScore(this.scores[0].data.lastSuccessTimestamp),                     
+            this.scores[0].getScore(this.scores[0].scoreData.lastSuccessTimestamp),                     
             0, "should be 0 initialy");
         
         for (var i=1; i<this.scores.length; i++)
             assert.equal(
-                this.scores[i].getScore(this.scores[i].data.lastSuccessTimestamp),       
+                this.scores[i].getScore(this.scores[i].scoreData.lastSuccessTimestamp),       
                 i, "should be " + i + " after " + i + " attempt(s)"
             );
     }
@@ -81,7 +81,7 @@ QUnit.test(
         for (var i=0; i<this.scores.length; i++) {
             this.assertNumEqual(assert,
                 this.scores[i].getFee(
-                    this.scores[i].data.lastSuccessTimestamp 
+                    this.scores[i].scoreData.lastSuccessTimestamp 
                     + (this.scores[i].lockHours)*60*60*1000
                 ),
                 0,
@@ -91,7 +91,7 @@ QUnit.test(
 
             this.assertNumEqual(assert,
                 this.scores[i].getFee(
-                    this.scores[i].data.lastSuccessTimestamp 
+                    this.scores[i].scoreData.lastSuccessTimestamp 
                     + (this.scores[i].lockHours+1)*60*60*1000
                 ),
                 Math.min(i, expectedFee[i]),
@@ -101,7 +101,7 @@ QUnit.test(
 
             this.assertNumEqual(assert,
                 this.scores[i].getFee(
-                    this.scores[i].data.lastSuccessTimestamp 
+                    this.scores[i].scoreData.lastSuccessTimestamp 
                     + (this.scores[i].lockHours+fee1AfterHours[i])*60*60*1000
                 ),
                 Math.min(i, fee1AfterHours[i]*expectedFee[i]),
@@ -112,7 +112,7 @@ QUnit.test(
             if (i>0)
                 this.assertNumEqual(assert,
                     this.scores[i].getFee(
-                        this.scores[i].data.lastSuccessTimestamp 
+                        this.scores[i].scoreData.lastSuccessTimestamp 
                         + (this.scores[i].lockHours+score0AfterHours[i])*60*60*1000
                     ),
                     Math.min(i, score0AfterHours[i]*expectedFee[i]),
@@ -128,7 +128,7 @@ QUnit.test(
     "LevelScore.getLevel()", 
     function(assert) {
         assert.equal(
-            this.scores[0].getLevel(this.scores[0].data.lastSuccessTimestamp),    
+            this.scores[0].getLevel(this.scores[0].scoreData.lastSuccessTimestamp),    
             1, "should be 1 initialy"
         );
         
@@ -136,7 +136,7 @@ QUnit.test(
         
         for (var i=1; i<this.scores.length; i++)
             assert.equal(this.scores[i].getLevel(
-                this.scores[i].data.lastSuccessTimestamp),                                
+                this.scores[i].scoreData.lastSuccessTimestamp),                                
                 expectedLevel[i], "should be " + expectedLevel[i] + " for less than " + (i+1) + " attempt(s)"
             );
     }
@@ -201,7 +201,7 @@ QUnit.test(
         for (var i=0; i<this.scoresWithOneHourFee.length; i++)
             this.assertNumEqual(
                 assert,
-                this.scoresWithOneHourFee[i].getScore(this.scoresWithOneHourFee[i].data.lastSuccessTimestamp),
+                this.scoresWithOneHourFee[i].getScore(this.scoresWithOneHourFee[i].scoreData.lastSuccessTimestamp),
                 expectedScore[i],  
                 0.001,
                 "score should be " + expectedScore[i] + " after " + i + " attempt(s)"

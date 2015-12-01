@@ -66,7 +66,7 @@ var PagePasswordTrainer;
                 }
                 
                 this.currentPasswordRegistration = passwordRegistration;
-                this.currentLeveledScore.reset(this.currentPasswordRegistration.scoreData);
+                this.currentLeveledScore.setScoreData(this.currentPasswordRegistration.scoreData);
                 
                 $('#passwordtrainer .passworddescription').text(passwordRegistration.description);
                 this.updateScore();
@@ -75,14 +75,14 @@ var PagePasswordTrainer;
             };
             
             this.setMostRecentPasswordRegistration = function() {
-                this.setPasswordRegistration(getMostRecentPasswordRegistration(this.appInstance.passwordRegistrations));
+                this.setPasswordRegistration(this.appInstance.passwordRegistrations.getMostRecentPasswordRegistration());
             };
 			
 			this.addPasswordAttempt = function(password) {
                 if (!this.appInstance)
                     return false;
                 
-                return app.addPasswordAttempt(this.currentPasswordRegistration, password);
+                return app.addPasswordAttempt(this.currentPasswordRegistration.description, password);
             };
 
             this.updateScore = function() {
@@ -160,30 +160,6 @@ var PagePasswordTrainer;
                 string += seconds + "s";
 
                 return string;
-            };
-            
-            var getMostRecentPasswordRegistration = function(passwordRegistrations) {
-                var maxHours = null;
-                var mostRecentInstance = null;
-                
-                var leveledScore = new LeveledScore();
-                
-                // determine instance with max fee hours passed and minimal lock hours left
-                for (var key in passwordRegistrations) {
-                    var passwordRegistration = passwordRegistrations[key];
-                    
-                    var updateInstance = false;
-                    leveledScore.reset(passwordRegistration.scoreData);
-                    
-                    var hours = leveledScore.feeHoursPassed - leveledScore.lockHoursLeft;
-                    
-                    if (maxHours == null || maxHours < hours) {
-                        maxHours = hours;
-                        mostRecentInstance = passwordRegistration;
-                    }
-                }
-                
-                return mostRecentInstance;
             };
         };
     }(jQuery)

@@ -30,7 +30,7 @@ var PageImportExport;
             };
             
             this.exportPasswordRegistrations = function() {
-                var json = this.appInstance.exportPasswordRegistrations();
+                var json = this.appInstance.passwordRegistrations.exportJSON();
                 
                 $('#importexportfield').val(json);                
             };
@@ -38,9 +38,10 @@ var PageImportExport;
             this.importPasswordRegistrations = function() {
                 var json = $('#importexportfield').val();
                 
-                if (this.appInstance.importPasswordRegistrations(json)) {
+                if (this.appInstance.passwordRegistrations.importJSON(json)) {
                     this.appInstance.writePasswordRegistrationsToLocalStorage();
-                    $.mobile.changePage('#pageTrainPasswords')
+					this.appInstance.pageTrainPasswords.setMostRecentPasswordRegistration();
+                    $.mobile.changePage('#pageTrainPasswords');
                 }
             };
         };

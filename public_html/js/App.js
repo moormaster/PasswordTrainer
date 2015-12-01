@@ -10,7 +10,9 @@ var App;
         App = function() {
             this.prototype = new IApp();
 			
-            this.passwordRegistrations = {};
+            this.passwordRegistrations = new PasswordRegistrationCollection();
+			
+			this.appNotificator = new AppNotificator(this, window);
             
             this.pageTrainPasswords = new PagePasswordTrainer(this);
             this.pageImportExport = new PageImportExport(this);
@@ -28,7 +30,8 @@ var App;
             
                 $('#passwordregistration').on('passwordEntered', 
                     function(e, desc, pwd) {
-                        appInstance.addPasswordRegistration(desc, pwd);
+                        appInstance.passwordRegistrations.add(desc, pwd);
+						this.writePasswordRegistrationsToLocalStorage();
                     }
                 );
             
@@ -37,44 +40,24 @@ var App;
             };
             
             this.readPasswordRegistrationsFromLocalStorage = function() {
-                this.importPasswordRegistrations(localStorage['passwordRegistrations']);
+                this.passwordRegistrations.importJSON(localStorage['passwordRegistrations']);
             };
             
             this.writePasswordRegistrationsToLocalStorage = function() {
-                localStorage['passwordRegistrations'] = this.exportPasswordRegistrations();
-            };
-            
-            this.importPasswordRegistrations = function(json) {
-                var passwordRegistrations = JSON.parse(json);
-                
-                if (!this.isPasswordRegistrationIntegrityOk(passwordRegistrations))
-                    return false;
-                
-                this.passwordRegistrations = passwordRegistrations;
-                this.pageTrainPasswords.setMostRecentPasswordRegistration();
-                
-                return true;
-            };
-            
-            this.exportPasswordRegistrations = function() {
-                return JSON.stringify(this.passwordRegistrations);
-            };
-            
-            this.addPasswordRegistration = function(description, password) {
-                this.passwordRegistrations[description] =
-                    {
-                        description:    description,
-                        hash:           CryptoJS.MD5(password).toString(),
-                        scoreData:      {
-                                            lastSuccessScore:   null,
-                                            lastSuccessTimestamp:  null
-                                        }
-                    };
+                localStorage['passwordRegistrations'] = this.exportJSON();
             };
 			
-			this.addPasswordAttempt = function(passwordRegistration, password) {
-                if (!passwordRegistration)
+			this.addPasswordAttempt = function(desc, password) {
+                if (!this.passwordRegistrations)
                     return false;
+					
+				if (!this.passwordRegistrations.collection)
+					return false;
+					
+				var passwordRegistration = this.passwordRegistrations.collection[desc];
+				
+				if (!passwordRegistration)
+					return false;
                 
 				var leveledScore = new LeveledScore(passwordRegistration.scoreData);
 				
@@ -89,28 +72,6 @@ var App;
                 
                 return true;
             };
-            
-            this.isPasswordRegistrationIntegrityOk = function(passwordRegistration) {
-                if (!passwordRegistration)
-                    return false;
-                
-                for (var desc in passwordRegistration) {
-                    var currentRegistration = passwordRegistration[desc];
-                    
-                    if (!currentRegistration)
-                        return false;
-                    
-                    if (currentRegistration.description != desc)
-                        return false;
-                    
-                    if (!currentRegistration.scoreData)
-                        return false;
-                }
-                
-                return true;
-            };
-			
-			
         };
     }(jQuery)
 );

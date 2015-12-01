@@ -1,7 +1,7 @@
 CACHE MANIFEST
 
 CACHE:
-# 2015-11-26 22:20
+# 2015-12-01 21:42
 
 index.html
 js/libs/cryptojs/md5.js
@@ -13,13 +13,20 @@ js/libs/jqueryui/jquery-ui.js
 css/JQPasswordInput.css
 js/init.js
 js/App.js
+js/AppNotificator.js
 js/IApp.js
+js/IAppNotificator.js
+js/ILeveledScore.js
+js/INotificator.js
 js/IPagePasswordTrainer.js
 js/IPageImportExport.js
+js/IPasswordRegistrationCollection.js
 js/JQPasswordRegistration.js
 js/JQPasswordInput.js
 js/LeveledScore.js
+js/Notificator.js
 js/PageImportExport.js
 js/PagePasswordTrainer.js
+js/PasswordRegistrationCollection.js
 
 

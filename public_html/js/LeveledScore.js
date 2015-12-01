@@ -1,9 +1,13 @@
-function LeveledScore(data) {
-    this.reset = function(data) {
-        this.data = data
+var LevelesScore;
+
+LeveledScore = function (scoreData) {
+	this.prototype = new ILeveledScore(scoreData);
+	
+    this.setScoreData = function(scoreData) {
+        this.scoreData = scoreData;
         
-        if (this.data == null) {
-            this.data = {
+        if (this.scoreData == null) {
+            this.scoreData = {
                 lastSuccessScore:   null,
                 lastSuccessTimestamp:  null
             };
@@ -14,40 +18,40 @@ function LeveledScore(data) {
         if (dateOfAttempt == null)
             dateOfAttempt = new Date();
 
-        var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
-        var lockHoursLeft = getLockHoursLeft(lastSuccessLevel, this.data.lastSuccessTimestamp, dateOfAttempt);
+        var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
+        var lockHoursLeft = getLockHoursLeft(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, dateOfAttempt);
         
         if (lockHoursLeft > 0)
             return false;
         
         var lastScore = this.getScore(dateOfAttempt);
         
-        this.data.lastSuccessScore = lastScore+1;
-        this.data.lastSuccessTimestamp = dateOfAttempt.getTime();
+        this.scoreData.lastSuccessScore = lastScore+1;
+        this.scoreData.lastSuccessTimestamp = dateOfAttempt.getTime();
         
         return true;
     };
     
     this.getFee = function(readDate) {
-        if (this.data.lastSuccessTimestamp == null)
+        if (this.scoreData.lastSuccessTimestamp == null)
             return 0;
 
-        var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
-        var feeHoursPassed = Math.floor(getFeeHoursPassed(lastSuccessLevel, this.data.lastSuccessTimestamp, readDate));
+        var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
+        var feeHoursPassed = Math.floor(getFeeHoursPassed(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, readDate));
         
         var fee = feeHoursPassed*this.feePerHour;
         
-        if (fee > this.data.lastSuccessScore)
-            return this.data.lastSuccessScore;
+        if (fee > this.scoreData.lastSuccessScore)
+            return this.scoreData.lastSuccessScore;
         
         return fee;
     };
     
     this.getScore = function(readDate) {
-        if (this.data.lastSuccessTimestamp == null)
+        if (this.scoreData.lastSuccessTimestamp == null)
             return 0;
         
-        return this.data.lastSuccessScore - this.getFee(readDate);
+        return this.scoreData.lastSuccessScore - this.getFee(readDate);
     };
     
     this.getLevel = function(readDate) {
@@ -55,15 +59,15 @@ function LeveledScore(data) {
     };
     
     this.getLockHoursLeft = function(readDate) {
-        var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
+        var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
         
-        return getLockHoursLeft(lastSuccessLevel, this.data.lastSuccessTimestamp, readDate);
+        return getLockHoursLeft(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, readDate);
     };
     
     this.getFeeHoursPassed = function(readDate) {
-        var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
+        var lastSuccessLevel = getLevel(this.scoreDatalastSuccessScore);
         
-        return getFeeHoursPassed(lastSuccessLevel, this.data.lastSuccessTimestamp, readDate);
+        return getFeeHoursPassed(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, readDate);
     };
     
     var fib = function(i) {
@@ -183,7 +187,7 @@ function LeveledScore(data) {
             
             "lockHours": {
                 get:    function() {
-                            var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
+                            var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
 
                             return getLockHours(lastSuccessLevel);
                         }
@@ -191,7 +195,7 @@ function LeveledScore(data) {
             
             "feePerHour": {
                 get:    function() {
-                            var lastSuccessLevel = getLevel(this.data.lastSuccessScore);
+                            var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
 
                             return getFeePerHour(lastSuccessLevel);
                         }
@@ -205,5 +209,5 @@ function LeveledScore(data) {
         }
     );
 
-    this.reset(data);
-}
+    this.setScoreData(scoreData);
+};
