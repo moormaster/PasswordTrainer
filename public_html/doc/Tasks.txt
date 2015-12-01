@@ -17,3 +17,5 @@
 #15                 display lock time display using cake diagram
 #16                 display fee using cake diagram
 #17                 click on cake diagram should open dialog with input field
+#18                 refactoring: unit tests against interfaces instead (single abstraction layer)
+#19                 refactoring: obey single abstraction layer rule
