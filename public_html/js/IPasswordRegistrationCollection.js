@@ -24,8 +24,8 @@ IPasswordRegistrationCollection = function() {
      */
     this.add = function(description, password) {};
 	
-	/*
-	 * find the password registration with minimum lock time and maximum fee time
-	 */
-	this.getMostRecentPasswordRegistration = function() {};
+    /*
+     * find the password registration with minimum lock time and maximum fee time
+     */
+    this.getMostRecentPasswordRegistration = function() {};
 };

@@ -15,10 +15,10 @@ var PagePasswordTrainer;
             this.currentPasswordRegistration;
             this.currentLeveledScore = new LeveledScore();
 			
-			/*
-			 * initializes widgets and auto page update
-			 */
-			this.init = function() {
+            /*
+             * initializes widgets and auto page update
+             */
+            this.init = function() {
                 var pageInstance = this;
                 
                 $('#passwordtrainer .password').JQPasswordInput();
