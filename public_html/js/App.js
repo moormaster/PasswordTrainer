@@ -41,25 +41,26 @@ var App;
             
             this.readPasswordRegistrationsFromLocalStorage = function() {
                 this.passwordRegistrations.importJSON(localStorage['passwordRegistrations']);
+                this.pageTrainPasswords.setMostRecentPasswordRegistration();
             };
             
             this.writePasswordRegistrationsToLocalStorage = function() {
                 localStorage['passwordRegistrations'] = this.exportJSON();
             };
 			
-			this.addPasswordAttempt = function(desc, password) {
+            this.addPasswordAttempt = function(desc, password) {
                 if (!this.passwordRegistrations)
                     return false;
 					
-				if (!this.passwordRegistrations.collection)
-					return false;
+		if (!this.passwordRegistrations.collection)
+                    return false;
 					
-				var passwordRegistration = this.passwordRegistrations.collection[desc];
+		var passwordRegistration = this.passwordRegistrations.collection[desc];
 				
-				if (!passwordRegistration)
-					return false;
+		if (!passwordRegistration)
+                    return false;
                 
-				var leveledScore = new LeveledScore(passwordRegistration.scoreData);
+		var leveledScore = new LeveledScore(passwordRegistration.scoreData);
 				
                 var hash = CryptoJS.MD5(password).toString();
                 if (hash != passwordRegistration.hash)
