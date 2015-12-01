@@ -12,7 +12,7 @@ var App;
 			
             this.passwordRegistrations = new PasswordRegistrationCollection();
 			
-			this.appNotificator = new AppNotificator(this, window);
+            this.appNotificator = new AppNotificator(this, window);
             
             this.pageTrainPasswords = new PagePasswordTrainer(this);
             this.pageImportExport = new PageImportExport(this);
@@ -31,7 +31,7 @@ var App;
                 $('#passwordregistration').on('passwordEntered', 
                     function(e, desc, pwd) {
                         appInstance.passwordRegistrations.add(desc, pwd);
-						this.writePasswordRegistrationsToLocalStorage();
+                        appInstance.writePasswordRegistrationsToLocalStorage();
                     }
                 );
             
@@ -41,11 +41,11 @@ var App;
             
             this.readPasswordRegistrationsFromLocalStorage = function() {
                 this.passwordRegistrations.importJSON(localStorage['passwordRegistrations']);
-                this.pageTrainPasswords.setMostRecentPasswordRegistration();
+                this.pageTrainPasswords.update();
             };
             
             this.writePasswordRegistrationsToLocalStorage = function() {
-                localStorage['passwordRegistrations'] = this.exportJSON();
+                localStorage['passwordRegistrations'] = this.passwordRegistrations.exportJSON();
             };
 			
             this.addPasswordAttempt = function(desc, password) {

@@ -22,19 +22,13 @@ var IPagePasswordTrainer = function() {
     this.setPasswordRegistration = function(passwordRegistration) {};
 
     /*
-     * ask app controller for most recent password registration
-     * instance and display it
+     * update page display
      */
-    this.setMostRecentPasswordRegistration = function() {};
+    this.update = function() {};
 
     /*
      * add a password input attempt with the given password
      */
     this.addPasswordAttempt = function(password) {};
-
-    /*
-     * recalculate displayed score information
-     */
-    this.updateScore = function() {};
 };
 

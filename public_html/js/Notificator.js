@@ -35,7 +35,7 @@ Notificator = function(window) {
     };
     
     this.notify = function(title, text, vibrationLengthInMs) {
-        if (vibrationLength && this.hasVibrationPermission())
+        if (vibrationLengthInMs && this.hasVibrationPermission())
             this.navigator.vibrate(vibrationLengthInMs);
         
         if (this.hasNotificationPermission())

@@ -40,7 +40,7 @@ var PageImportExport;
                 
                 if (this.appInstance.passwordRegistrations.importJSON(json)) {
                     this.appInstance.writePasswordRegistrationsToLocalStorage();
-					this.appInstance.pageTrainPasswords.setMostRecentPasswordRegistration();
+                    this.appInstance.pageTrainPasswords.update();
                     $.mobile.changePage('#pageTrainPasswords');
                 }
             };

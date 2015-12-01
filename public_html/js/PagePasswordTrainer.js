@@ -35,7 +35,7 @@ var PagePasswordTrainer;
                         $(this).val("");
                         window.setTimeout(
                             function() {
-                                pageInstance.setMostRecentPasswordRegistration();                                
+                                pageInstance.update();                                
                             },
                             2000
                         );
@@ -44,7 +44,7 @@ var PagePasswordTrainer;
                 
                 $('#pageTrainPasswords').on('pageshow', 
                     function(e) {
-                        pageInstance.setMostRecentPasswordRegistration();
+                        pageInstance.update();
                     }
                 );
                         
@@ -78,12 +78,19 @@ var PagePasswordTrainer;
                 this.setPasswordRegistration(this.appInstance.passwordRegistrations.getMostRecentPasswordRegistration());
             };
 			
-			this.addPasswordAttempt = function(password) {
+            this.addPasswordAttempt = function(password) {
                 if (!this.appInstance)
                     return false;
                 
                 return app.addPasswordAttempt(this.currentPasswordRegistration.description, password);
             };
+            
+            this.update = function() {
+                this.setMostRecentPasswordRegistration();
+                this.updateScore();
+                
+                this.appInstance.appNotificator.notify();
+            }
 
             this.updateScore = function() {
                 var statusDisplay = null;
@@ -98,8 +105,6 @@ var PagePasswordTrainer;
                     $('#passwordtrainer .passwordscore').text("Score " + formatScore(this.currentLeveledScore.score) + " / Level " + this.currentLeveledScore.level);
                 else
                     $('#passwordtrainer .passwordscore').text("Score " + formatScore(this.currentLeveledScore.score) + " / Level " + this.currentLeveledScore.level + " (" + statusDisplay + ")");
-                    
-                    
             };
             
             var formatScore = function(score) {

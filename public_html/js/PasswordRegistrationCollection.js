@@ -42,7 +42,6 @@ PasswordRegistrationCollection = function() {
         for (var key in this.collection) {
             var passwordRegistration = this.collection[key];
 
-            var updateInstance = false;
             leveledScore.setScoreData(passwordRegistration.scoreData);
 
             var hours = leveledScore.feeHoursPassed - leveledScore.lockHoursLeft;

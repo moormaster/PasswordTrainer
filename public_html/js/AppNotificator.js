@@ -2,28 +2,47 @@ var AppNotificator;
 
 AppNotificator = function(app, window) {
 	this.prototype = new IAppNotificator(app, window);
+        
+        this.app = app;
 	this.notificator = new Notificator(window);
+        
+        this.suppressNotification = false;
 	
 	this.notify = function() {
             var date = new Date();
-            var readyPasswordDescs = gatherReadyPasswordDescriptions(date);
-		
-            if (readyPasswordDescs.length)
-                this.notificator.notify(readyPasswordDescs.length + " password registrations are ready", 2000);
+            var readyPasswordDescs = gatherReadyPasswordDescriptions(this.app.passwordRegistrations, date);
+
+            if (!readyPasswordDescs.length) {
+                this.suppressNotification = false;
+                return;
+            }
+            
+            if (this.suppressNotification)
+                return;
+            
+            this.notificator.notify("PasswordTrainer", readyPasswordDescs.length + " password registrations are ready", 2000);
+            this.suppressNotification = true;
 	};
 	
-	var gatherReadyPasswordDescriptions = function(date) {
+	var gatherReadyPasswordDescriptions = function(passwordRegistrations, date) {
             var readyPasswordDescs = [];
+            
+            if (!passwordRegistrations)
+                return null;
+            
+            if (!passwordRegistrations.collection)
+                return null;
 
-            for (var desc in this.app.passwordRegistrations) {
-                var passwordRegistration = this.app.passwordRegistrations[desc];
+            for (var desc in passwordRegistrations.collection) {
+                var passwordRegistration = passwordRegistrations.collection[desc];
 
-                if (!passwordRegistrations)
+                if (!passwordRegistration)
                     continue;
 
                 if (!passwordRegistration.scoreData)
-
-                var leveledScore = new LeveledScore(passwordRegistrations.scoreData);
+                    continue;
+                    
+                var leveledScore = new LeveledScore(passwordRegistration.scoreData);
                 if (leveledScore.getLockHoursLeft(date) > 0)
                     continue;
 
