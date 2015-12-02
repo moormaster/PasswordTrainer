@@ -9,7 +9,7 @@ var PageImportExport;
 (
     function($) {
         PageImportExport = function(app) {
-            this.prototype = new IPageImportExport();
+            this.prototype = new IPageImportExport(app);
 			
             this.appInstance = app;
             

@@ -4,7 +4,10 @@
  * and open the template in the editor.
  */
 
-var IPagePasswordTrainer = function() {
+var IPagePasswordTrainer = function(app) {
+    // app instance where this page is displayed in
+    this.appInstance = null;
+    
     // password registration instance which is currently shown
     this.currentPasswordRegistration = null;
 
@@ -12,7 +15,7 @@ var IPagePasswordTrainer = function() {
     this.currentLeveledScore = null;
 
     /*
-     * initializes jquery widgets and page
+     * initializes jquery ui widgets and page
      */
     this.init = function() {};
 

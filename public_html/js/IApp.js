@@ -6,12 +6,13 @@ var IApp = function() {
      * page instances
      */
     this.pageTrainPasswords = null;
+    this.pageManagePasswords = null;
     this.pageImportExport = null;
 	
-	/*
-	 * app notificator
-	 */
-	this.appNotificator = null;
+    /*
+     * app notificator
+     */
+    this.appNotificator = null;
 
     /*
      * initialize jquery widgets and pages

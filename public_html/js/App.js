@@ -15,27 +15,14 @@ var App;
             this.appNotificator = new AppNotificator(this, window);
             
             this.pageTrainPasswords = new PagePasswordTrainer(this);
+            this.pageManagePasswords = new PageManagePasswords(this);
             this.pageImportExport = new PageImportExport(this);
 			
             this.init = function() {
                 var appInstance = this;
-                
-                $('#passwordregistration').JQPasswordRegistration(
-                    {
-                        passwordDescription:            $('#passwordregistration .passworddescription'),
-                        password:                       $('#passwordregistration .password'),
-                        passwordRepeat:                 $('#passwordregistration .passwordrepeat'),
-                    }
-                );
-            
-                $('#passwordregistration').on('passwordEntered', 
-                    function(e, desc, pwd) {
-                        appInstance.passwordRegistrations.add(desc, pwd);
-                        appInstance.writePasswordRegistrationsToLocalStorage();
-                    }
-                );
-            
+
                 this.pageTrainPasswords.init();
+                this.pageManagePasswords.init();
                 this.pageImportExport.init();
             };
             
