@@ -38,9 +38,17 @@ Notificator = function(window) {
         if (vibrationLengthInMs && this.hasVibrationPermission())
             this.navigator.vibrate(vibrationLengthInMs);
         
-        if (this.hasNotificationPermission())
-            new this.Notification(title, { body: text });
+        if (this.hasNotificationPermission()) {
+            try {
+                // try deprecated way first
+                return new this.Notification(title, { body: text });
+            } catch (e) {
+                // use future chrome implementation 
+                if (ServiceWorkerRegistration && ServiceWorkerRegistration.showNotification)
+                    return ServiceWorkerRegistration.showNotification(title, { body: text });
+            }
+        }
         
-        return;
+        return null;
     };
 };

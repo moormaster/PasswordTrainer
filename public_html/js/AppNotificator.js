@@ -20,7 +20,7 @@ AppNotificator = function(app, window) {
             if (this.suppressNotification)
                 return;
             
-            this.notificator.notify("PasswordTrainer", readyPasswordDescs.length + " password registrations are ready", 2000);
+            this.notificator.notify("PasswordTrainer", readyPasswordDescs.length + " passwords are ready", [300, 100, 300, 100, 300]);
             this.suppressNotification = true;
 	};
 	
