@@ -50,7 +50,7 @@ var PagePasswordTrainer;
                         
                 window.setInterval(
                     function() {
-                        pageInstance.updateScore();
+                        pageInstance.update();
                     },
                     1000
                 );
