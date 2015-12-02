@@ -1,7 +1,7 @@
 var LevelesScore;
 
 LeveledScore = function (scoreData) {
-	this.prototype = new ILeveledScore(scoreData);
+    this.prototype = new ILeveledScore(scoreData);
 	
     this.setScoreData = function(scoreData) {
         this.scoreData = scoreData;
@@ -65,7 +65,7 @@ LeveledScore = function (scoreData) {
     };
     
     this.getFeeHoursPassed = function(readDate) {
-        var lastSuccessLevel = getLevel(this.scoreDatalastSuccessScore);
+        var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
         
         return getFeeHoursPassed(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, readDate);
     };
