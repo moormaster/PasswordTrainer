@@ -1,10 +1,10 @@
 var IPasswordRegistrationCollection;
 
 IPasswordRegistrationCollection = function() {
-	// collection of password registrations
-	this.collection = null;
+    // collection of password registrations
+    this.collection = null;
 	
-	/*
+    /*
      * import password registrations from json string
      *
      * returns true if json string contains a valid persistence
