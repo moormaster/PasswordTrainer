@@ -3,13 +3,14 @@ var AppNotificator;
 AppNotificator = function(app, window) {
 	this.prototype = new IAppNotificator(app, window);
         
-        this.app = app;
+    this.app = app;
 	this.notificator = new Notificator(window);
         
-        this.suppressNotification = false;
+    this.suppressNotification = false;
 	
 	this.notify = function() {
             var date = new Date();
+            // TODO SLA
             var readyPasswordDescs = gatherReadyPasswordDescriptions(this.app.passwordRegistrations, date);
 
             if (!readyPasswordDescs.length) {

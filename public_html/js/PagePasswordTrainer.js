@@ -75,6 +75,7 @@ var PagePasswordTrainer;
             };
             
             this.setMostRecentPasswordRegistration = function() {
+                // TODO SLA
                 this.setPasswordRegistration(this.appInstance.passwordRegistrations.getMostRecentPasswordRegistration());
             };
 			
@@ -90,7 +91,7 @@ var PagePasswordTrainer;
                 this.updateScore();
                 
                 this.appInstance.appNotificator.notify();
-            }
+            };
 
             this.updateScore = function() {
                 var statusDisplay = null;

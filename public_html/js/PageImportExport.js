@@ -30,6 +30,7 @@ var PageImportExport;
             };
             
             this.exportPasswordRegistrations = function() {
+                // TODO SLA
                 var json = this.appInstance.passwordRegistrations.exportJSON();
                 
                 $('#importexportfield').val(json);                
@@ -38,6 +39,7 @@ var PageImportExport;
             this.importPasswordRegistrations = function() {
                 var json = $('#importexportfield').val();
                 
+                // TODO SLA
                 if (this.appInstance.passwordRegistrations.importJSON(json)) {
                     this.appInstance.writePasswordRegistrationsToLocalStorage();
                     this.appInstance.pageTrainPasswords.update();

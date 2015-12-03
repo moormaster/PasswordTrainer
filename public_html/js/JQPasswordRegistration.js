@@ -7,7 +7,7 @@
 (
     function($) {
         function elemInit(elem, instance) {
-            elem.passwordRegistration = instance
+            elem.passwordRegistration = instance;
         }
         
         function passwordEntered(elem, instance) {
@@ -83,6 +83,6 @@
                     passwordEntered(this, instance);
                 }
             );
-        }
+        };
     }
 )(jQuery);

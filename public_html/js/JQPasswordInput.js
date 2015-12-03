@@ -9,9 +9,9 @@
         $.fn.JQPasswordInput = function() {
             this.change(
                 function() {
-                    $(this).trigger("passwordEntered", [$(this).val()])
+                    $(this).trigger("passwordEntered", [$(this).val()]);
                 }
-            )
+            );
         };
 
     }
