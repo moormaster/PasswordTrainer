@@ -16,7 +16,7 @@ INotificator = function(window) {
     this.hasVibrationPermission = function() {};
     
     /*
-     * sends a new notification
+     * sends a new notification and returns an notification instance
      */
     this.notify = function(title, text) {};
 };
