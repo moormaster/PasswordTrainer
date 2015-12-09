@@ -25,9 +25,7 @@ var PageManagePasswords;
                 
                 $('#passwordregistration').on('passwordEntered', 
                     function(e, desc, pwd) {
-                        // TODO SLA
-                        pageInstance.appInstance.passwordRegistrations.add(desc, pwd);
-                        pageInstance.appInstance.writePasswordRegistrationsToLocalStorage();
+                        pageInstance.appInstance.addPasswordRegistration(desc, pwd);
                     }
                 );
             };

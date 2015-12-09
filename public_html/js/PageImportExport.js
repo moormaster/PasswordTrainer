@@ -30,21 +30,15 @@ var PageImportExport;
             };
             
             this.exportPasswordRegistrations = function() {
-                // TODO SLA
-                var json = this.appInstance.passwordRegistrations.exportJSON();
+                var json = this.appInstance.exportJSON();
                 
-                $('#importexportfield').val(json);                
+                $('#importexportfield').val(json);
             };
             
             this.importPasswordRegistrations = function() {
                 var json = $('#importexportfield').val();
                 
-                // TODO SLA
-                if (this.appInstance.passwordRegistrations.importJSON(json)) {
-                    this.appInstance.writePasswordRegistrationsToLocalStorage();
-                    this.appInstance.pageTrainPasswords.update();
-                    $.mobile.changePage('#pageTrainPasswords');
-                }
+                this.appInstance.importJSON(json);
             };
         };
     }(jQuery)

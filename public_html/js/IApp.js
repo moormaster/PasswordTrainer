@@ -1,4 +1,6 @@
 var IApp = function() {
+    this.prototype = new IImportsExportsPasswordRegistrations();
+    
     // password registrations
     this.passwordRegistrations = null;
 
@@ -28,6 +30,11 @@ var IApp = function() {
      * persist password registration to local storage
      */
     this.writePasswordRegistrationsToLocalStorage = function() {};
+    
+    /*
+     * register a new password
+     */
+    this.addPasswordRegistration = function(description, password) {};
     
     /*
      * add a password input attempt with the given password on the given password registration

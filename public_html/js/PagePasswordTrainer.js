@@ -36,7 +36,7 @@ var PagePasswordTrainer;
                         else
                             $(this).addClass('bg_anim_red');
                         
-                        pageInstance.updateWidgets();
+                        updateWidgets(pageInstance, false);
                     }
                 );
                 
@@ -50,19 +50,14 @@ var PagePasswordTrainer;
             };
             
             this.setPasswordRegistration = function(passwordRegistration) {
-                if (!passwordRegistration)
-                    return false;
-                
-                if (this.currentPasswordRegistration != passwordRegistration) {
-                    $('#passwordtrainer .password').removeClass('bg_anim_green');
-                    $('#passwordtrainer .password').removeClass('bg_anim_red');
-                }
-                
                 this.currentPasswordRegistration = passwordRegistration;
-                this.currentLeveledScore.setScoreData(this.currentPasswordRegistration.scoreData);
                 
-                $('#passwordtrainer .passworddescription').text(passwordRegistration.description);
-                updateWidgets(this.currentLeveledScore);
+                if (!this.currentPasswordRegistration)
+                    this.currentLeveledScore.setScoreData(null);
+                else
+                    this.currentLeveledScore.setScoreData(this.currentPasswordRegistration.scoreData);
+                
+                updateWidgets(this, true);
                 
                 return true;
             };
@@ -81,7 +76,7 @@ var PagePasswordTrainer;
             
             this.update = function() {
                 this.setMostRecentPasswordRegistration();
-                updateWidgets(this.currentLeveledScore);
+                updateWidgets(this, false);
                 
                 this.appInstance.appNotificator.notify();
             };
@@ -119,21 +114,49 @@ var PagePasswordTrainer;
                 return true;
             }
 
-            var updateWidgets = function(leveledScore) {
+            var updateWidgets = function(pageInstance, resetColor) {
+                if (resetColor) {
+                    $('#passwordtrainer .password').removeClass('bg_anim_green');
+                    $('#passwordtrainer .password').removeClass('bg_anim_red');
+                    
+                    updateWidgetReadonly(pageInstance);
+                }
+                
+                if (pageInstance) {
+                    updateWidgetDescription(pageInstance.currentPasswordRegistration);
+                    updateWidgetScoreDisplay(pageInstance.currentLeveledScore);
+                }
+            };
+            
+            var updateWidgetDescription = function(passwordRegistration) {
+                if (!passwordRegistration)
+                    $('#passwordtrainer .passworddescription').text("");
+                else
+                    $('#passwordtrainer .passworddescription').text(passwordRegistration.description);
+            };
+            
+            var updateWidgetScoreDisplay = function(leveledScore) {
                 var statusDisplay = formatStatus(leveledScore);
                 var leveledScoreDisplay = formatLeveledScore(leveledScore);
-                
+
                 if (!statusDisplay)
                     $('#passwordtrainer .passwordscore').text(leveledScoreDisplay);
                 else
                     $('#passwordtrainer .passwordscore').text(leveledScoreDisplay + " (" + statusDisplay + ")");
-                
-                if (leveledScore.lockHoursLeft) {
+            };
+            
+            var updateWidgetReadonly = function(pageInstance) {
+                if (pageInstance) {
+                    if (!pageInstance.currentPasswordRegistration || pageInstance.currentLeveledScore.lockHoursLeft) {
+                        $('#passwordtrainer .password').attr("readonly", "");
+                        $('#passwordtrainer .password').addClass('bg_readonly');
+                    } else {
+                        $('#passwordtrainer .password').removeAttr("readonly");
+                        $('#passwordtrainer .password').removeClass('bg_readonly');
+                    }
+                } else {
                     $('#passwordtrainer .password').attr("readonly", "");
                     $('#passwordtrainer .password').addClass('bg_readonly');
-                } else {
-                    $('#passwordtrainer .password').removeAttr("readonly");
-                    $('#passwordtrainer .password').removeClass('bg_readonly');
                 }
             };
             

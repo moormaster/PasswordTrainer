@@ -1,24 +1,11 @@
 var IPasswordRegistrationCollection;
 
 IPasswordRegistrationCollection = function() {
+    this.prototype = new IImportsExportsPasswordRegistrations();
+    
     // collection of password registrations
     this.collection = null;
     
-    /*
-     * import password registrations from json string
-     *
-     * returns true if json string contains a valid persistence
-     * of password registrations.
-     */
-    this.importJSON = function(json) {};
-
-    /*
-     * export password registrations to a json string
-     *
-     * returns the json string
-     */
-    this.exportJSON = function() {};
-
     /*
      * add new password registration
      */

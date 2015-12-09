@@ -35,6 +35,24 @@ var App;
                 localStorage['passwordRegistrations'] = this.passwordRegistrations.exportJSON();
             };
             
+            this.importJSON = function(json) {
+                if (this.passwordRegistrations.importJSON(json)) {
+                    this.writePasswordRegistrationsToLocalStorage();
+                    
+                    this.pageTrainPasswords.update();
+                    $.mobile.changePage('#pageTrainPasswords');
+                }
+            };
+
+            this.exportJSON = function() {
+                return this.passwordRegistrations.exportJSON();
+            };
+            
+            this.addPasswordRegistration = function(description, password) {
+                this.passwordRegistrations.add(description, password);
+                this.writePasswordRegistrationsToLocalStorage();
+            };
+            
             this.addPasswordAttempt = function(desc, password) {
                 if (!this.passwordRegistrations)
                     return false;

@@ -6,7 +6,10 @@ PasswordRegistrationCollection = function() {
     this.collection = {};
 
     this.importJSON = function(json) {
-        var passwordRegistrations = JSON.parse(json);
+        var passwordRegistrations = "";
+        
+        if (json)
+            passwordRegistrations = JSON.parse(json);
 
         if (!isPasswordRegistrationIntegrityOk(passwordRegistrations))
             return false;
