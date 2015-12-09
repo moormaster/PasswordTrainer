@@ -39,15 +39,15 @@ var App;
                 if (!this.passwordRegistrations)
                     return false;
 					
-		if (!this.passwordRegistrations.collection)
+                if (!this.passwordRegistrations.collection)
                     return false;
 					
-		var passwordRegistration = this.passwordRegistrations.collection[desc];
+                var passwordRegistration = this.passwordRegistrations.collection[desc];
 				
-		if (!passwordRegistration)
+                if (!passwordRegistration)
                     return false;
                 
-		var leveledScore = new LeveledScore(passwordRegistration.scoreData);
+		        var leveledScore = new LeveledScore(passwordRegistration.scoreData);
 				
                 var hash = CryptoJS.MD5(password).toString();
                 if (hash != passwordRegistration.hash)
