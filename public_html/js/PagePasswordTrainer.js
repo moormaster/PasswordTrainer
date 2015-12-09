@@ -69,7 +69,7 @@ var PagePasswordTrainer;
                 this.currentLeveledScore.setScoreData(this.currentPasswordRegistration.scoreData);
                 
                 $('#passwordtrainer .passworddescription').text(passwordRegistration.description);
-                this.updateScore();
+                updateWidgets(this.currentLeveledScore);
                 
                 return true;
             };
@@ -88,24 +88,31 @@ var PagePasswordTrainer;
             
             this.update = function() {
                 this.setMostRecentPasswordRegistration();
-                this.updateScore();
+                updateWidgets(this.currentLeveledScore);
                 
                 this.appInstance.appNotificator.notify();
             };
 
-            this.updateScore = function() {
-                var statusDisplay = null;
-                
-                if (this.currentLeveledScore.fee)
-                    statusDisplay = formatScore(this.currentLeveledScore.fee) + " fee";
-                
-                if (this.currentLeveledScore.lockHoursLeft)
-                    statusDisplay = "locked for " + formatTime(this.currentLeveledScore.lockHoursLeft*60*60*1000);
+            var updateWidgets = function(leveledScore) {
+                var statusDisplay = formatStatus(leveledScore);
+                var leveledScoreDisplay = formatLeveledScore(leveledScore);
                 
                 if (!statusDisplay)
-                    $('#passwordtrainer .passwordscore').text("Score " + formatScore(this.currentLeveledScore.score) + " / Level " + this.currentLeveledScore.level);
+                    $('#passwordtrainer .passwordscore').text(leveledScoreDisplay);
                 else
-                    $('#passwordtrainer .passwordscore').text("Score " + formatScore(this.currentLeveledScore.score) + " / Level " + this.currentLeveledScore.level + " (" + statusDisplay + ")");
+                    $('#passwordtrainer .passwordscore').text(leveledScoreDisplay + " (" + statusDisplay + ")");
+            };
+            
+            var formatStatus = function(leveledScore) {
+                if (leveledScore.fee)
+                    return formatScore(leveledScore.fee) + " fee";
+                
+                if (leveledScore.lockHoursLeft)
+                    return "locked for " + formatTime(leveledScore.lockHoursLeft*60*60*1000);
+            };
+            
+            var formatLeveledScore = function(leveledScore) {
+                return "Score " + formatScore(leveledScore.score) + " / Level " + leveledScore.level;
             };
             
             var formatScore = function(score) {
