@@ -15,6 +15,8 @@ var PagePasswordTrainer;
             this.currentPasswordRegistration;
             this.currentLeveledScore = new LeveledScore();
             
+            this.intervalId = null;
+            
             /*
              * initializes widgets and auto page update
              */
@@ -24,21 +26,17 @@ var PagePasswordTrainer;
                 $('#passwordtrainer .password').JQPasswordInput();
                 $('#passwordtrainer .password').on('passwordEntered',
                     function(e, password) {
+                        $(this).val("");
                         $(this).removeClass('bg_anim_green');
                         $(this).removeClass('bg_anim_red');
                         
+                        interruptInterval(pageInstance, 1000);
                         if (pageInstance.addPasswordAttempt(password))
                             $(this).addClass('bg_anim_green');
                         else
                             $(this).addClass('bg_anim_red');
                         
-                        $(this).val("");
-                        window.setTimeout(
-                            function() {
-                                pageInstance.update();
-                            },
-                            2000
-                        );
+                        pageInstance.updateWidgets();
                     }
                 );
                 
@@ -47,13 +45,8 @@ var PagePasswordTrainer;
                         pageInstance.update();
                     }
                 );
-                        
-                window.setInterval(
-                    function() {
-                        pageInstance.update();
-                    },
-                    1000
-                );
+                
+                activateInterval(pageInstance);
             };
             
             this.setPasswordRegistration = function(passwordRegistration) {
@@ -92,6 +85,39 @@ var PagePasswordTrainer;
                 
                 this.appInstance.appNotificator.notify();
             };
+            
+            var activateInterval = function(pageInstance) {
+                pageInstance.intervalId = window.setInterval(
+                    function() {
+                        pageInstance.update();
+                    },
+                    1000
+                );
+            };
+            
+            var clearInterval = function(pageInstance) {
+                if (!pageInstance.intervalId)
+                    return false;
+                
+                window.clearInterval(pageInstance.intervalId);
+                pageInstance.intervalId = null;
+                
+                return true;
+            };
+            
+            var interruptInterval = function(pageInstance, interruptDurationMs) {
+                if (!clearInterval(pageInstance))
+                    return false;
+                
+                window.setTimeout(
+                    function() {
+                        activateInterval(pageInstance);
+                    },
+                    interruptDurationMs
+                );
+                
+                return true;
+            }
 
             var updateWidgets = function(leveledScore) {
                 var statusDisplay = formatStatus(leveledScore);
