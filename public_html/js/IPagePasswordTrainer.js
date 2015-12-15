@@ -15,7 +15,7 @@ var IPagePasswordTrainer = function(app) {
     this.currentLeveledScore = null;
     
     // refresh interval id
-    this.intervalId
+    this.intervalId;
 
     /*
      * initializes jquery ui widgets and page

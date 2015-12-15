@@ -27,16 +27,10 @@ var PagePasswordTrainer;
                 $('#passwordtrainer .password').on('passwordEntered',
                     function(e, password) {
                         $(this).val("");
-                        $(this).removeClass('bg_anim_green');
-                        $(this).removeClass('bg_anim_red');
                         
                         interruptInterval(pageInstance, 1000);
-                        if (pageInstance.addPasswordAttempt(password))
-                            $(this).addClass('bg_anim_green');
-                        else
-                            $(this).addClass('bg_anim_red');
-                        
-                        updateWidgets(pageInstance, false);
+                        var success = pageInstance.addPasswordAttempt(password);
+                        updateWidgets(pageInstance.currentLeveledScore, success);
                     }
                 );
                 
@@ -50,6 +44,9 @@ var PagePasswordTrainer;
             };
             
             this.setPasswordRegistration = function(passwordRegistration) {
+                if (!passwordRegistration)
+                    return false;
+                
                 this.currentPasswordRegistration = passwordRegistration;
                 
                 if (!this.currentPasswordRegistration)
@@ -112,52 +109,42 @@ var PagePasswordTrainer;
                 );
                 
                 return true;
-            }
+            };
 
-            var updateWidgets = function(pageInstance, resetColor) {
-                if (resetColor) {
-                    $('#passwordtrainer .password').removeClass('bg_anim_green');
-                    $('#passwordtrainer .password').removeClass('bg_anim_red');
-                    
-                    updateWidgetReadonly(pageInstance);
-                }
-                
-                if (pageInstance) {
-                    updateWidgetDescription(pageInstance.currentPasswordRegistration);
-                    updateWidgetScoreDisplay(pageInstance.currentLeveledScore);
-                }
-            };
-            
-            var updateWidgetDescription = function(passwordRegistration) {
-                if (!passwordRegistration)
-                    $('#passwordtrainer .passworddescription').text("");
-                else
-                    $('#passwordtrainer .passworddescription').text(passwordRegistration.description);
-            };
-            
-            var updateWidgetScoreDisplay = function(leveledScore) {
+            var updateWidgets = function(leveledScore, successState) {
                 var statusDisplay = formatStatus(leveledScore);
                 var leveledScoreDisplay = formatLeveledScore(leveledScore);
-
+                
+                switch(successState) {
+                    case false:
+                        $('#passwordtrainer .password').removeClass('bg_anim_green');
+                        $('#passwordtrainer .password').addClass('bg_anim_red');
+                        break;
+                        
+                    case true:
+                        $('#passwordtrainer .password').removeClass('bg_anim_red');
+                        $('#passwordtrainer .password').addClass('bg_anim_green');
+                        break;
+                    
+                    default:
+                        $('#passwordtrainer .password').removeClass('bg_anim_green');
+                        $('#passwordtrainer .password').removeClass('bg_anim_red');
+                        
+                        if (leveledScore.lockHoursLeft) {
+                            $('#passwordtrainer .password').attr("readonly", "");
+                            $('#passwordtrainer .password').addClass('bg_readonly');
+                        } else {
+                            $('#passwordtrainer .password').removeAttr("readonly");
+                            $('#passwordtrainer .password').removeClass('bg_readonly');
+                        }
+                        break;
+                } 
+                
                 if (!statusDisplay)
                     $('#passwordtrainer .passwordscore').text(leveledScoreDisplay);
                 else
                     $('#passwordtrainer .passwordscore').text(leveledScoreDisplay + " (" + statusDisplay + ")");
-            };
-            
-            var updateWidgetReadonly = function(pageInstance) {
-                if (pageInstance) {
-                    if (!pageInstance.currentPasswordRegistration || pageInstance.currentLeveledScore.lockHoursLeft) {
-                        $('#passwordtrainer .password').attr("readonly", "");
-                        $('#passwordtrainer .password').addClass('bg_readonly');
-                    } else {
-                        $('#passwordtrainer .password').removeAttr("readonly");
-                        $('#passwordtrainer .password').removeClass('bg_readonly');
-                    }
-                } else {
-                    $('#passwordtrainer .password').attr("readonly", "");
-                    $('#passwordtrainer .password').addClass('bg_readonly');
-                }
+
             };
             
             var formatStatus = function(leveledScore) {
