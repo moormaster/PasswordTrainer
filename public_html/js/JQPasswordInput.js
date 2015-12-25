@@ -13,6 +13,42 @@
                 }
             );
         };
+        
+        $.prototype.JQPasswordInputSuccessColor = function(isSuccessful) {
+                switch(isSuccessful) {
+                    case false:
+                        this.find('.password').removeClass('bg_anim_green');
+                        this.find('.password').addClass('bg_anim_red');
+                        break;
+                        
+                    case true:
+                        this.find('.password').removeClass('bg_anim_red');
+                        this.find('.password').addClass('bg_anim_green');
+                        break;
+                        
+                    default:
+                        this.find('.password').removeClass('bg_anim_green');
+                        this.find('.password').removeClass('bg_anim_red');
+                        break;
+                }                        
+        };
+        
+        $.prototype.JQPasswordInputColor = function(isLocked) {
+            if (isLocked) {
+                this.find('.password').attr("readonly", "");
+                this.find('.password').addClass('bg_readonly');
+            } else {
+                this.find('.password').removeAttr("readonly");
+                this.find('.password').removeClass('bg_readonly');
+            }
+        };
 
+        $.prototype.JQPasswordInputStatus = function(text) {
+            return this.find('.passwordscore').text(text);
+        };
+        
+        $.prototype.JQPasswordInputDescription = function(text) {
+            return this.find('.passworddescription').text(text);
+        }
     }
 )(jQuery);
