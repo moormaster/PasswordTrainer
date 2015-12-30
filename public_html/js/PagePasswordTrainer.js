@@ -119,13 +119,13 @@ var PagePasswordTrainer;
             
             var updateWidgetDescription = function(passwordRegistration) {
                 if (!passwordRegistration)
-                    $('#passwordtrainer').JQPasswordInputDescription("");
+                    $('#passwordtrainer').JQPasswordInput("description", {text: ""});
                 else
-                    $('#passwordtrainer').JQPasswordInputDescription(passwordRegistration.description);
+                    $('#passwordtrainer').JQPasswordInput("description", {text: passwordRegistration.description});
             };
             
             var updateWidgetsSuccessColor = function(lockedState, successState) {
-                $('#passwordtrainer').JQPasswordInputSuccessColor(successState);
+                $('#passwordtrainer').JQPasswordInput("successColor", {isSuccessful: successState});
 
                 switch(successState) {
                     case false:
@@ -133,15 +133,15 @@ var PagePasswordTrainer;
                         break;
                     
                     default:
-                        $('#passwordtrainer').JQPasswordInputColor(lockedState);
+                        $('#passwordtrainer').JQPasswordInput("lock", {isLocked: lockedState});
                         break;
                 } 
                 
                 if (!statusDisplay)
-                    $('#passwordtrainer').JQPasswordInputStatus(leveledScoreDisplay);
+                    $('#passwordtrainer').JQPasswordInput("status", {text: leveledScoreDisplay});
                 else
-                    $('#passwordtrainer').JQPasswordInputStatus(leveledScoreDisplay + " (" + statusDisplay + ")");
-            }
+                    $('#passwordtrainer').JQPasswordInput("status", {text: leveledScoreDisplay + " (" + statusDisplay + ")"});
+            };
             
             var formatStatus = function(leveledScore) {
                 if (leveledScore.fee)

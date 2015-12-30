@@ -6,7 +6,7 @@
 
 (
     function($) {
-        $.fn.JQPasswordInput = function() {
+        var init = function() {
             this.change(
                 function() {
                     $(this).trigger("passwordEntered", [$(this).val()]);
@@ -14,7 +14,7 @@
             );
         };
         
-        $.prototype.JQPasswordInputSuccessColor = function(isSuccessful) {
+        var setSuccessColor = function(isSuccessful) {
                 switch(isSuccessful) {
                     case false:
                         this.find('.password').removeClass('bg_anim_green');
@@ -33,7 +33,7 @@
                 }                        
         };
         
-        $.prototype.JQPasswordInputColor = function(isLocked) {
+        var setLock = function(isLocked) {
             if (isLocked) {
                 this.find('.password').attr("readonly", "");
                 this.find('.password').addClass('bg_readonly');
@@ -43,12 +43,39 @@
             }
         };
 
-        $.prototype.JQPasswordInputStatus = function(text) {
+        var setStatus = function(text) {
             return this.find('.passwordscore').text(text);
         };
         
-        $.prototype.JQPasswordInputDescription = function(text) {
+        var setDescription = function(text) {
             return this.find('.passworddescription').text(text);
-        }
+        };
+        
+        $.fn.JQPasswordInput = function(sub, options) {
+            if (!sub)
+                sub = "init";
+                
+            switch(sub) {
+                case "init":
+                    return init.call(this);
+                    break;
+                    
+                case "successColor":
+                    return setSuccessColor.call(this, options.isSuccessful);
+                    break;
+                    
+                case "lock":
+                    return setLock.call(this, options.isLocked);
+                    break;
+                    
+                case "status":
+                    return setStatus.call(this, options.text);
+                    break;
+                    
+                case "description":
+                    return setDescription.call(this, options.text);
+                    break;
+            };
+        };
     }
 )(jQuery);
