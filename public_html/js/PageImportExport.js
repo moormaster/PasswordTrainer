@@ -31,6 +31,7 @@ var PageImportExport;
             
             this.exportPasswordRegistrations = function() {
                 var json = this.appInstance.exportJSON();
+                json = JSONFormatter.format(json);
                 
                 $('#importexportfield').val(json);
             };

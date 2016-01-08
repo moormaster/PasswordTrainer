@@ -5,7 +5,7 @@
  */
 
 QUnit.module(
-    "LevelScore",
+    "LeveledScore",
     {
         beforeEach: function() {
             var addAttempt = function(leveledScore, feeHours) {
@@ -20,7 +20,7 @@ QUnit.module(
                 
                 
                 return leveledScore.addSuccessfulAttempt(new Date(d.getTime() + 1000*60*60*h));
-            }
+            };
             
             var getScoreFixture = function(attemptsCount, lastAttemptFeeHours) {
                 if (!lastAttemptFeeHours)
@@ -35,7 +35,7 @@ QUnit.module(
                     addAttempt(score, lastAttemptFeeHours);
 
                 return score;
-            }
+            };
             
             this.assertNumEqual = function(assert, actual, expected, diff, message) {
                 if (Math.abs(actual - expected) <= diff)
@@ -54,7 +54,7 @@ QUnit.module(
             }
         }
     }
-)
+);
 
 QUnit.test(
     "LevelScore.getScore()", 

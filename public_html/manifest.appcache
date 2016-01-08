@@ -1,7 +1,7 @@
 CACHE MANIFEST
 
 CACHE:
-# 2015-12-31 00:32
+# 2016-01-08 18:55
 
 index.html
 js/libs/cryptojs/md5.js
@@ -16,6 +16,7 @@ js/App.js
 js/AppNotificator.js
 js/IApp.js
 js/IAppNotificator.js
+js/IJSONFormatter.js
 js/ILeveledScore.js
 js/IImportsExportsPasswordRegistrations.js
 js/INotificator.js
@@ -25,6 +26,7 @@ js/IPageImportExport.js
 js/IPasswordRegistrationCollection.js
 js/JQPasswordRegistration.js
 js/JQPasswordInput.js
+js/JSONFormatter.js
 js/LeveledScore.js
 js/Notificator.js
 js/PageImportExport.js
