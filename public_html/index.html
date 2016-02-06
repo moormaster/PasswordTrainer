@@ -19,7 +19,6 @@ and open the template in the editor.
         <script src="js/libs/cryptojs/md5.js"></script>
         <script src="js/libs/jquery/jquery.js"></script>
         <script src="js/libs/jquerymobile/jquery.mobile.js"></script>
-        <script src="js/libs/jqueryui/jquery-ui.js"></script>   
         
         <!-- jquery ui widgets -->
         <script src="js/JQPasswordRegistration.js"></script>
@@ -32,8 +31,8 @@ and open the template in the editor.
         <script src="js/IJSONFormatter.js"></script>
         <script src="js/ILeveledScore.js"></script>
         <script src="js/INotificator.js"></script>
+        <script src="js/IPagePasswordDialog.js"></script>
         <script src="js/IPagePasswordTrainer.js"></script>
-        <script src="js/IPageManagePasswords.js"></script>
         <script src="js/IPageImportExport.js"></script>
         <script src="js/IPasswordRegistrationCollection.js"></script>
         
@@ -43,8 +42,8 @@ and open the template in the editor.
         <script src="js/Notificator.js"></script>
         <script src="js/AppNotificator.js"></script>
         <script src="js/PasswordRegistrationCollection.js"></script>
+        <script src="js/PagePasswordDialog.js"></script>
         <script src="js/PagePasswordTrainer.js"></script>
-        <script src="js/PageManagePasswords.js"></script>
         <script src="js/PageImportExport.js"></script>
         <script src="js/App.js"></script>
         
@@ -83,21 +82,8 @@ and open the template in the editor.
             </div>
 
             <div data-role="content">
+                <a href="#pagePasswordDialog" data-rel="dialog">Add/Edit password</a>
                 <div id="mainaccordioncontainer">
-                    <table id="passwordregistration">
-                        <tr>
-                            <th>Description:</th>
-                            <td><input type="text" data-role="none" class="passworddescription"/></td>
-                        </tr>
-                        <tr>
-                            <th>Password:</th>
-                            <td><input type="text" data-role="none" class="password"/></td>
-                        </tr>
-                        <tr>
-                            <th>Repeat:</th>
-                            <td><input type="text" data-role="none" class="passwordrepeat"/></td>
-                        </tr>
-                    </table>
                 </div>
             </div>
             
@@ -129,6 +115,29 @@ and open the template in the editor.
                         <li><a href="#pageImportExport" class="ui-btn-active ui-state-persist">Import/Export</a></li>
                     </ul>
                 </div>
+            </div>
+        </div>
+        
+        <div data-role="page" id="pagePasswordDialog">
+            <div data-role="header" data-position="fixed">
+                <h1>Add/Edit Passwords</h1>
+            </div>
+            
+            <div data-role="content">
+                <table id="passwordregistration">
+                    <tr>
+                        <th>Description:</th>
+                        <td><input type="text" data-role="none" class="passworddescription"/></td>
+                    </tr>
+                    <tr>
+                        <th>Password:</th>
+                        <td><input type="text" data-role="none" class="password"/></td>
+                    </tr>
+                    <tr>
+                        <th>Repeat:</th>
+                        <td><input type="text" data-role="none" class="passwordrepeat"/></td>
+                    </tr>
+                </table>
             </div>
         </div>
     </body>

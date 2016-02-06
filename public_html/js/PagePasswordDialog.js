@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var PageManagePasswords;
+var PagePasswordDialog;
 
 (
     function($) {
-        PageManagePasswords = function(app) {
-            this.prototype = new IPageManagePasswords(app);
+        PagePasswordDialog = function(app) {
+            this.prototype = new IPagePasswordDialog(app);
             
             this.appInstance = app;
             

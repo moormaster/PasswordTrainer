@@ -15,14 +15,15 @@ var App;
             this.appNotificator = new AppNotificator(this, window);
             
             this.pageTrainPasswords = new PagePasswordTrainer(this);
-            this.pageManagePasswords = new PageManagePasswords(this);
             this.pageImportExport = new PageImportExport(this);
+            
+            this.pagePasswordDialog = new PagePasswordDialog(this);
             
             this.init = function() {
                 var appInstance = this;
 
                 this.pageTrainPasswords.init();
-                this.pageManagePasswords.init();
+                this.pagePasswordDialog.init();
                 this.pageImportExport.init();
             };
             

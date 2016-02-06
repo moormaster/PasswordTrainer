@@ -6,7 +6,7 @@
 #6  [done]          training page which always shows the password with minimal
                     lock time & maximum punish score first
 #7                  create reusable ui widget for showing / guessing password
-#8                  convert manage-page into add-dialog
+#8  [done]          convert manage-page into add-dialog
 #9                  buttons for adding / deleting current password
 
 #10 [done]          localStorage persistence
