@@ -8,7 +8,7 @@ AppNotificator = function(app, window) {
     
     this.activeNotifications = [];
     this.lastNotificationPasswordCount = null;
-	
+    
     this.notify = function() {
         var date = new Date();
         // TODO SLA
@@ -53,7 +53,7 @@ AppNotificator = function(app, window) {
         
         return true;
     };
-	
+    
     var gatherReadyPasswordDescriptions = function(passwordRegistrations, date) {
         var readyPasswordDescs = [];
 

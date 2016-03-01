@@ -3,9 +3,9 @@ var ILeveledScore;
 ILeveledScore = function(scoreData) {
     this.setScoreData = function(scoreData) {};
     
-	/*
-	 * add successful password attempt to score
-	 */
+    /*
+     * add successful password attempt to score
+     */
     this.addSuccessfulAttempt = function(dateOfAttempt) {};
     
     this.getFee = function(readDate) {};
@@ -16,8 +16,8 @@ ILeveledScore = function(scoreData) {
     this.getFeeHoursPassed = function(readDate) {};
     
     /*
-	 * score properties by current date/time
-	 */
+     * score properties by current date/time
+     */
     Object.defineProperties(
         this, 
         {

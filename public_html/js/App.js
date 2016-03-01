@@ -9,15 +9,15 @@ var App;
     function($) {
         App = function() {
             this.prototype = new IApp();
-			
+            
             this.passwordRegistrations = new PasswordRegistrationCollection();
-			
+            
             this.appNotificator = new AppNotificator(this, window);
             
             this.pageTrainPasswords = new PagePasswordTrainer(this);
             this.pageManagePasswords = new PageManagePasswords(this);
             this.pageImportExport = new PageImportExport(this);
-			
+            
             this.init = function() {
                 var appInstance = this;
 
@@ -34,21 +34,21 @@ var App;
             this.writePasswordRegistrationsToLocalStorage = function() {
                 localStorage['passwordRegistrations'] = this.passwordRegistrations.exportJSON();
             };
-			
+            
             this.addPasswordAttempt = function(desc, password) {
                 if (!this.passwordRegistrations)
                     return false;
-					
+                
                 if (!this.passwordRegistrations.collection)
                     return false;
-					
+                
                 var passwordRegistration = this.passwordRegistrations.collection[desc];
-				
+                
                 if (!passwordRegistration)
                     return false;
                 
-		        var leveledScore = new LeveledScore(passwordRegistration.scoreData);
-				
+                var leveledScore = new LeveledScore(passwordRegistration.scoreData);
+                
                 var hash = CryptoJS.MD5(password).toString();
                 if (hash != passwordRegistration.hash)
                     return false;

@@ -10,11 +10,11 @@ var PagePasswordTrainer;
     function($) {
         PagePasswordTrainer = function(app) {
             this.prototype = new IPagePasswordTrainer(app);
-			
+            
             this.appInstance = app;
             this.currentPasswordRegistration;
             this.currentLeveledScore = new LeveledScore();
-			
+            
             /*
              * initializes widgets and auto page update
              */
@@ -35,7 +35,7 @@ var PagePasswordTrainer;
                         $(this).val("");
                         window.setTimeout(
                             function() {
-                                pageInstance.update();                                
+                                pageInstance.update();
                             },
                             2000
                         );
@@ -78,7 +78,7 @@ var PagePasswordTrainer;
                 // TODO SLA
                 this.setPasswordRegistration(this.appInstance.passwordRegistrations.getMostRecentPasswordRegistration());
             };
-			
+            
             this.addPasswordAttempt = function(password) {
                 if (!this.appInstance)
                     return false;
@@ -103,9 +103,9 @@ var PagePasswordTrainer;
                     $('#passwordtrainer .passwordscore').text(leveledScoreDisplay + " (" + statusDisplay + ")");
                 
                 if (leveledScore.lockHoursLeft)
-                    $('#passwordtrainer .password').attr("readonly", "")
+                    $('#passwordtrainer .password').attr("readonly", "");
                 else
-                    $('#passwordtrainer .password').removeAttr("readonly")                
+                    $('#passwordtrainer .password').removeAttr("readonly");
             };
             
             var formatStatus = function(leveledScore) {

@@ -3,7 +3,7 @@ var IPasswordRegistrationCollection;
 IPasswordRegistrationCollection = function() {
     // collection of password registrations
     this.collection = null;
-	
+    
     /*
      * import password registrations from json string
      *
@@ -23,7 +23,7 @@ IPasswordRegistrationCollection = function() {
      * add new password registration
      */
     this.add = function(description, password) {};
-	
+    
     /*
      * find the password registration with minimum lock time and maximum fee time
      */

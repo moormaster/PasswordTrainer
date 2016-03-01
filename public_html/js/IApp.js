@@ -8,7 +8,7 @@ var IApp = function() {
     this.pageTrainPasswords = null;
     this.pageManagePasswords = null;
     this.pageImportExport = null;
-	
+    
     /*
      * app notificator
      */

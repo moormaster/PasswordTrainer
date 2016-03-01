@@ -11,7 +11,7 @@ var PageManagePasswords;
             this.prototype = new IPageManagePasswords(app);
             
             this.appInstance = app;
-			
+            
             this.init = function() {
                 var pageInstance = this;
                 
@@ -22,7 +22,7 @@ var PageManagePasswords;
                         passwordRepeat:                 $('#passwordregistration .passwordrepeat'),
                     }
                 );
-            
+                
                 $('#passwordregistration').on('passwordEntered', 
                     function(e, desc, pwd) {
                         // TODO SLA

@@ -10,7 +10,7 @@ var PageImportExport;
     function($) {
         PageImportExport = function(app) {
             this.prototype = new IPageImportExport(app);
-			
+            
             this.appInstance = app;
             
             this.init = function() {
@@ -21,7 +21,7 @@ var PageImportExport;
                         pageInstance.exportPasswordRegistrations();
                     }
                 );
-        
+                
                 $('#pageImportExport').on('change',
                     function(e) {
                         pageInstance.importPasswordRegistrations();

@@ -2,7 +2,7 @@ var LevelesScore;
 
 LeveledScore = function (scoreData) {
     this.prototype = new ILeveledScore(scoreData);
-	
+    
     this.setScoreData = function(scoreData) {
         this.scoreData = scoreData;
         
