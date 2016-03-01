@@ -102,10 +102,13 @@ var PagePasswordTrainer;
                 else
                     $('#passwordtrainer .passwordscore').text(leveledScoreDisplay + " (" + statusDisplay + ")");
                 
-                if (leveledScore.lockHoursLeft)
+                if (leveledScore.lockHoursLeft) {
                     $('#passwordtrainer .password').attr("readonly", "");
-                else
+                    $('#passwordtrainer .password').addClass('bg_readonly');
+                } else {
                     $('#passwordtrainer .password').removeAttr("readonly");
+                    $('#passwordtrainer .password').removeClass('bg_readonly');
+                }
             };
             
             var formatStatus = function(leveledScore) {
