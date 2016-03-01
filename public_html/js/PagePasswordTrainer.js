@@ -101,6 +101,11 @@ var PagePasswordTrainer;
                     $('#passwordtrainer .passwordscore').text(leveledScoreDisplay);
                 else
                     $('#passwordtrainer .passwordscore').text(leveledScoreDisplay + " (" + statusDisplay + ")");
+                
+                if (leveledScore.lockHoursLeft)
+                    $('#passwordtrainer .password').attr("readonly", "")
+                else
+                    $('#passwordtrainer .password').removeAttr("readonly")                
             };
             
             var formatStatus = function(leveledScore) {

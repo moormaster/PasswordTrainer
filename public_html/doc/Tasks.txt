@@ -11,7 +11,7 @@
 
 #10 [done]          localStorage persistence
 #11 [done]          display fee points instead of fee time
-#12                 lock input field while lock time hours left
+#12 [done]          lock input field while lock time hours left
 #13 [done]          export/import page (copy & paste from text field)
 #14 [done]          generate test fixtures by generation method
 #15                 display lock time display using cake diagram
