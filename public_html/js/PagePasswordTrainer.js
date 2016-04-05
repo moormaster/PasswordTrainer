@@ -30,7 +30,7 @@ var PagePasswordTrainer;
                         
                         interruptInterval(pageInstance, 1000);
                         var success = pageInstance.addPasswordAttempt(password);
-                        updateWidgets(pageInstance, success);
+                        updateWidgets.call(pageInstance, success);
                     }
                 );
                 
@@ -54,7 +54,7 @@ var PagePasswordTrainer;
                 else
                     this.currentLeveledScore.setScoreData(this.currentPasswordRegistration.scoreData);
                 
-                updateWidgets(this, true);
+                updateWidgets.call(this, true);
                 
                 return true;
             };
@@ -73,7 +73,7 @@ var PagePasswordTrainer;
             
             this.update = function() {
                 this.setMostRecentPasswordRegistration();
-                updateWidgets(this, false);
+                updateWidgets.call(this, false);
                 
                 this.appInstance.appNotificator.notify();
             };
@@ -111,10 +111,10 @@ var PagePasswordTrainer;
                 return true;
             };
 
-            var updateWidgets = function(pageInstance, successState) {
-                updateWidgetDescription(pageInstance.currentPasswordRegistration);
-                updateWidgetsSuccessColor((pageInstance.currentLeveledScore.lockHoursLeft > 0), successState);
-                updateWidgetsStatus(pageInstance.currentLeveledScore);
+            var updateWidgets = function(successState) {
+                updateWidgetDescription(this.currentPasswordRegistration);
+                updateWidgetsSuccessColor((this.currentLeveledScore.lockHoursLeft > 0), successState);
+                updateWidgetsStatus(this.currentLeveledScore);
             };
             
             var updateWidgetDescription = function(passwordRegistration) {

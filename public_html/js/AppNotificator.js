@@ -11,8 +11,7 @@ AppNotificator = function(app, window) {
     
     this.notify = function() {
         var date = new Date();
-        // TODO SLA
-        var readyPasswordDescs = gatherReadyPasswordDescriptions(this.app.passwordRegistrations, date);
+        var readyPasswordDescs = gatherReadyPasswordDescriptions.call(this, date);
 
         // no pending passwords -> reset notifications
         if (!readyPasswordDescs.length) {
@@ -29,18 +28,18 @@ AppNotificator = function(app, window) {
         }
 
         // create new notification
-        resetNotifications(this.activeNotifications);
+        resetNotifications.call(this);
         var notification = this.notificator.notify("PasswordTrainer", readyPasswordDescs.length + " passwords are ready", [300, 100, 300, 100, 300]);
         this.activeNotifications.push(notification);
         this.lastNotificationPasswordCount = readyPasswordDescs.length;
     };
     
-    var resetNotifications = function(notificationList) {
-        if (!notificationList)
-            return false;
+    var resetNotifications = function() {
+        if (!this.activeNotifications)
+            this.activeNotifications = [];
         
-        while (notificationList.length > 0) {
-            var notification = notificationList.pop();
+        while (this.activeNotifications.length > 0) {
+            var notification = this.activeNotifications.pop();
             
             if (!notification)
                 continue;
@@ -48,23 +47,27 @@ AppNotificator = function(app, window) {
             notification.close();
         }
         
-        if (notificationList.length > 0)
+        if (this.activeNotifications.length > 0)
             return false;
         
         return true;
     };
     
-    var gatherReadyPasswordDescriptions = function(passwordRegistrations, date) {
+    var gatherReadyPasswordDescriptions = function(date) {
         var readyPasswordDescs = [];
 
-        if (!passwordRegistrations)
+        // TODO SLA
+        if (!this.app.passwordRegistrations)
+            return null;
+        
+        // TODO SLA
+        if (!this.app.passwordRegistrations.collection)
             return null;
 
-        if (!passwordRegistrations.collection)
-            return null;
-
-        for (var desc in passwordRegistrations.collection) {
-            var passwordRegistration = passwordRegistrations.collection[desc];
+        // TODO SLA
+        for (var desc in this.app.passwordRegistrations.collection) {
+            // TODO SLA
+            var passwordRegistration = this.app.passwordRegistrations.collection[desc];
 
             if (!passwordRegistration)
                 continue;
