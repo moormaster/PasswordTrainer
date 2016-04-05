@@ -20,4 +20,4 @@
 #18                 refactoring: unit tests against interfaces (single abstraction layer)
 #19                 refactoring: obey single abstraction layer rule
 #20 [done]          format exported JSON string
-#21                 use call() for local methods
+#21                 refactoring: use call() for local methods
