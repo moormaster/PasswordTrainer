@@ -30,7 +30,7 @@ var PagePasswordTrainer;
                         
                         interruptInterval(pageInstance, 1000);
                         var success = pageInstance.addPasswordAttempt(password);
-                        updateWidgets(pageInstance.currentLeveledScore, success);
+                        updateWidgets(pageInstance, success);
                     }
                 );
                 
@@ -135,7 +135,12 @@ var PagePasswordTrainer;
                     default:
                         $('#passwordtrainer').JQPasswordInput("lock", {isLocked: lockedState});
                         break;
-                } 
+                }
+            };
+            
+            var updateWidgetsStatus = function(leveledScore) {
+                var leveledScoreDisplay = formatLeveledScore(leveledScore);
+                var statusDisplay = formatStatus(leveledScore);
                 
                 if (!statusDisplay)
                     $('#passwordtrainer').JQPasswordInput("status", {text: leveledScoreDisplay});
