@@ -30,5 +30,5 @@ var PagePasswordDialog;
                 );
             };
         };
-    }(jQuery)
-);
+    }
+)(jQuery);

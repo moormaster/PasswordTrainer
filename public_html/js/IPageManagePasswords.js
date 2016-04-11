@@ -14,4 +14,9 @@ IPageManagePasswords = function(app) {
      * initialize jquery ui widgets
      */
     this.init = function() {};
+    
+    /*
+     * update page display
+     */
+    this.update = function() {};
 };

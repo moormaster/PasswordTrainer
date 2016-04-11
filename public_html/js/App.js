@@ -16,6 +16,7 @@ var App;
             
             this.pageTrainPasswords = new PagePasswordTrainer(this);
             this.pageImportExport = new PageImportExport(this);
+            this.pagePasswordManagePasswords = new PageManagePasswords(this);
             
             this.pagePasswordDialog = new PagePasswordDialog(this);
             
@@ -23,13 +24,14 @@ var App;
                 var appInstance = this;
 
                 this.pageTrainPasswords.init();
-                this.pagePasswordDialog.init();
                 this.pageImportExport.init();
+                this.pagePasswordManagePasswords.init();
+                
+                this.pagePasswordDialog.init();
             };
             
             this.readPasswordRegistrationsFromLocalStorage = function() {
                 this.passwordRegistrations.importJSON(localStorage['passwordRegistrations']);
-                this.pageTrainPasswords.update();
             };
             
             this.writePasswordRegistrationsToLocalStorage = function() {

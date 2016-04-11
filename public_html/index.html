@@ -21,30 +21,39 @@ and open the template in the editor.
         <script src="js/libs/jquerymobile/jquery.mobile.js"></script>
         
         <!-- jquery ui widgets -->
-        <script src="js/JQPasswordRegistration.js"></script>
+        <script src="js/JQPassword.js"></script>
         <script src="js/JQPasswordInput.js"></script>
+        <script src="js/JQPasswordRegistration.js"></script>
         
-        <!-- js interface classes -->
+        <!-- js interfaces -->
         <script src="js/IImportsExportsPasswordRegistrations.js"></script>
         <script src="js/IApp.js"></script>
         <script src="js/IAppNotificator.js"></script>
         <script src="js/IJSONFormatter.js"></script>
         <script src="js/ILeveledScore.js"></script>
+        <script src="js/ILeveledScoreFormatter.js"></script>
         <script src="js/INotificator.js"></script>
         <script src="js/IPagePasswordDialog.js"></script>
+        <script src="js/IPageManagePasswords.js"></script>
         <script src="js/IPagePasswordTrainer.js"></script>
         <script src="js/IPageImportExport.js"></script>
         <script src="js/IPasswordRegistrationCollection.js"></script>
         
-        <!-- js classes -->
+        <!-- js classes / components -->
         <script src="js/JSONFormatter.js"></script>
         <script src="js/LeveledScore.js"></script>
+        <script src="js/LeveledScoreFormatter.js"></script>
         <script src="js/Notificator.js"></script>
         <script src="js/AppNotificator.js"></script>
         <script src="js/PasswordRegistrationCollection.js"></script>
+        
+        <!-- js classes / pages -->
         <script src="js/PagePasswordDialog.js"></script>
-        <script src="js/PagePasswordTrainer.js"></script>
+        <script src="js/PageManagePasswords.js"></script>
         <script src="js/PageImportExport.js"></script>
+        <script src="js/PagePasswordTrainer.js"></script>
+        
+        <!-- js classes / main -->
         <script src="js/App.js"></script>
         
         <script src="js/init.js"></script>
@@ -82,9 +91,14 @@ and open the template in the editor.
             </div>
 
             <div data-role="content">
+                <table class="passwordTable">
+                    <tr>
+                        <th>Description</th>
+                        <th>Score / Level</th>
+                        <th>Status</th>
+                    </tr>
+                </table>
                 <a href="#pagePasswordDialog" data-rel="dialog">Add/Edit password</a>
-                <div id="mainaccordioncontainer">
-                </div>
             </div>
             
             <div data-role="footer" data-position="fixed">

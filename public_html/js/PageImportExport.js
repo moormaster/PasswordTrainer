@@ -42,5 +42,5 @@ var PageImportExport;
                 this.appInstance.importJSON(json);
             };
         };
-    }(jQuery)
-);
+    }
+)(jQuery);

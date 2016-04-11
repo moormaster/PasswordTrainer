@@ -9,6 +9,7 @@ var IApp = function() {
      */
     this.pageTrainPasswords = null;
     this.pageImportExport = null;
+    this.pagePasswordManagePasswords = null;
     
     this.pagePasswordDialog = null;
     

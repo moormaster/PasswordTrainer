@@ -21,3 +21,4 @@
 #19                 refactoring: obey single abstraction layer rule
 #20 [done]          format exported JSON string
 #21 [done]          refactoring: use call() for local methods
+#22 [done]          show a list of all passwords and its status in password manage page

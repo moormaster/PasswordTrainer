@@ -1,4 +1,4 @@
-var LevelesScore;
+var LeveledScore;
 
 LeveledScore = function (scoreData) {
     this.prototype = new ILeveledScore(scoreData);
