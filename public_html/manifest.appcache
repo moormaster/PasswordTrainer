@@ -1,15 +1,17 @@
 CACHE MANIFEST
 
 CACHE:
-# 2016-04-11 20:15
+# 2016-04-11 22:14
 
+favicon.ico
 index.html
+css/JQPasswordInput.css
+img/icon.png
 js/libs/cryptojs/md5.js
 js/libs/jquery/jquery.js
 js/libs/jquerymobile/css/jquery.mobile.css
 js/libs/jquerymobile/css/images/ajax-loader.gif
 js/libs/jquerymobile/jquery.mobile.js
-css/JQPasswordInput.css
 js/init.js
 js/App.js
 js/AppNotificator.js
