@@ -20,6 +20,8 @@ var App;
             
             this.pagePasswordDialog = new PagePasswordDialog(this);
             
+            this.passwordHasher = new MD5PasswordHasher();
+            
             this.init = function() {
                 var appInstance = this;
 
@@ -70,7 +72,7 @@ var App;
                 
                 var leveledScore = new LeveledScore(passwordRegistration.scoreData);
                 
-                var hash = CryptoJS.MD5(password).toString();
+                var hash = this.passwordHasher.generateSaltedHash(password);
                 if (hash != passwordRegistration.hash)
                     return false;
                 

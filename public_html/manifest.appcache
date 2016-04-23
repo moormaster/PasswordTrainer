@@ -1,7 +1,7 @@
 CACHE MANIFEST
 
 CACHE:
-# 2016-04-11 22:14
+# 2016-04-23 23:45
 
 favicon.ico
 index.html
@@ -26,18 +26,22 @@ js/IPagePasswordDialog.js
 js/IPageManagePasswords.js
 js/IPagePasswordTrainer.js
 js/IPageImportExport.js
+js/IPasswordHasher.js
 js/IPasswordRegistrationCollection.js
 js/JQPassword.js
 js/JQPasswordInput.js
 js/JQPasswordRegistration.js
+js/ISaltGenerator.js
 js/JSONFormatter.js
 js/LeveledScore.js
 js/LeveledScoreFormatter.js
+js/MD5PasswordHasher.js
 js/Notificator.js
 js/PagePasswordDialog.js
 js/PageImportExport.js
 js/PageManagePasswords.js
 js/PagePasswordTrainer.js
 js/PasswordRegistrationCollection.js
+js/SaltGenerator.js
 
 
