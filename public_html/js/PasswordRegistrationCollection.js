@@ -1,7 +1,9 @@
 var PasswordRegistrationCollection;
 
-PasswordRegistrationCollection = function() {
-    this.prototype = new IPasswordRegistrationCollection();
+PasswordRegistrationCollection = function(passwordHasher) {
+    this.prototype = new IPasswordRegistrationCollection(passwordHasher);
+    
+    this.passwordHasher = passwordHasher;
 
     this.collection = {};
 
@@ -27,12 +29,22 @@ PasswordRegistrationCollection = function() {
         this.collection[description] =
         {
             description:    description,
-            hash:           CryptoJS.MD5(password).toString(),
+            hash:           this.passwordHasher.generateSaltedHash(password, null),
             scoreData:      {
                 lastSuccessScore:   null,
                 lastSuccessTimestamp:  null
             }
         };
+    };
+
+    /*
+     * recreate the hash for the given password without losing score info
+     */
+    this.rehash = function(description, password) {
+        if (!this.collection[description])
+            return;
+        
+        this.collection[description].hash = this.passwordHasher.generateSaltedHash(password, null);
     };
 
     this.getMostRecentPasswordRegistration = function() {

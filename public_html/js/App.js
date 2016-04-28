@@ -10,8 +10,9 @@ var App;
         App = function() {
             this.prototype = new IApp();
             
-            this.passwordRegistrations = new PasswordRegistrationCollection();
-            
+            this.passwordHasher = new MD5PasswordHasher();
+            this.passwordRegistrations = new PasswordRegistrationCollection(this.passwordHasher);
+
             this.appNotificator = new AppNotificator(this, window);
             
             this.pageTrainPasswords = new PagePasswordTrainer(this);
@@ -20,7 +21,6 @@ var App;
             
             this.pagePasswordDialog = new PagePasswordDialog(this);
             
-            this.passwordHasher = new MD5PasswordHasher();
             
             this.init = function() {
                 var appInstance = this;
@@ -72,12 +72,21 @@ var App;
                 
                 var leveledScore = new LeveledScore(passwordRegistration.scoreData);
                 
-                var hash = this.passwordHasher.generateSaltedHash(password);
+                // parse salt value from stored hash
+                var saltedHash = this.passwordHasher.parseSaltedHash(passwordRegistration.hash);
+                
+                if (!saltedHash)
+                    return false;
+                
+                var hash = this.passwordHasher.generateSaltedHash(password, saltedHash.salt);
                 if (hash != passwordRegistration.hash)
                     return false;
                 
                 if (!leveledScore.addSuccessfulAttempt())
                     return false;
+                
+                // rehash with a new salt on every attempt
+                this.passwordRegistrations.rehash(desc, password);
                     
                 this.writePasswordRegistrationsToLocalStorage();
                 

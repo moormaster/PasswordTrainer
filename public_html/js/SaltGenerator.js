@@ -23,7 +23,7 @@ var SaltGenerator = function(length, charSet) {
         if (!charSet)
             charSet = '!"§$%&/()=?`´+*#\'~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-        for (var i=0;i<length;i++) {
+        for (var i=0;i<this.length;i++) {
             var rnd = Math.floor(Math.random()*charSet.length);
 
             salt += charSet[rnd]
