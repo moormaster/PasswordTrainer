@@ -7,11 +7,6 @@ favicon.ico
 index.html
 css/JQPasswordInput.css
 img/icon.png
-js/libs/cryptojs/md5.js
-js/libs/jquery/jquery.js
-js/libs/jquerymobile/css/jquery.mobile.css
-js/libs/jquerymobile/css/images/ajax-loader.gif
-js/libs/jquerymobile/jquery.mobile.js
 js/init.js
 js/App.js
 js/AppNotificator.js
@@ -43,5 +38,10 @@ js/PageManagePasswords.js
 js/PagePasswordTrainer.js
 js/PasswordRegistrationCollection.js
 js/SaltGenerator.js
+libs/cryptojs/md5.js
+libs/jquery/jquery.js
+libs/jquerymobile/css/jquery.mobile.css
+libs/jquerymobile/css/images/ajax-loader.gif
+libs/jquerymobile/jquery.mobile.js
 
 
