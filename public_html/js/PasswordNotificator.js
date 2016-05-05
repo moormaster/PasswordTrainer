@@ -1,9 +1,9 @@
-var AppNotificator;
+var PasswordNotificator;
 
-AppNotificator = function(app, window) {
-    this.prototype = new IAppNotificator(app, window);
+PasswordNotificator = function(passwordRegistrations, window) {
+    this.prototype = new IPasswordNotificator(passwordRegistrations, window);
         
-    this.app = app;
+    this.passwordRegistrations = passwordRegistrations;
     this.notificator = new Notificator(window);
     
     this.activeNotifications = [];
@@ -56,18 +56,16 @@ AppNotificator = function(app, window) {
     var gatherReadyPasswordDescriptions = function(date) {
         var readyPasswordDescs = [];
 
-        // TODO SLA
-        if (!this.app.passwordRegistrations)
+        if (!this.passwordRegistrations)
             return null;
         
-        // TODO SLA
-        if (!this.app.passwordRegistrations.collection)
+        if (!this.passwordRegistrations.collection)
             return null;
+        
+        var passwordCollection = this.passwordRegistrations.collection;
 
-        // TODO SLA
-        for (var desc in this.app.passwordRegistrations.collection) {
-            // TODO SLA
-            var passwordRegistration = this.app.passwordRegistrations.collection[desc];
+        for (var desc in passwordCollection) {
+            var passwordRegistration = passwordCollection[desc];
 
             if (!passwordRegistration)
                 continue;

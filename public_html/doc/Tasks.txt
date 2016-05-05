@@ -17,7 +17,7 @@
 #15                 display lock time display using cake diagram
 #16                 display fee using cake diagram
 #17                 click on cake diagram should open dialog with input field
-#18                 refactoring: obey single abstraction layer rule
+#18 [done]          refactoring: obey single abstraction layer rule
 #19 [done]          format exported JSON string
 #20 [done]          refactoring: use call() for local methods
 #21 [done]          show a list of all passwords and its status in password manage page

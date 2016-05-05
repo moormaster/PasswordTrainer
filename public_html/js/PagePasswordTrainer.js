@@ -60,8 +60,7 @@ var PagePasswordTrainer;
             };
             
             this.setMostRecentPasswordRegistration = function() {
-                // TODO SLA
-                this.setPasswordRegistration(this.appInstance.passwordRegistrations.getMostRecentPasswordRegistration());
+                this.setPasswordRegistration(this.appInstance.getMostRecentPasswordRegistration());
             };
             
             this.addPasswordAttempt = function(password) {
@@ -75,7 +74,7 @@ var PagePasswordTrainer;
                 this.setMostRecentPasswordRegistration();
                 updateWidgets.call(this);
                 
-                this.appInstance.appNotificator.notify();
+                this.appInstance.passwordNotificator.notify();
             };
             
             var activateInterval = function(pageInstance) {

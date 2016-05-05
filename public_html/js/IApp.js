@@ -14,9 +14,9 @@ var IApp = function() {
     this.pagePasswordDialog = null;
     
     /*
-     * app notificator
+     * password notificator
      */
-    this.appNotificator = null;
+    this.passwordNotificator = null;
 
     /*
      * initialize jquery widgets and pages
@@ -42,4 +42,10 @@ var IApp = function() {
      * add a password input attempt with the given password on the given password registration
      */
     this.addPasswordAttempt = function(passwordRegistration, password) {};
+    
+    /*
+     * find the password registration with minimum lock time and maximum fee time
+     */
+    this.getMostRecentPasswordRegistration = function() {};
+
 };

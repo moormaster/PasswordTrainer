@@ -1,6 +1,6 @@
-var IAppNotificator;
+var IPasswordNotificator;
 
-IAppNotificator = function(app, window) {
+IPasswordNotificator = function(passwordRegistrations, window) {
     // App instance
     this.app = null;
 

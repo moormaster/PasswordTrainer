@@ -13,7 +13,7 @@ var App;
             this.passwordHasher = new MD5PasswordHasher();
             this.passwordRegistrations = new PasswordRegistrationCollection(this.passwordHasher);
 
-            this.appNotificator = new AppNotificator(this, window);
+            this.passwordNotificator = new PasswordNotificator(this.passwordRegistrations, window);
             
             this.pageTrainPasswords = new PagePasswordTrainer(this);
             this.pageImportExport = new PageImportExport(this);
@@ -91,6 +91,14 @@ var App;
                 this.writePasswordRegistrationsToLocalStorage();
                 
                 return true;
+            };
+            
+            
+            this.getMostRecentPasswordRegistration = function() {
+                if (!this.passwordRegistrations)
+                    return null;
+                
+                return this.passwordRegistrations.getMostRecentPasswordRegistration();
             };
         };
     }(jQuery)
