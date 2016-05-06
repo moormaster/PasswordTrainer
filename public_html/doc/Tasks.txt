@@ -23,5 +23,5 @@
 #21 [done]          show a list of all passwords and its status in password manage page
 #22 [done]          implement salted password hashing / checking
 #23 [done]          unit tests for JSONFormatter
-#24                 unit tests for MD5PasswordHasher
-#25                 unit tests for SaltGenerator
+#24 [done]          unit tests for MD5PasswordHasher
+#25 [done]          unit tests for SaltGenerator
