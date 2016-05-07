@@ -25,3 +25,5 @@
 #23 [done]          unit tests for JSONFormatter
 #24 [done]          unit tests for MD5PasswordHasher
 #25 [done]          unit tests for SaltGenerator
+#26                 unit tests for LeveledScoreFormatter
+#27                 unit tests for PasswordRegistrationCollection
