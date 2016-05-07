@@ -1,7 +1,7 @@
 CACHE MANIFEST
 
 CACHE:
-# 2016-05-05 20:55
+# 2016-05-07 23:29
 
 favicon.ico
 index.html
@@ -16,28 +16,28 @@ js/ILeveledScore.js
 js/ILeveledScoreFormatter.js
 js/IImportsExportsPasswordRegistrations.js
 js/INotificator.js
-js/IPagePasswordDialog.js
-js/IPageManagePasswords.js
-js/IPagePasswordTrainer.js
-js/IPageImportExport.js
 js/IPasswordHasher.js
 js/IPasswordRegistrationCollection.js
-js/JQPassword.js
-js/JQPasswordInput.js
-js/JQPasswordRegistration.js
 js/ISaltGenerator.js
 js/JSONFormatter.js
 js/LeveledScore.js
 js/LeveledScoreFormatter.js
 js/MD5PasswordHasher.js
 js/Notificator.js
-js/PagePasswordDialog.js
-js/PageImportExport.js
-js/PageManagePasswords.js
-js/PagePasswordTrainer.js
 js/PasswordNotificator.js
 js/PasswordRegistrationCollection.js
 js/SaltGenerator.js
+js/ui/IPagePasswordDialog.js
+js/ui/IPageManagePasswords.js
+js/ui/IPagePasswordTrainer.js
+js/ui/IPageImportExport.js
+js/ui/JQPassword.js
+js/ui/JQPasswordInput.js
+js/ui/JQPasswordRegistration.js
+js/ui/PagePasswordDialog.js
+js/ui/PageImportExport.js
+js/ui/PageManagePasswords.js
+js/ui/PagePasswordTrainer.js
 libs/cryptojs/md5.js
 libs/jquery/jquery.js
 libs/jquerymobile/css/jquery.mobile.css
