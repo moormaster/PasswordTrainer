@@ -14,6 +14,8 @@ IPasswordRegistrationCollection = function(passwordHasher) {
     
     /*
      * recreate the hash for the given password without losing score info
+     * 
+     * returns true on success
      */
     this.rehash = function(description, password) {};
     

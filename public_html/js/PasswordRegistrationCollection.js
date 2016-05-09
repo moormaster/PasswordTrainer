@@ -42,9 +42,18 @@ PasswordRegistrationCollection = function(passwordHasher) {
      */
     this.rehash = function(description, password) {
         if (!this.collection[description])
-            return;
+            return false;
+        
+        var hash = this.collection[description].hash;
+        var parsedHash = this.passwordHasher.parseSaltedHash(hash);
+        
+        // dont rehash if wrong password was given
+        if (this.passwordHasher.generateSaltedHash(password, parsedHash.salt) != hash)
+            return false;
         
         this.collection[description].hash = this.passwordHasher.generateSaltedHash(password, null);
+        
+        return true;
     };
 
     this.getMostRecentPasswordRegistration = function() {

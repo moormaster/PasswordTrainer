@@ -26,4 +26,4 @@
 #24 [done]          unit tests for MD5PasswordHasher
 #25 [done]          unit tests for SaltGenerator
 #26 [done]          unit tests for LeveledScoreFormatter
-#27                 unit tests for PasswordRegistrationCollection
+#27 [done]          unit tests for PasswordRegistrationCollection

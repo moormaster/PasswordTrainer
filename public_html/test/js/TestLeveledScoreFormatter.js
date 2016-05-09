@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-QUnit.module("TestLeveledScoreFormatter", {
+QUnit.module("LeveledScoreFormatter", {
     beforeEach: function() {
         this.formatter = new LeveledScoreFormatter();
     }
