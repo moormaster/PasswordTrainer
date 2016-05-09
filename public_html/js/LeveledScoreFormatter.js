@@ -90,18 +90,19 @@ LeveledScoreFormatter = function() {
         var string = "";
 
         if (years > 0)
-            string += years + "y ";
+            string += (string.length>0?" ":"") + years + "y";
 
         if (days > 0)
-            string += days + "d ";
+            string += (string.length>0?" ":"") + days + "d";
 
         if (hours > 0)
-            string += hours + "h ";
+            string += (string.length>0?" ":"") + hours + "h";
 
         if (minutes > 0)
-            string += minutes + "m ";
+            string += (string.length>0?" ":"") + minutes + "m";
 
-        string += seconds + "s";
+        if (seconds > 0 || string.length == 0)
+            string += (string.length>0?" ":"") + seconds + "s";
 
         return string;
     };
