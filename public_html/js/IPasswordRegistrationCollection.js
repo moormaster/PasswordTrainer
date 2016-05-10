@@ -1,8 +1,9 @@
 var IPasswordRegistrationCollection;
 
-IPasswordRegistrationCollection = function(passwordHasher) {
+IPasswordRegistrationCollection = function(passwordHasher, scoreDataComparator) {
     this.prototype = new IImportsExportsPasswordRegistrations();
     this.passwordHasher = null;
+    this.scoreDataComparator = null;
     
     // collection of password registrations
     this.collection = null;
@@ -20,7 +21,8 @@ IPasswordRegistrationCollection = function(passwordHasher) {
     this.rehash = function(description, password) {};
     
     /*
-     * find the password registration with minimum lock time and maximum fee time
+     * find the password registration which is minimal according to the scoreDataComparator
+     * (i.e. maximal feeHours or minimal lock hours)
      */
     this.getMostRecentPasswordRegistration = function() {};
 };

@@ -1,9 +1,10 @@
 var PasswordRegistrationCollection;
 
-PasswordRegistrationCollection = function(passwordHasher) {
+PasswordRegistrationCollection = function(passwordHasher, scoreDataComparator) {
     this.prototype = new IPasswordRegistrationCollection(passwordHasher);
     
     this.passwordHasher = passwordHasher;
+    this.scoreDataComparator = scoreDataComparator;
 
     this.collection = {};
 
@@ -57,23 +58,18 @@ PasswordRegistrationCollection = function(passwordHasher) {
     };
 
     this.getMostRecentPasswordRegistration = function() {
-        var maxHours = null;
+        if (!this.scoreDataComparator)
+            return null;
+        
         var mostRecentInstance = null;
-
-        var leveledScore = new LeveledScore();
 
         // determine instance with max fee hours passed and minimal lock hours left
         for (var key in this.collection) {
             var passwordRegistration = this.collection[key];
+            var scoreData  = passwordRegistration.scoreData;
 
-            leveledScore.setScoreData(passwordRegistration.scoreData);
-
-            var hours = leveledScore.feeHoursPassed - leveledScore.lockHoursLeft;
-
-            if (maxHours == null || maxHours < hours) {
-                maxHours = hours;
+            if (mostRecentInstance == null || this.scoreDataComparator.compare(scoreData, mostRecentInstance.scoreData) < 0)
                 mostRecentInstance = passwordRegistration;
-            }
         }
 
         return mostRecentInstance;

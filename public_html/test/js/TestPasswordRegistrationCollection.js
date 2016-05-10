@@ -4,22 +4,9 @@
  * and open the template in the editor.
  */
 
-
-    /*
-     * add new password registration
-     */
-    // this.add = function(description, password) {};
-    
-    /*
-     * recreate the hash for the given password without losing score info
-     */
-    // this.rehash = function(description, password) {};
-    
-    /*
-     * find the password registration with minimum lock time and maximum fee time
-     */
-    // this.getMostRecentPasswordRegistration = function() {};
-
+/*
+ * PasswordHasherMock with identity function as hash function and rudimental salting
+ */
 var PasswordHasherMock = function() {
     this.prototype = new IPasswordHasher(null);
     
@@ -41,9 +28,38 @@ var PasswordHasherMock = function() {
     }
 }
 
+/*
+ * scoreDataComparator which simply orders by timestamp
+ */
+var ScoreDataComparatorMock = function() {
+    this.prototype = new IComparator();
+    
+    this.compare = function(obj1, obj2) {
+        if (obj1 == null)
+            return -1;
+        
+        if (obj2 == null)
+            return 1;
+        
+        if (obj1.lastSuccessTimestamp == null)
+            return -1;
+        
+        if (obj2.lastSuccessTimestamp == null)
+            return 1;
+        
+        if (obj1.lastSuccessTimestamp < obj2.lastSuccessTimestamp)
+            return -1;
+        
+        if (obj1.lastSuccessTimestamp > obj2.lastSuccessTimestamp)
+            return 1;
+        
+        return 0;
+    };
+}
+
 QUnit.module("PasswordRegistrationCollection", {
     beforeEach: function() {
-        this.passwordRegistrationCollection = new PasswordRegistrationCollection(new PasswordHasherMock());
+        this.passwordRegistrationCollection = new PasswordRegistrationCollection(new PasswordHasherMock(), new ScoreDataComparatorMock());
 
         this.passwordRegistrationCollection.add("description1", "abc");
         this.passwordRegistrationCollection.add("description2", "cde");

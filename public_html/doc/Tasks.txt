@@ -27,3 +27,4 @@
 #25 [done]          unit tests for SaltGenerator
 #26 [done]          unit tests for LeveledScoreFormatter
 #27 [done]          unit tests for PasswordRegistrationCollection
+#28 [done]          refactor PasswordRegistrationCollection: replace implicit dependency to LeveledScore with comparator interface

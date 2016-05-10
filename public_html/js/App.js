@@ -11,7 +11,7 @@ var App;
             this.prototype = new IApp();
             
             this.passwordHasher = new MD5PasswordHasher();
-            this.passwordRegistrations = new PasswordRegistrationCollection(this.passwordHasher);
+            this.passwordRegistrations = new PasswordRegistrationCollection(this.passwordHasher, new ScoreDataFeeHoursAndLockHoursComparator());
 
             this.passwordNotificator = new PasswordNotificator(this.passwordRegistrations, window);
             
