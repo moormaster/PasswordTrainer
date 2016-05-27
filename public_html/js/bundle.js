@@ -279,7 +279,8 @@ IImportsExportsPasswordRegistrations = function() {
      * returns the json string
      */
     this.exportJSON = function() {};
-}var IApp = function() {
+};
+var IApp = function() {
     this.prototype = new IImportsExportsPasswordRegistrations();
     
     // password registrations
