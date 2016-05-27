@@ -1,0 +1,17 @@
+CACHE MANIFEST
+
+CACHE:
+# 2016-05-10 15:33
+
+favicon.ico
+index.html
+css/JQPasswordInput.css
+img/icon.png
+js/bundle.js
+libs/cryptojs/md5.js
+libs/jquery/jquery.js
+libs/jquerymobile/css/jquery.mobile.css
+libs/jquerymobile/css/images/ajax-loader.gif
+libs/jquerymobile/jquery.mobile.js
+
+
