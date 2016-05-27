@@ -22,4 +22,4 @@ IImportsExportsPasswordRegistrations = function() {
      * returns the json string
      */
     this.exportJSON = function() {};
-}
+};
