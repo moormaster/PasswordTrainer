@@ -16,12 +16,8 @@ ScoreDataFeeHoursAndLockHoursComparator = function() {
         if (obj2 == null)
             return 1;
         
-        var leveledScore1 = new LeveledScore();
-        var leveledScore2 = new LeveledScore();
-        
-        // TODO: check why passing obj1 / obj2 to constructor does not work?!
-        leveledScore1.setScoreData(obj1);
-        leveledScore2.setScoreData(obj2);
+        var leveledScore1 = new LeveledScore(obj1);
+        var leveledScore2 = new LeveledScore(obj2);
         
         // maximum fee hours first
         if (leveledScore1.feeHoursPassed > leveledScore2.feeHoursPassed)
