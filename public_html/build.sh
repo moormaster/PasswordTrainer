@@ -65,10 +65,11 @@ catjsbundle() {
     cat js/app/model/LeveledScore.js
     cat js/app/model/PasswordRegistrationCollection.js
 
-    cat js/app/ui/LeveledScoreFormatter.js
     cat js/app/ui/JQPassword.js
     cat js/app/ui/JQPasswordInput.js
     cat js/app/ui/JQPasswordRegistration.js
+
+    cat js/app/ui/LeveledScoreFormatter.js
     cat js/app/ui/PagePasswordDialog.js
     cat js/app/ui/PageManagePasswords.js
     cat js/app/ui/PageImportExport.js
