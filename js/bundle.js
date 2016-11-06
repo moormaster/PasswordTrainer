@@ -4,6 +4,1043 @@
  * and open the template in the editor.
  */
 
+
+var IImportsExportsPasswordRegistrations;
+
+IImportsExportsPasswordRegistrations = function() {
+    /*
+     * import password registrations from json string
+     *
+     * returns true if json string contains a valid persistence
+     * of password registrations.
+     */
+    this.importJSON = function(json) {};
+
+    /*
+     * export password registrations to a json string
+     *
+     * returns the json string
+     */
+    this.exportJSON = function() {};
+};var IApp = function() {
+    this.prototype = new IImportsExportsPasswordRegistrations();
+    
+    // password registrations
+    this.passwordRegistrations = null;
+
+    /* 
+     * page instances
+     */
+    this.pageTrainPasswords = null;
+    this.pageImportExport = null;
+    this.pagePasswordManagePasswords = null;
+    
+    this.pagePasswordDialog = null;
+    
+    /*
+     * password notificator
+     */
+    this.passwordNotificator = null;
+
+    /*
+     * initialize jquery widgets and pages
+     */
+    this.init = function() {};
+
+    /*
+     * restore password registrations from localStorage
+     */
+    this.readPasswordRegistrationsFromLocalStorage = function() {};
+
+    /*
+     * persist password registration to local storage
+     */
+    this.writePasswordRegistrationsToLocalStorage = function() {};
+    
+    /*
+     * register a new password
+     */
+    this.addPasswordRegistration = function(description, password) {};
+    
+    /*
+     * add a password input attempt with the given password on the given password registration
+     */
+    this.addPasswordAttempt = function(passwordRegistration, password) {};
+    
+    /*
+     * find the password registration with minimum lock time and maximum fee time
+     */
+    this.getMostRecentPasswordRegistration = function() {};
+
+};
+var IPasswordNotificator;
+
+IPasswordNotificator = function(passwordRegistrations, window) {
+    // App instance
+    this.app = null;
+
+    /*
+     * show notification about the number of ready password registrations
+     */
+    this.notify = function() {};
+};
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+var IComparator;
+
+IComparator = function() {
+    /*
+     * compares obj1 to obj2
+     * 
+     * returns
+     *      -1 if obj1 is null or obj1 < obj2
+     *      0  if obj1 is equally to obj2
+     *      1  if obj1 > obj2 or obj2 is null
+     */
+    this.compare= function(obj1, obj2) {}
+}
+var ILeveledScore;
+
+ILeveledScore = function(scoreData) {
+    this.setScoreData = function(scoreData) {};
+    
+    /*
+     * add successful password attempt to score
+     */
+    this.addSuccessfulAttempt = function(dateOfAttempt) {};
+    
+    this.getFee = function(readDate) {};
+    this.getScore = function(readDate) {};
+    this.getLevel = function(readDate) {};
+    
+    this.getLockHoursLeft = function(readDate) {};
+    this.getFeeHoursPassed = function(readDate) {};
+    
+    /*
+     * score properties by current date/time
+     */
+    Object.defineProperties(
+        this, 
+        {
+            "score": {},
+            
+            "fee": {},
+            
+            "lockHoursLeft": {},
+            
+            "feeHoursPassed": {},
+            
+            "lockHours": {},
+            
+            "feePerHour": {},
+                        
+            "level": {}
+        }
+    );
+};
+var IPasswordRegistrationCollection;
+
+IPasswordRegistrationCollection = function(passwordHasher, scoreDataComparator) {
+    this.prototype = new IImportsExportsPasswordRegistrations();
+    this.passwordHasher = null;
+    this.scoreDataComparator = null;
+    
+    // collection of password registrations
+    this.collection = null;
+    
+    /*
+     * add new password registration
+     */
+    this.add = function(description, password) {};
+    
+    /*
+     * recreate the hash for the given password without losing score info
+     * 
+     * returns true on success
+     */
+    this.rehash = function(description, password) {};
+    
+    /*
+     * find the password registration which is minimal according to the scoreDataComparator
+     * (i.e. maximal feeHours or minimal lock hours)
+     */
+    this.getMostRecentPasswordRegistration = function() {};
+};
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+var ILeveledScoreFormatter;
+
+ILeveledScoreFormatter = function() {
+    /*
+     * returns a formatted string describing the status of the leveled score
+     * (locked time, fee amount)
+     */
+    this.formatStatus = function(leveledScore) {};
+    
+    /*
+     * returns a formatted string describing score and level
+     */
+    this.formatLeveledScore = function(leveledScore) {};
+    
+    /*
+     * returns a formatted string describing the score points
+     */
+    this.formatScore = function(leveledScore) {};
+    
+    /*
+     * returns a formatted string describing the fee points
+     */
+    this.formatFee = function(leveledScore) {};
+
+    /*
+     * returns a formatted string describing the level
+     */
+    this.formatLevel = function(leveledScore) {};
+
+}
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+var IPagePasswordDialog;
+
+IPagePasswordDialog = function(app) {
+    // app instance where this page is displayed in
+    this.appInstance = null;
+
+    
+    /*
+     * initialize jquery ui widgets
+     */
+    this.init = function() {};
+};
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+var IPageManagePasswords;
+
+IPageManagePasswords = function(app) {
+    // app instance where this page is displayed in
+    this.appInstance = null;
+
+    
+    /*
+     * initialize jquery ui widgets
+     */
+    this.init = function() {};
+    
+    /*
+     * update page display
+     */
+    this.update = function() {};
+};
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+var IPagePasswordTrainer = function(app) {
+    // app instance where this page is displayed in
+    this.appInstance = null;
+    
+    // password registration instance which is currently shown
+    this.currentPasswordRegistration = null;
+
+    // leveled score instance of the password registration
+    this.currentLeveledScore = null;
+    
+    // refresh interval id
+    this.intervalId;
+
+    /*
+     * initializes jquery ui widgets and page
+     */
+    this.init = function() {};
+
+    /*
+     * changes the displayed password registration
+     */
+    this.setPasswordRegistration = function(passwordRegistration) {};
+
+    /*
+     * update page display
+     */
+    this.update = function() {};
+
+    /*
+     * add a password input attempt with the given password
+     */
+    this.addPasswordAttempt = function(password) {};
+};
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+ 
+var IPageImportExport = function(app) {
+    // app instance where this page is displayed in
+    this.appInstance = null;
+
+    /*
+     * initialize jquery ui widgets
+     */
+    this.init = function() {};
+
+    /*
+     * perform export of password registrations
+     */
+    this.exportPasswordRegistrations = function() {};
+
+    /*
+     * perform import of password registrations
+     */
+    this.importPasswordRegistrations = function() {};
+};
+
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+var IPasswordHasher = function(saltGenerator) {
+    this.saltGenerator = saltGenerator; // the salt generator which shall be used
+    
+    /*
+     * generate salted hash from given password
+     * If no salt is given then the saltGenerator will be used to generate one
+     */
+    this.generateSaltedHash = function(password, salt) {};
+    
+    /*
+     * From a given hash value parse the salt and the password hash
+     */
+    this.parseSaltedHash = function(hash) {};
+}
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+var ISaltGenerator = function(length, charSet) {
+    this.length = null;   // the desired length of the salt
+    this.charSet = null;  // the desired charset
+    
+    /*
+     * Generates and returns a salt value (as specified by the constructor 
+     * parameters)
+     */
+    this.generate = function() {};
+}
+
+var IJSONFormatter;
+
+IJSONFormatter = function() {
+    /*
+     * pretty formats the given JSON string
+     */
+    this.format = function(JSONStr) {};
+};
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+var INotificator;
+INotificator = function(window) {
+    /*
+     * returns true if application may send notifications
+     */
+    this.hasNotificationPermission = function() {};
+
+    /*
+     * returns true if application may vibrate
+     */
+    this.hasVibrationPermission = function() {};
+    
+    /*
+     * sends a new notification and returns an notification instance
+     */
+    this.notify = function(title, text) {};
+};
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+var MD5PasswordHasher = function(saltGenerator) {
+    // unsalted md5 generator
+    this.prototype = new IPasswordHasher(null);
+    
+    this.saltGenerator = new SaltGenerator(32, null);
+    
+    /*
+     * generate salted hash from given password
+     * If no salt is given then the saltGenerator will be used to generate one
+     */
+    this.generateSaltedHash = function(password, salt) {
+        if (salt == null)
+            salt = this.saltGenerator.generate();
+        
+        if (!salt)
+            // backward compatibility - check unsalted hash
+            return CryptoJS.MD5(password).toString();
+        else
+            return CryptoJS.MD5(password + salt).toString() + ":" + salt;
+    };
+    
+    /*
+     * From a given hash value parse the salt and the password hash
+     */
+    this.parseSaltedHash = function(hash) {
+        var index = null;
+        if (hash && (index = hash.lastIndexOf(":")) >= 0 )
+            return {salt: hash.substr(index+1), hash: hash.substring(0, index)};
+        
+        return {salt: "", hash: hash};
+    };
+}
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+var SaltGenerator = function(length, charSet) {
+    this.prototype = new ISaltGenerator(length, charSet);
+    
+    this.length = length;   // the desired length of the salt
+    this.charSet = charSet;  // the desired charset
+
+    if (!this.charSet)
+        this.charSet = '!"§$%&/()=?`´+*#\'~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    
+    /*
+     * Generates and returns a salt value (as specified by the constructor 
+     * parameters)
+     */
+    this.generate = function() {
+        var salt = "";
+
+        if (!charSet)
+            charSet = '!"§$%&/()=?`´+*#\'~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        for (var i=0;i<this.length;i++) {
+            var rnd = Math.floor(Math.random()*charSet.length);
+
+            salt += charSet[rnd]
+        }
+
+        return salt;
+    };
+}
+var JSONFormatter;
+
+JSONFormatter = new function() {
+    this.prototype = new IJSONFormatter();
+    
+    this.format = function(JSONStr) {
+        if (!JSONStr)
+            return "";
+            
+        var result = "";
+        
+        var indent = "";
+        var startIndex = 0;
+        var isInsideStringLiteral = false;
+        
+        while (JSONStr.length > startIndex) {
+            var currentIndex = startIndex;
+            
+          
+            while (JSONStr.length > currentIndex) {
+                // skip escaped characters
+                if (isInsideStringLiteral && JSONStr[currentIndex] == "\\") {
+                    currentIndex += 2;
+                    continue;
+                }
+                
+                // check for string literal
+                if (JSONStr[currentIndex] == "\"")
+                    isInsideStringLiteral = !isInsideStringLiteral;
+                
+                // move cursor until first occurence of ',',  '{' or '}'
+                if (!isInsideStringLiteral && ",{}".indexOf(JSONStr[currentIndex]) >= 0)
+                    break;
+                    
+                currentIndex++;
+            }
+        
+            result += JSONStr.substring(startIndex, currentIndex);
+            startIndex = currentIndex;
+            
+            if (JSONStr.length <= startIndex)
+                continue;
+        
+            switch(JSONStr[currentIndex]) {
+                case ",":
+                    result += JSONStr[currentIndex];
+                    result += "\n" + indent;
+                    
+                    break;
+                
+                case "{":
+                    indent += "\t";
+                    
+                    result += JSONStr[currentIndex];
+                    result += "\n" + indent;
+                    
+                    break;
+                
+                case "}":
+                    indent = indent.substring(0, indent.length-1);
+                    result += "\n" + indent;
+                    result += JSONStr[currentIndex];
+                    
+                    break;
+            };
+            
+            startIndex++;
+        };
+        
+        return result;
+    };
+};
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+var Notificator;
+Notificator = function(window) {
+    this.prototype = new INotificator(window);
+    
+    this.Notification = window.Notification;
+    this.navigator = window.navigator;
+    
+    if (this.Notification)
+        this.Notification.requestPermission();
+    
+    this.hasNotificationPermission = function() {
+        if (!this.Notification)
+            return false;
+        
+        if (this.Notification.permission != "granted")
+            return false;
+        
+        return true;
+    };
+
+    this.hasVibrationPermission = function() {
+        if (!this.navigator)
+            return false;
+        
+        if (!this.navigator.vibrate)
+            return false;
+        
+        return true;
+    };
+    
+    this.notify = function(title, text, vibrationLengthInMs) {
+        if (vibrationLengthInMs && this.hasVibrationPermission())
+            this.navigator.vibrate(vibrationLengthInMs);
+        
+        if (this.hasNotificationPermission()) {
+            try {
+                // try deprecated way first
+                return new this.Notification(title, { body: text });
+            } catch (e) {
+                // use future chrome implementation 
+                if (ServiceWorkerRegistration && ServiceWorkerRegistration.showNotification)
+                    return ServiceWorkerRegistration.showNotification(title, { body: text });
+            }
+        }
+        
+        return null;
+    };
+};/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+var ScoreDataFeeHoursAndLockHoursComparator;
+
+ScoreDataFeeHoursAndLockHoursComparator = function() {
+    this.prototype = new IComparator();
+    
+    this.compare = function(obj1, obj2) {
+        if (obj1 == null)
+            return -1;
+        
+        if (obj2 == null)
+            return 1;
+        
+        var leveledScore1 = new LeveledScore(obj1);
+        var leveledScore2 = new LeveledScore(obj2);
+        
+        // maximum fee hours first
+        if (leveledScore1.feeHoursPassed > leveledScore2.feeHoursPassed)
+            return -1;
+        
+        if (leveledScore1.feeHoursPassed < leveledScore2.feeHoursPassed)
+            return 1;
+        
+        // minimum lock hours first
+        if (leveledScore1.lockHoursLeft < leveledScore2.lockHoursLeft)
+            return -1;
+        
+        if (leveledScore1.lockHoursLeft > leveledScore2.lockHoursLeft)
+            return 1;
+        
+        return 0;
+    }
+};
+var LeveledScore;
+
+LeveledScore = function(scoreData) {
+    this.prototype = new ILeveledScore(scoreData);
+    
+    this.setScoreData = function(scoreData) {
+        this.scoreData = scoreData;
+        
+        if (this.scoreData == null) {
+            this.scoreData = {
+                lastSuccessScore:   null,
+                lastSuccessTimestamp:  null
+            };
+        }
+    };
+        
+    this.addSuccessfulAttempt = function(dateOfAttempt) {
+        if (dateOfAttempt == null)
+            dateOfAttempt = new Date();
+
+        var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
+        var lockHoursLeft = getLockHoursLeft(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, dateOfAttempt);
+        
+        if (lockHoursLeft > 0)
+            return false;
+        
+        var lastScore = this.getScore(dateOfAttempt);
+        
+        this.scoreData.lastSuccessScore = lastScore+1;
+        this.scoreData.lastSuccessTimestamp = dateOfAttempt.getTime();
+        
+        return true;
+    };
+    
+    this.getFee = function(readDate) {
+        if (this.scoreData.lastSuccessTimestamp == null)
+            return 0;
+
+        var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
+        var feeHoursPassed = Math.floor(getFeeHoursPassed(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, readDate));
+        
+        var fee = feeHoursPassed*this.feePerHour;
+        
+        if (fee > this.scoreData.lastSuccessScore)
+            return this.scoreData.lastSuccessScore;
+        
+        return fee;
+    };
+    
+    this.getScore = function(readDate) {
+        if (this.scoreData.lastSuccessTimestamp == null)
+            return 0;
+        
+        return this.scoreData.lastSuccessScore - this.getFee(readDate);
+    };
+    
+    this.getLevel = function(readDate) {
+        return getLevel(this.getScore(readDate));
+    };
+    
+    this.getLockHoursLeft = function(readDate) {
+        var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
+        
+        return getLockHoursLeft(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, readDate);
+    };
+    
+    this.getFeeHoursPassed = function(readDate) {
+        var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
+        
+        return getFeeHoursPassed(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, readDate);
+    };
+    
+    var fib = function(i) {
+        if (i==0)
+            return 0;
+        
+        if (i==1)
+            return 1;
+        
+        var a = 0;
+        var b = 1;
+        var fib_k = 1;
+        
+        for (var k=2; k<i; k++) {
+            a = b;
+            b = fib_k;
+            fib_k = a + b;
+        }
+
+        return fib_k;
+    };
+    
+    var fibinv = function(n) {
+        if (n == 0)
+            return 0;
+        
+        var k = 2;
+        
+        var a = 0;
+        var b = 1;
+        var fib_k = 1;
+        
+        while (fib_k <= n) {
+            a = b;
+            b = fib_k;
+            
+            fib_k = a + b;
+            k++;
+        }
+        
+        return k-1;
+    };
+    
+    var getLevel = function(score) {
+        if (score < 1 )
+            return 1;
+
+        return fibinv(score);
+    };
+    
+    var getLockHours = function(level) {
+        if (level <= 1)
+            return 0;
+
+        return fib(level);
+    };
+    
+    var getFeePerHour = function(level) {
+        if (level <= 1)
+            return 0;
+
+        return 1 / fib(level+1);
+    };
+    
+    var getLockHoursLeft = function(level, lastSuccessDate, readDate) {
+        var lockHours = getLockHours(level);
+        
+        if (!lastSuccessDate)
+            return 0;
+        
+        var lockHoursLeft = lockHours - (readDate - lastSuccessDate)/(1000*60*60);
+        if (!lockHoursLeft || lockHoursLeft < 0)
+            lockHoursLeft = 0;
+
+        return lockHoursLeft;
+    };
+    
+    var getFeeHoursPassed = function(level, lastSuccessDate, readDate) {
+        var lockHours = getLockHours(level);
+        
+        if (!lastSuccessDate)
+            return 0;
+        
+        var feeHoursPassed = (readDate - lastSuccessDate)/(1000*60*60) - lockHours;
+        if (!feeHoursPassed || feeHoursPassed < 0)
+            feeHoursPassed = 0;
+
+        return feeHoursPassed;
+    };
+    
+    Object.defineProperties(
+        this, 
+        {
+            "score": {
+                get:    function() {
+                            return this.getScore(new Date());
+                        }
+            },
+            
+            "fee": {
+                get:    function() {
+                            return this.getFee(new Date());
+                        }
+            },
+            
+            "lockHoursLeft": {
+                get:    function() {
+                            return this.getLockHoursLeft(new Date());
+                        }
+            },
+            
+            "feeHoursPassed": {
+                get:    function() {
+                            return this.getFeeHoursPassed(new Date());
+                        }
+            },
+            
+            "lockHours": {
+                get:    function() {
+                            var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
+
+                            return getLockHours(lastSuccessLevel);
+                        }
+            },
+            
+            "feePerHour": {
+                get:    function() {
+                            var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
+
+                            return getFeePerHour(lastSuccessLevel);
+                        }
+            },
+                        
+            "level": {
+                get:    function() {
+                            return this.getLevel(new Date());
+                }
+            }
+        }
+    );
+
+    this.setScoreData(scoreData);
+};
+var PasswordRegistrationCollection;
+
+PasswordRegistrationCollection = function(passwordHasher, scoreDataComparator) {
+    this.prototype = new IPasswordRegistrationCollection(passwordHasher);
+    
+    this.passwordHasher = passwordHasher;
+    this.scoreDataComparator = scoreDataComparator;
+
+    this.collection = {};
+
+    this.importJSON = function(json) {
+        var passwordRegistrations = "";
+        
+        if (json)
+            passwordRegistrations = JSON.parse(json);
+
+        if (!isPasswordRegistrationIntegrityOk(passwordRegistrations))
+            return false;
+
+        this.collection = passwordRegistrations;
+
+        return true;
+    };
+
+    this.exportJSON = function() {
+        return JSON.stringify(this.collection);
+    };
+
+    this.add = function(description, password) {
+        this.collection[description] =
+        {
+            description:    description,
+            hash:           this.passwordHasher.generateSaltedHash(password, null),
+            scoreData:      {
+                lastSuccessScore:   null,
+                lastSuccessTimestamp:  null
+            }
+        };
+    };
+
+    /*
+     * recreate the hash for the given password without losing score info
+     */
+    this.rehash = function(description, password) {
+        if (!this.collection[description])
+            return false;
+        
+        var hash = this.collection[description].hash;
+        var parsedHash = this.passwordHasher.parseSaltedHash(hash);
+        
+        // dont rehash if wrong password was given
+        if (this.passwordHasher.generateSaltedHash(password, parsedHash.salt) != hash)
+            return false;
+        
+        this.collection[description].hash = this.passwordHasher.generateSaltedHash(password, null);
+        
+        return true;
+    };
+
+    this.getMostRecentPasswordRegistration = function() {
+        if (!this.scoreDataComparator)
+            return null;
+        
+        var mostRecentInstance = null;
+
+        // determine instance with max fee hours passed and minimal lock hours left
+        for (var key in this.collection) {
+            var passwordRegistration = this.collection[key];
+            var scoreData  = passwordRegistration.scoreData;
+
+            if (mostRecentInstance == null || this.scoreDataComparator.compare(scoreData, mostRecentInstance.scoreData) < 0)
+                mostRecentInstance = passwordRegistration;
+        }
+
+        return mostRecentInstance;
+    };
+
+    /*
+    * checks the given dictionary if it is a valid password registration container
+    */
+    var isPasswordRegistrationIntegrityOk = function(passwordRegistration) {
+        if (!passwordRegistration)
+                return false;
+
+        for (var desc in passwordRegistration) {
+                var currentRegistration = passwordRegistration[desc];
+
+                if (!currentRegistration)
+                        return false;
+
+                if (currentRegistration.description != desc)
+                        return false;
+
+                if (!currentRegistration.scoreData)
+                        return false;
+        }
+
+        return true;
+    };
+};
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+var LeveledScoreFormatter;
+
+LeveledScoreFormatter = function() {
+    this.prototype = new ILeveledScoreFormatter();
+    
+    /*
+     * returns a formatted string describing the status of the leveled score
+     * (locked time, fee amount)
+     */
+    this.formatStatus = function(leveledScore) {
+        if (leveledScore.fee)
+            return this.formatFee(leveledScore) + " fee";
+
+        if (leveledScore.lockHoursLeft)
+            return "locked for " + formatTime(leveledScore.lockHoursLeft*60*60*1000);
+    };
+    
+    
+    /*
+     * returns a formatted string describing score and level
+     */
+    this.formatLeveledScore = function(leveledScore) {
+        return "Score " + this.formatScore(leveledScore) + " / Level " + this.formatLevel(leveledScore);
+    };
+    
+    /*
+     * returns a formatted string describing the score points
+     */
+    this.formatScore = function(leveledScore) {
+        return Math.round(leveledScore.score*100)/100;
+    };
+    
+    /*
+     * returns a formatted string describing the fee points
+     */
+    this.formatFee = function(leveledScore) {
+        return Math.round(leveledScore.fee*100)/100;
+    };
+    
+    /*
+     * returns a formatted string describing the level
+     */
+    this.formatLevel = function(leveledScore) {
+        return leveledScore.level;
+    };
+
+    var formatTime = function(ms) {
+        if (ms < 0)
+            return "-" + formatTime(-ms);
+
+        var years, days, hours, minutes, seconds;
+
+        years = 0;
+        days = 0;
+        hours = 0;
+        minutes = 0;
+        seconds = 0;
+
+        if (ms >= 1000*60*60*24*365) {
+            years = Math.floor(ms / (1000*60*60*24*365));
+            ms -= years * 1000*60*60*24*365;
+        }
+
+        if (ms >= 1000*60*60*24) {
+            days = Math.floor(ms / (1000*60*60*24));
+            ms -= days * 1000*60*60*24;        
+        }
+
+        if (ms >= 1000*60*60) {
+            hours = Math.floor(ms / (1000*60*60));
+            ms -= hours * 1000*60*60;
+        }
+
+        if (ms >= 1000*60) {
+            minutes = Math.floor(ms / (1000*60));
+            ms -= minutes * 1000*60;
+        }
+
+        if (ms >= 1000) {
+            seconds = Math.floor(ms / 1000);
+            ms -= seconds * 1000;
+        }
+
+        var string = "";
+
+        if (years > 0)
+            string += (string.length>0?" ":"") + years + "y";
+
+        if (days > 0)
+            string += (string.length>0?" ":"") + days + "d";
+
+        if (hours > 0)
+            string += (string.length>0?" ":"") + hours + "h";
+
+        if (minutes > 0)
+            string += (string.length>0?" ":"") + minutes + "m";
+
+        if (seconds > 0 || string.length == 0)
+            string += (string.length>0?" ":"") + seconds + "s";
+
+        return string;
+    };
+}
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 (
     function($) {
         $.fn.JQPassword = function(sub, options) {
@@ -236,1133 +1273,6 @@
         };
     }
 )(jQuery);
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-var IComparator;
-
-IComparator = function() {
-    /*
-     * compares obj1 to obj2
-     * 
-     * returns
-     *      -1 if obj1 is null or obj1 < obj2
-     *      0  if obj1 is equally to obj2
-     *      1  if obj1 > obj2 or obj2 is null
-     */
-    this.compare= function(obj1, obj2) {}
-}
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
-var IImportsExportsPasswordRegistrations;
-
-IImportsExportsPasswordRegistrations = function() {
-    /*
-     * import password registrations from json string
-     *
-     * returns true if json string contains a valid persistence
-     * of password registrations.
-     */
-    this.importJSON = function(json) {};
-
-    /*
-     * export password registrations to a json string
-     *
-     * returns the json string
-     */
-    this.exportJSON = function() {};
-};
-var IApp = function() {
-    this.prototype = new IImportsExportsPasswordRegistrations();
-    
-    // password registrations
-    this.passwordRegistrations = null;
-
-    /* 
-     * page instances
-     */
-    this.pageTrainPasswords = null;
-    this.pageImportExport = null;
-    this.pagePasswordManagePasswords = null;
-    
-    this.pagePasswordDialog = null;
-    
-    /*
-     * password notificator
-     */
-    this.passwordNotificator = null;
-
-    /*
-     * initialize jquery widgets and pages
-     */
-    this.init = function() {};
-
-    /*
-     * restore password registrations from localStorage
-     */
-    this.readPasswordRegistrationsFromLocalStorage = function() {};
-
-    /*
-     * persist password registration to local storage
-     */
-    this.writePasswordRegistrationsToLocalStorage = function() {};
-    
-    /*
-     * register a new password
-     */
-    this.addPasswordRegistration = function(description, password) {};
-    
-    /*
-     * add a password input attempt with the given password on the given password registration
-     */
-    this.addPasswordAttempt = function(passwordRegistration, password) {};
-    
-    /*
-     * find the password registration with minimum lock time and maximum fee time
-     */
-    this.getMostRecentPasswordRegistration = function() {};
-
-};
-var IJSONFormatter;
-
-IJSONFormatter = function() {
-    /*
-     * pretty formats the given JSON string
-     */
-    this.format = function(JSONStr) {};
-};
-var ILeveledScore;
-
-ILeveledScore = function(scoreData) {
-    this.setScoreData = function(scoreData) {};
-    
-    /*
-     * add successful password attempt to score
-     */
-    this.addSuccessfulAttempt = function(dateOfAttempt) {};
-    
-    this.getFee = function(readDate) {};
-    this.getScore = function(readDate) {};
-    this.getLevel = function(readDate) {};
-    
-    this.getLockHoursLeft = function(readDate) {};
-    this.getFeeHoursPassed = function(readDate) {};
-    
-    /*
-     * score properties by current date/time
-     */
-    Object.defineProperties(
-        this, 
-        {
-            "score": {},
-            
-            "fee": {},
-            
-            "lockHoursLeft": {},
-            
-            "feeHoursPassed": {},
-            
-            "lockHours": {},
-            
-            "feePerHour": {},
-                        
-            "level": {}
-        }
-    );
-};
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-var ILeveledScoreFormatter;
-
-ILeveledScoreFormatter = function() {
-    /*
-     * returns a formatted string describing the status of the leveled score
-     * (locked time, fee amount)
-     */
-    this.formatStatus = function(leveledScore) {};
-    
-    /*
-     * returns a formatted string describing score and level
-     */
-    this.formatLeveledScore = function(leveledScore) {};
-    
-    /*
-     * returns a formatted string describing the score points
-     */
-    this.formatScore = function(leveledScore) {};
-    
-    /*
-     * returns a formatted string describing the fee points
-     */
-    this.formatFee = function(leveledScore) {};
-
-    /*
-     * returns a formatted string describing the level
-     */
-    this.formatLevel = function(leveledScore) {};
-
-}
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-var INotificator;
-INotificator = function(window) {
-    /*
-     * returns true if application may send notifications
-     */
-    this.hasNotificationPermission = function() {};
-
-    /*
-     * returns true if application may vibrate
-     */
-    this.hasVibrationPermission = function() {};
-    
-    /*
-     * sends a new notification and returns an notification instance
-     */
-    this.notify = function(title, text) {};
-};
-var IPasswordNotificator;
-
-IPasswordNotificator = function(passwordRegistrations, window) {
-    // App instance
-    this.app = null;
-
-    /*
-     * show notification about the number of ready password registrations
-     */
-    this.notify = function() {};
-};
-var IPasswordRegistrationCollection;
-
-IPasswordRegistrationCollection = function(passwordHasher, scoreDataComparator) {
-    this.prototype = new IImportsExportsPasswordRegistrations();
-    this.passwordHasher = null;
-    this.scoreDataComparator = null;
-    
-    // collection of password registrations
-    this.collection = null;
-    
-    /*
-     * add new password registration
-     */
-    this.add = function(description, password) {};
-    
-    /*
-     * recreate the hash for the given password without losing score info
-     * 
-     * returns true on success
-     */
-    this.rehash = function(description, password) {};
-    
-    /*
-     * find the password registration which is minimal according to the scoreDataComparator
-     * (i.e. maximal feeHours or minimal lock hours)
-     */
-    this.getMostRecentPasswordRegistration = function() {};
-};
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-var IPasswordHasher = function(saltGenerator) {
-    this.saltGenerator = saltGenerator; // the salt generator which shall be used
-    
-    /*
-     * generate salted hash from given password
-     * If no salt is given then the saltGenerator will be used to generate one
-     */
-    this.generateSaltedHash = function(password, salt) {};
-    
-    /*
-     * From a given hash value parse the salt and the password hash
-     */
-    this.parseSaltedHash = function(hash) {};
-}
-
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-var ISaltGenerator = function(length, charSet) {
-    this.length = null;   // the desired length of the salt
-    this.charSet = null;  // the desired charset
-    
-    /*
-     * Generates and returns a salt value (as specified by the constructor 
-     * parameters)
-     */
-    this.generate = function() {};
-}
-
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-var IPagePasswordDialog;
-
-IPagePasswordDialog = function(app) {
-    // app instance where this page is displayed in
-    this.appInstance = null;
-
-    
-    /*
-     * initialize jquery ui widgets
-     */
-    this.init = function() {};
-};
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-var IPageManagePasswords;
-
-IPageManagePasswords = function(app) {
-    // app instance where this page is displayed in
-    this.appInstance = null;
-
-    
-    /*
-     * initialize jquery ui widgets
-     */
-    this.init = function() {};
-    
-    /*
-     * update page display
-     */
-    this.update = function() {};
-};
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-var IPagePasswordTrainer = function(app) {
-    // app instance where this page is displayed in
-    this.appInstance = null;
-    
-    // password registration instance which is currently shown
-    this.currentPasswordRegistration = null;
-
-    // leveled score instance of the password registration
-    this.currentLeveledScore = null;
-    
-    // refresh interval id
-    this.intervalId;
-
-    /*
-     * initializes jquery ui widgets and page
-     */
-    this.init = function() {};
-
-    /*
-     * changes the displayed password registration
-     */
-    this.setPasswordRegistration = function(passwordRegistration) {};
-
-    /*
-     * update page display
-     */
-    this.update = function() {};
-
-    /*
-     * add a password input attempt with the given password
-     */
-    this.addPasswordAttempt = function(password) {};
-};
-
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
- 
-var IPageImportExport = function(app) {
-    // app instance where this page is displayed in
-    this.appInstance = null;
-
-    /*
-     * initialize jquery ui widgets
-     */
-    this.init = function() {};
-
-    /*
-     * perform export of password registrations
-     */
-    this.exportPasswordRegistrations = function() {};
-
-    /*
-     * perform import of password registrations
-     */
-    this.importPasswordRegistrations = function() {};
-};
-
-
-var JSONFormatter;
-
-JSONFormatter = new function() {
-    this.prototype = new IJSONFormatter();
-    
-    this.format = function(JSONStr) {
-        if (!JSONStr)
-            return "";
-            
-        var result = "";
-        
-        var indent = "";
-        var startIndex = 0;
-        var isInsideStringLiteral = false;
-        
-        while (JSONStr.length > startIndex) {
-            var currentIndex = startIndex;
-            
-          
-            while (JSONStr.length > currentIndex) {
-                // skip escaped characters
-                if (isInsideStringLiteral && JSONStr[currentIndex] == "\\") {
-                    currentIndex += 2;
-                    continue;
-                }
-                
-                // check for string literal
-                if (JSONStr[currentIndex] == "\"")
-                    isInsideStringLiteral = !isInsideStringLiteral;
-                
-                // move cursor until first occurence of ',',  '{' or '}'
-                if (!isInsideStringLiteral && ",{}".indexOf(JSONStr[currentIndex]) >= 0)
-                    break;
-                    
-                currentIndex++;
-            }
-        
-            result += JSONStr.substring(startIndex, currentIndex);
-            startIndex = currentIndex;
-            
-            if (JSONStr.length <= startIndex)
-                continue;
-        
-            switch(JSONStr[currentIndex]) {
-                case ",":
-                    result += JSONStr[currentIndex];
-                    result += "\n" + indent;
-                    
-                    break;
-                
-                case "{":
-                    indent += "\t";
-                    
-                    result += JSONStr[currentIndex];
-                    result += "\n" + indent;
-                    
-                    break;
-                
-                case "}":
-                    indent = indent.substring(0, indent.length-1);
-                    result += "\n" + indent;
-                    result += JSONStr[currentIndex];
-                    
-                    break;
-            };
-            
-            startIndex++;
-        };
-        
-        return result;
-    };
-};
-var LeveledScore;
-
-LeveledScore = function (scoreData) {
-    this.prototype = new ILeveledScore(scoreData);
-    
-    this.setScoreData = function(scoreData) {
-        this.scoreData = scoreData;
-        
-        if (this.scoreData == null) {
-            this.scoreData = {
-                lastSuccessScore:   null,
-                lastSuccessTimestamp:  null
-            };
-        }
-    };
-        
-    this.addSuccessfulAttempt = function(dateOfAttempt) {
-        if (dateOfAttempt == null)
-            dateOfAttempt = new Date();
-
-        var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
-        var lockHoursLeft = getLockHoursLeft(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, dateOfAttempt);
-        
-        if (lockHoursLeft > 0)
-            return false;
-        
-        var lastScore = this.getScore(dateOfAttempt);
-        
-        this.scoreData.lastSuccessScore = lastScore+1;
-        this.scoreData.lastSuccessTimestamp = dateOfAttempt.getTime();
-        
-        return true;
-    };
-    
-    this.getFee = function(readDate) {
-        if (this.scoreData.lastSuccessTimestamp == null)
-            return 0;
-
-        var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
-        var feeHoursPassed = Math.floor(getFeeHoursPassed(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, readDate));
-        
-        var fee = feeHoursPassed*this.feePerHour;
-        
-        if (fee > this.scoreData.lastSuccessScore)
-            return this.scoreData.lastSuccessScore;
-        
-        return fee;
-    };
-    
-    this.getScore = function(readDate) {
-        if (this.scoreData.lastSuccessTimestamp == null)
-            return 0;
-        
-        return this.scoreData.lastSuccessScore - this.getFee(readDate);
-    };
-    
-    this.getLevel = function(readDate) {
-        return getLevel(this.getScore(readDate));
-    };
-    
-    this.getLockHoursLeft = function(readDate) {
-        var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
-        
-        return getLockHoursLeft(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, readDate);
-    };
-    
-    this.getFeeHoursPassed = function(readDate) {
-        var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
-        
-        return getFeeHoursPassed(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, readDate);
-    };
-    
-    var fib = function(i) {
-        if (i==0)
-            return 0;
-        
-        if (i==1)
-            return 1;
-        
-        var a = 0;
-        var b = 1;
-        var fib_k = 1;
-        
-        for (var k=2; k<i; k++) {
-            a = b;
-            b = fib_k;
-            fib_k = a + b;
-        }
-
-        return fib_k;
-    };
-    
-    var fibinv = function(n) {
-        if (n == 0)
-            return 0;
-        
-        var k = 2;
-        
-        var a = 0;
-        var b = 1;
-        var fib_k = 1;
-        
-        while (fib_k <= n) {
-            a = b;
-            b = fib_k;
-            
-            fib_k = a + b;
-            k++;
-        }
-        
-        return k-1;
-    };
-    
-    var getLevel = function(score) {
-        if (score < 1 )
-            return 1;
-
-        return fibinv(score);
-    };
-    
-    var getLockHours = function(level) {
-        if (level <= 1)
-            return 0;
-
-        return fib(level);
-    };
-    
-    var getFeePerHour = function(level) {
-        if (level <= 1)
-            return 0;
-
-        return 1 / fib(level+1);
-    };
-    
-    var getLockHoursLeft = function(level, lastSuccessDate, readDate) {
-        var lockHours = getLockHours(level);
-        
-        if (!lastSuccessDate)
-            return 0;
-        
-        var lockHoursLeft = lockHours - (readDate - lastSuccessDate)/(1000*60*60);
-        if (!lockHoursLeft || lockHoursLeft < 0)
-            lockHoursLeft = 0;
-
-        return lockHoursLeft;
-    };
-    
-    var getFeeHoursPassed = function(level, lastSuccessDate, readDate) {
-        var lockHours = getLockHours(level);
-        
-        if (!lastSuccessDate)
-            return 0;
-        
-        var feeHoursPassed = (readDate - lastSuccessDate)/(1000*60*60) - lockHours;
-        if (!feeHoursPassed || feeHoursPassed < 0)
-            feeHoursPassed = 0;
-
-        return feeHoursPassed;
-    };
-    
-    Object.defineProperties(
-        this, 
-        {
-            "score": {
-                get:    function() {
-                            return this.getScore(new Date());
-                        }
-            },
-            
-            "fee": {
-                get:    function() {
-                            return this.getFee(new Date());
-                        }
-            },
-            
-            "lockHoursLeft": {
-                get:    function() {
-                            return this.getLockHoursLeft(new Date());
-                        }
-            },
-            
-            "feeHoursPassed": {
-                get:    function() {
-                            return this.getFeeHoursPassed(new Date());
-                        }
-            },
-            
-            "lockHours": {
-                get:    function() {
-                            var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
-
-                            return getLockHours(lastSuccessLevel);
-                        }
-            },
-            
-            "feePerHour": {
-                get:    function() {
-                            var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
-
-                            return getFeePerHour(lastSuccessLevel);
-                        }
-            },
-                        
-            "level": {
-                get:    function() {
-                            return this.getLevel(new Date());
-                }
-            }
-        }
-    );
-
-    this.setScoreData(scoreData);
-};
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-var LeveledScoreFormatter;
-
-LeveledScoreFormatter = function() {
-    this.prototype = new ILeveledScoreFormatter();
-    
-    /*
-     * returns a formatted string describing the status of the leveled score
-     * (locked time, fee amount)
-     */
-    this.formatStatus = function(leveledScore) {
-        if (leveledScore.fee)
-            return this.formatFee(leveledScore) + " fee";
-
-        if (leveledScore.lockHoursLeft)
-            return "locked for " + formatTime(leveledScore.lockHoursLeft*60*60*1000);
-    };
-    
-    
-    /*
-     * returns a formatted string describing score and level
-     */
-    this.formatLeveledScore = function(leveledScore) {
-        return "Score " + this.formatScore(leveledScore) + " / Level " + this.formatLevel(leveledScore);
-    };
-    
-    /*
-     * returns a formatted string describing the score points
-     */
-    this.formatScore = function(leveledScore) {
-        return Math.round(leveledScore.score*100)/100;
-    };
-    
-    /*
-     * returns a formatted string describing the fee points
-     */
-    this.formatFee = function(leveledScore) {
-        return Math.round(leveledScore.fee*100)/100;
-    };
-    
-    /*
-     * returns a formatted string describing the level
-     */
-    this.formatLevel = function(leveledScore) {
-        return leveledScore.level;
-    };
-
-    var formatTime = function(ms) {
-        if (ms < 0)
-            return "-" + formatTime(-ms);
-
-        var years, days, hours, minutes, seconds;
-
-        years = 0;
-        days = 0;
-        hours = 0;
-        minutes = 0;
-        seconds = 0;
-
-        if (ms >= 1000*60*60*24*365) {
-            years = Math.floor(ms / (1000*60*60*24*365));
-            ms -= years * 1000*60*60*24*365;
-        }
-
-        if (ms >= 1000*60*60*24) {
-            days = Math.floor(ms / (1000*60*60*24));
-            ms -= days * 1000*60*60*24;        
-        }
-
-        if (ms >= 1000*60*60) {
-            hours = Math.floor(ms / (1000*60*60));
-            ms -= hours * 1000*60*60;
-        }
-
-        if (ms >= 1000*60) {
-            minutes = Math.floor(ms / (1000*60));
-            ms -= minutes * 1000*60;
-        }
-
-        if (ms >= 1000) {
-            seconds = Math.floor(ms / 1000);
-            ms -= seconds * 1000;
-        }
-
-        var string = "";
-
-        if (years > 0)
-            string += (string.length>0?" ":"") + years + "y";
-
-        if (days > 0)
-            string += (string.length>0?" ":"") + days + "d";
-
-        if (hours > 0)
-            string += (string.length>0?" ":"") + hours + "h";
-
-        if (minutes > 0)
-            string += (string.length>0?" ":"") + minutes + "m";
-
-        if (seconds > 0 || string.length == 0)
-            string += (string.length>0?" ":"") + seconds + "s";
-
-        return string;
-    };
-}
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-var MD5PasswordHasher = function(saltGenerator) {
-    // unsalted md5 generator
-    this.prototype = new IPasswordHasher(null);
-    
-    this.saltGenerator = new SaltGenerator(32, null);
-    
-    /*
-     * generate salted hash from given password
-     * If no salt is given then the saltGenerator will be used to generate one
-     */
-    this.generateSaltedHash = function(password, salt) {
-        if (salt == null)
-            salt = this.saltGenerator.generate();
-        
-        if (!salt)
-            // backward compatibility - check unsalted hash
-            return CryptoJS.MD5(password).toString();
-        else
-            return CryptoJS.MD5(password + salt).toString() + ":" + salt;
-    };
-    
-    /*
-     * From a given hash value parse the salt and the password hash
-     */
-    this.parseSaltedHash = function(hash) {
-        var index = null;
-        if (hash && (index = hash.lastIndexOf(":")) >= 0 )
-            return {salt: hash.substr(index+1), hash: hash.substring(0, index)};
-        
-        return {salt: "", hash: hash};
-    };
-}
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-var Notificator;
-Notificator = function(window) {
-    this.prototype = new INotificator(window);
-    
-    this.Notification = window.Notification;
-    this.navigator = window.navigator;
-    
-    if (this.Notification)
-        this.Notification.requestPermission();
-    
-    this.hasNotificationPermission = function() {
-        if (!this.Notification)
-            return false;
-        
-        if (this.Notification.permission != "granted")
-            return false;
-        
-        return true;
-    };
-
-    this.hasVibrationPermission = function() {
-        if (!this.navigator)
-            return false;
-        
-        if (!this.navigator.vibrate)
-            return false;
-        
-        return true;
-    };
-    
-    this.notify = function(title, text, vibrationLengthInMs) {
-        if (vibrationLengthInMs && this.hasVibrationPermission())
-            this.navigator.vibrate(vibrationLengthInMs);
-        
-        if (this.hasNotificationPermission()) {
-            try {
-                // try deprecated way first
-                return new this.Notification(title, { body: text });
-            } catch (e) {
-                // use future chrome implementation 
-                if (ServiceWorkerRegistration && ServiceWorkerRegistration.showNotification)
-                    return ServiceWorkerRegistration.showNotification(title, { body: text });
-            }
-        }
-        
-        return null;
-    };
-};var PasswordNotificator;
-
-PasswordNotificator = function(passwordRegistrations, window) {
-    this.prototype = new IPasswordNotificator(passwordRegistrations, window);
-        
-    this.passwordRegistrations = passwordRegistrations;
-    this.notificator = new Notificator(window);
-    
-    this.activeNotifications = [];
-    this.lastNotificationPasswordCount = null;
-    
-    this.notify = function() {
-        var date = new Date();
-        var readyPasswordDescs = gatherReadyPasswordDescriptions.call(this, date);
-
-        // no pending passwords -> reset notifications
-        if (!readyPasswordDescs.length) {
-            resetNotifications(this.activeNotifications);
-            this.lastNotificationPasswordCount = null;
-
-            return;
-        }
-
-        // suppress creation of a new notification if password count lowers
-        if (readyPasswordDescs.length <= this.lastNotificationPasswordCount) {
-            this.lastNotificationPasswordCount = readyPasswordDescs.length;
-            return;
-        }
-
-        // create new notification
-        resetNotifications.call(this);
-        var notification = this.notificator.notify("PasswordTrainer", readyPasswordDescs.length + " passwords are ready", [300, 100, 300, 100, 300]);
-        this.activeNotifications.push(notification);
-        this.lastNotificationPasswordCount = readyPasswordDescs.length;
-    };
-    
-    var resetNotifications = function() {
-        if (!this.activeNotifications)
-            this.activeNotifications = [];
-        
-        while (this.activeNotifications.length > 0) {
-            var notification = this.activeNotifications.pop();
-            
-            if (!notification)
-                continue;
-                
-            notification.close();
-        }
-        
-        if (this.activeNotifications.length > 0)
-            return false;
-        
-        return true;
-    };
-    
-    var gatherReadyPasswordDescriptions = function(date) {
-        var readyPasswordDescs = [];
-
-        if (!this.passwordRegistrations)
-            return null;
-        
-        if (!this.passwordRegistrations.collection)
-            return null;
-        
-        var passwordCollection = this.passwordRegistrations.collection;
-
-        for (var desc in passwordCollection) {
-            var passwordRegistration = passwordCollection[desc];
-
-            if (!passwordRegistration)
-                continue;
-
-            if (!passwordRegistration.scoreData)
-                continue;
-
-            var leveledScore = new LeveledScore(passwordRegistration.scoreData);
-            if (leveledScore.getLockHoursLeft(date) > 0)
-                continue;
-
-            readyPasswordDescs.push(desc);
-        }
-
-        return readyPasswordDescs;
-    };
-};
-var PasswordRegistrationCollection;
-
-PasswordRegistrationCollection = function(passwordHasher, scoreDataComparator) {
-    this.prototype = new IPasswordRegistrationCollection(passwordHasher);
-    
-    this.passwordHasher = passwordHasher;
-    this.scoreDataComparator = scoreDataComparator;
-
-    this.collection = {};
-
-    this.importJSON = function(json) {
-        var passwordRegistrations = "";
-        
-        if (json)
-            passwordRegistrations = JSON.parse(json);
-
-        if (!isPasswordRegistrationIntegrityOk(passwordRegistrations))
-            return false;
-
-        this.collection = passwordRegistrations;
-
-        return true;
-    };
-
-    this.exportJSON = function() {
-        return JSON.stringify(this.collection);
-    };
-
-    this.add = function(description, password) {
-        this.collection[description] =
-        {
-            description:    description,
-            hash:           this.passwordHasher.generateSaltedHash(password, null),
-            scoreData:      {
-                lastSuccessScore:   null,
-                lastSuccessTimestamp:  null
-            }
-        };
-    };
-
-    /*
-     * recreate the hash for the given password without losing score info
-     */
-    this.rehash = function(description, password) {
-        if (!this.collection[description])
-            return false;
-        
-        var hash = this.collection[description].hash;
-        var parsedHash = this.passwordHasher.parseSaltedHash(hash);
-        
-        // dont rehash if wrong password was given
-        if (this.passwordHasher.generateSaltedHash(password, parsedHash.salt) != hash)
-            return false;
-        
-        this.collection[description].hash = this.passwordHasher.generateSaltedHash(password, null);
-        
-        return true;
-    };
-
-    this.getMostRecentPasswordRegistration = function() {
-        if (!this.scoreDataComparator)
-            return null;
-        
-        var mostRecentInstance = null;
-
-        // determine instance with max fee hours passed and minimal lock hours left
-        for (var key in this.collection) {
-            var passwordRegistration = this.collection[key];
-            var scoreData  = passwordRegistration.scoreData;
-
-            if (mostRecentInstance == null || this.scoreDataComparator.compare(scoreData, mostRecentInstance.scoreData) < 0)
-                mostRecentInstance = passwordRegistration;
-        }
-
-        return mostRecentInstance;
-    };
-
-    /*
-    * checks the given dictionary if it is a valid password registration container
-    */
-    var isPasswordRegistrationIntegrityOk = function(passwordRegistration) {
-        if (!passwordRegistration)
-                return false;
-
-        for (var desc in passwordRegistration) {
-                var currentRegistration = passwordRegistration[desc];
-
-                if (!currentRegistration)
-                        return false;
-
-                if (currentRegistration.description != desc)
-                        return false;
-
-                if (!currentRegistration.scoreData)
-                        return false;
-        }
-
-        return true;
-    };
-};
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-var ScoreDataFeeHoursAndLockHoursComparator;
-
-ScoreDataFeeHoursAndLockHoursComparator = function() {
-    this.prototype = new IComparator();
-    
-    this.compare = function(obj1, obj2) {
-        if (obj1 == null)
-            return -1;
-        
-        if (obj2 == null)
-            return 1;
-        
-        var leveledScore1 = new LeveledScore();
-        var leveledScore2 = new LeveledScore();
-        
-        // TODO: check why passing obj1 / obj2 to constructor does not work?!
-        leveledScore1.setScoreData(obj1);
-        leveledScore2.setScoreData(obj2);
-        
-        // maximum fee hours first
-        if (leveledScore1.feeHoursPassed > leveledScore2.feeHoursPassed)
-            return -1;
-        
-        if (leveledScore1.feeHoursPassed < leveledScore2.feeHoursPassed)
-            return 1;
-        
-        // minimum lock hours first
-        if (leveledScore1.lockHoursLeft < leveledScore2.lockHoursLeft)
-            return -1;
-        
-        if (leveledScore1.lockHoursLeft > leveledScore2.lockHoursLeft)
-            return 1;
-        
-        return 0;
-    }
-};
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-var SaltGenerator = function(length, charSet) {
-    this.prototype = new ISaltGenerator(length, charSet);
-    
-    this.length = length;   // the desired length of the salt
-    this.charSet = charSet;  // the desired charset
-
-    if (!this.charSet)
-        this.charSet = '!"§$%&/()=?`´+*#\'~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    
-    /*
-     * Generates and returns a salt value (as specified by the constructor 
-     * parameters)
-     */
-    this.generate = function() {
-        var salt = "";
-
-        if (!charSet)
-            charSet = '!"§$%&/()=?`´+*#\'~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-        for (var i=0;i<this.length;i++) {
-            var rnd = Math.floor(Math.random()*charSet.length);
-
-            salt += charSet[rnd]
-        }
-
-        return salt;
-    };
-}
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -1665,6 +1575,91 @@ var PagePasswordTrainer;
         };
     }(jQuery)
 );
+var PasswordNotificator;
+
+PasswordNotificator = function(passwordRegistrations, window) {
+    this.prototype = new IPasswordNotificator(passwordRegistrations, window);
+        
+    this.passwordRegistrations = passwordRegistrations;
+    this.notificator = new Notificator(window);
+    
+    this.activeNotifications = [];
+    this.lastNotificationPasswordCount = null;
+    
+    this.notify = function() {
+        var date = new Date();
+        var readyPasswordDescs = gatherReadyPasswordDescriptions.call(this, date);
+
+        // no pending passwords -> reset notifications
+        if (!readyPasswordDescs.length) {
+            resetNotifications(this.activeNotifications);
+            this.lastNotificationPasswordCount = null;
+
+            return;
+        }
+
+        // suppress creation of a new notification if password count lowers
+        if (readyPasswordDescs.length <= this.lastNotificationPasswordCount) {
+            this.lastNotificationPasswordCount = readyPasswordDescs.length;
+            return;
+        }
+
+        // create new notification
+        resetNotifications.call(this);
+        var notification = this.notificator.notify("PasswordTrainer", readyPasswordDescs.length + " passwords are ready", [300, 100, 300, 100, 300]);
+        this.activeNotifications.push(notification);
+        this.lastNotificationPasswordCount = readyPasswordDescs.length;
+    };
+    
+    var resetNotifications = function() {
+        if (!this.activeNotifications)
+            this.activeNotifications = [];
+        
+        while (this.activeNotifications.length > 0) {
+            var notification = this.activeNotifications.pop();
+            
+            if (!notification)
+                continue;
+                
+            notification.close();
+        }
+        
+        if (this.activeNotifications.length > 0)
+            return false;
+        
+        return true;
+    };
+    
+    var gatherReadyPasswordDescriptions = function(date) {
+        var readyPasswordDescs = [];
+
+        if (!this.passwordRegistrations)
+            return null;
+        
+        if (!this.passwordRegistrations.collection)
+            return null;
+        
+        var passwordCollection = this.passwordRegistrations.collection;
+
+        for (var desc in passwordCollection) {
+            var passwordRegistration = passwordCollection[desc];
+
+            if (!passwordRegistration)
+                continue;
+
+            if (!passwordRegistration.scoreData)
+                continue;
+
+            var leveledScore = new LeveledScore(passwordRegistration.scoreData);
+            if (leveledScore.getLockHoursLeft(date) > 0)
+                continue;
+
+            readyPasswordDescs.push(desc);
+        }
+
+        return readyPasswordDescs;
+    };
+};
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
