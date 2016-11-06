@@ -31,42 +31,51 @@ build() {
 }
 
 catjsbundle() {
-    cat js/ui/JQPassword.js
-    cat js/ui/JQPasswordInput.js
-    cat js/ui/JQPasswordRegistration.js
+    cat js/app/IImportsExportsPasswordRegistrations.js
+    cat js/app/IApp.js
+    cat js/app/IPasswordNotificator.js
 
-    cat js/IComparator.js
-    cat js/IImportsExportsPasswordRegistrations.js
-    cat js/IApp.js
-    cat js/IJSONFormatter.js
-    cat js/ILeveledScore.js
-    cat js/ILeveledScoreFormatter.js
-    cat js/INotificator.js
-    cat js/IPasswordNotificator.js
-    cat js/IPasswordRegistrationCollection.js
-    cat js/IPasswordHasher.js
-    cat js/ISaltGenerator.js
-    cat js/ui/IPagePasswordDialog.js
-    cat js/ui/IPageManagePasswords.js
-    cat js/ui/IPagePasswordTrainer.js
-    cat js/ui/IPageImportExport.js
+    cat js/app/comparator/IComparator.js
 
-    cat js/JSONFormatter.js
-    cat js/LeveledScore.js
-    cat js/LeveledScoreFormatter.js
-    cat js/MD5PasswordHasher.js
-    cat js/Notificator.js
-    cat js/PasswordNotificator.js
-    cat js/PasswordRegistrationCollection.js
-    cat js/ScoreDataFeeHoursAndLockHoursComparator.js
-    cat js/SaltGenerator.js
+    cat js/app/model/ILeveledScore.js
+    cat js/app/model/IPasswordRegistrationCollection.js
 
-    cat js/ui/PagePasswordDialog.js
-    cat js/ui/PageManagePasswords.js
-    cat js/ui/PageImportExport.js
-    cat js/ui/PagePasswordTrainer.js
-    
-    cat js/App.js
+    cat js/app/ui/ILeveledScoreFormatter.js
+    cat js/app/ui/IPagePasswordDialog.js
+    cat js/app/ui/IPageManagePasswords.js
+    cat js/app/ui/IPagePasswordTrainer.js
+    cat js/app/ui/IPageImportExport.js
+
+    cat js/util/hash/IPasswordHasher.js
+    cat js/util/hash/ISaltGenerator.js
+
+    cat js/util/json/IJSONFormatter.js
+
+    cat js/util/notification/INotificator.js
+
+    cat js/util/hash/MD5PasswordHasher.js
+    cat js/util/hash/SaltGenerator.js
+
+    cat js/util/json/JSONFormatter.js
+
+    cat js/util/notification/Notificator.js
+
+    cat js/app/comparator/ScoreDataFeeHoursAndLockHoursComparator.js
+
+    cat js/app/model/LeveledScore.js
+    cat js/app/model/PasswordRegistrationCollection.js
+
+    cat js/app/ui/LeveledScoreFormatter.js
+    cat js/app/ui/JQPassword.js
+    cat js/app/ui/JQPasswordInput.js
+    cat js/app/ui/JQPasswordRegistration.js
+    cat js/app/ui/PagePasswordDialog.js
+    cat js/app/ui/PageManagePasswords.js
+    cat js/app/ui/PageImportExport.js
+    cat js/app/ui/PagePasswordTrainer.js
+
+    cat js/app/PasswordNotificator.js
+    cat js/app/App.js
     
     cat js/init.js
 }
