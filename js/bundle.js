@@ -1661,7 +1661,7 @@ var PasswordNotificator = (
 
         class PasswordNotificator extends IPasswordNotificator {
             constructor(passwordRegistrations, window) {
-                this.prototype = new IPasswordNotificator(passwordRegistrations, window);
+                super(passwordRegistrations, window);
 
                 this.passwordRegistrations = passwordRegistrations;
                 this.notificator = new Notificator(window);
