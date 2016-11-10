@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 
-var IComparator;
-
-IComparator = function() {
+class IComparator{
+    constructor() {}
+    
     /*
      * compares obj1 to obj2
      * 
@@ -15,5 +15,5 @@ IComparator = function() {
      *      0  if obj1 is equally to obj2
      *      1  if obj1 > obj2 or obj2 is null
      */
-    this.compare= function(obj1, obj2) {}
+    compare(obj1, obj2) {}
 }

@@ -4,16 +4,16 @@
  * and open the template in the editor.
  */
  
-var PageImportExport;
-
-(
+var PageImportExport = (
     function($) {
-        PageImportExport = function(app) {
-            this.prototype = new IPageImportExport(app);
+        class PageImportExport extends IPageImportExport {
+            constructor(app) {
+                super(app);
             
-            this.appInstance = app;
+                this.appInstance = app;
+            }
             
-            this.init = function() {
+            init() {
                 var pageInstance = this;
                 
                 $('#pageImportExport').on('pageshow',
@@ -27,20 +27,23 @@ var PageImportExport;
                         pageInstance.importPasswordRegistrations();
                     }
                 );
-            };
+            }
             
-            this.exportPasswordRegistrations = function() {
+            exportPasswordRegistrations() {
                 var json = this.appInstance.exportJSON();
-                json = JSONFormatter.format(json);
+                var formatter = new JSONFormatter();
+                json = formatter.format(json);
                 
                 $('#importexportfield').val(json);
-            };
+            }
             
-            this.importPasswordRegistrations = function() {
+            importPasswordRegistrations() {
                 var json = $('#importexportfield').val();
                 
                 this.appInstance.importJSON(json);
-            };
+            }
         };
+        
+        return PageImportExport;
     }
 )(jQuery);

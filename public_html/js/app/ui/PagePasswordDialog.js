@@ -3,16 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var PagePasswordDialog;
-
-(
+var PagePasswordDialog = (
     function($) {
-        PagePasswordDialog = function(app) {
-            this.prototype = new IPagePasswordDialog(app);
+        class PagePasswordDialog extends IPagePasswordDialog{
+            constructor(app) {
+                super(app);
+                
+                this.prototype = new IPagePasswordDialog(app);
             
-            this.appInstance = app;
+                this.appInstance = app;
+            }
             
-            this.init = function() {
+            init() {
                 var pageInstance = this;
                 
                 $('#passwordregistration').JQPasswordRegistration(
@@ -28,7 +30,9 @@ var PagePasswordDialog;
                         pageInstance.appInstance.addPasswordRegistration(desc, pwd);
                     }
                 );
-            };
+            }
         };
+        
+        return PagePasswordDialog;
     }
 )(jQuery);

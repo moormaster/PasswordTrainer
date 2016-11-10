@@ -3,20 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var INotificator;
-INotificator = function(window) {
+class INotificator {
+    constructor(window) {}
+    
     /*
      * returns true if application may send notifications
      */
-    this.hasNotificationPermission = function() {};
+    hasNotificationPermission() {};
 
     /*
      * returns true if application may vibrate
      */
-    this.hasVibrationPermission = function() {};
+    hasVibrationPermission() {};
     
     /*
      * sends a new notification and returns an notification instance
      */
-    this.notify = function(title, text) {};
+    notify(title, text) {};
 };

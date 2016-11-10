@@ -4,31 +4,30 @@
  * and open the template in the editor.
  */
 
-var SaltGenerator = function(length, charSet) {
-    this.prototype = new ISaltGenerator(length, charSet);
+class SaltGenerator extends ISaltGenerator {
+    constructor(length, charSet) {
+        super(length, charSet);
     
-    this.length = length;   // the desired length of the salt
-    this.charSet = charSet;  // the desired charset
+        this.length = length;   // the desired length of the salt
+        this.charSet = charSet;  // the desired charset
 
-    if (!this.charSet)
-        this.charSet = '!"§$%&/()=?`´+*#\'~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        if (!this.charSet)
+            this.charSet = '!"§$%&/()=?`´+*#\'~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    }
     
     /*
      * Generates and returns a salt value (as specified by the constructor 
      * parameters)
      */
-    this.generate = function() {
+    generate() {
         var salt = "";
 
-        if (!charSet)
-            charSet = '!"§$%&/()=?`´+*#\'~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
         for (var i=0;i<this.length;i++) {
-            var rnd = Math.floor(Math.random()*charSet.length);
+            var rnd = Math.floor(Math.random()*this.charSet.length);
 
-            salt += charSet[rnd]
+            salt += this.charSet[rnd]
         }
 
         return salt;
-    };
-}
+    }
+};

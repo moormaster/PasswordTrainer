@@ -1,39 +1,30 @@
-var ILeveledScore;
-
-ILeveledScore = function(scoreData) {
-    this.setScoreData = function(scoreData) {};
+class ILeveledScore {
+    constructor(scoreData) {
+        this.scoreData = null;
+    }
+    
+    setScoreData(scoreData) {}
     
     /*
      * add successful password attempt to score
      */
-    this.addSuccessfulAttempt = function(dateOfAttempt) {};
+    addSuccessfulAttempt(dateOfAttempt) {}
     
-    this.getFee = function(readDate) {};
-    this.getScore = function(readDate) {};
-    this.getLevel = function(readDate) {};
+    getFee(readDate) {}
+    getScore(readDate) {}
+    getLevel(readDate) {}
     
-    this.getLockHoursLeft = function(readDate) {};
-    this.getFeeHoursPassed = function(readDate) {};
-    
+    getLockHoursLeft(readDate) {}
+    getFeeHoursPassed(readDate) {}
+
     /*
      * score properties by current date/time
      */
-    Object.defineProperties(
-        this, 
-        {
-            "score": {},
-            
-            "fee": {},
-            
-            "lockHoursLeft": {},
-            
-            "feeHoursPassed": {},
-            
-            "lockHours": {},
-            
-            "feePerHour": {},
-                        
-            "level": {}
-        }
-    );
+    get score() {}
+    get fee() {}
+    get lockHoursLeft() {}
+    get feeHoursPassed() {}
+    get lockHours() {}
+    get feePerHour() {}
+    get level() {}
 };

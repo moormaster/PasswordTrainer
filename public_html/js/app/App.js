@@ -3,26 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var App;
-
-(
+var App = (
     function($) {
-        App = function() {
-            this.prototype = new IApp();
+        class App extends IApp {
+            constructor() {
+                super();
             
-            this.passwordHasher = new MD5PasswordHasher();
-            this.passwordRegistrations = new PasswordRegistrationCollection(this.passwordHasher, new ScoreDataFeeHoursAndLockHoursComparator());
+                this.passwordHasher = new MD5PasswordHasher();
+                this.passwordRegistrations = new PasswordRegistrationCollection(this.passwordHasher, new ScoreDataFeeHoursAndLockHoursComparator());
 
-            this.passwordNotificator = new PasswordNotificator(this.passwordRegistrations, window);
+                this.passwordNotificator = new PasswordNotificator(this.passwordRegistrations, window);
             
-            this.pageTrainPasswords = new PagePasswordTrainer(this);
-            this.pageImportExport = new PageImportExport(this);
-            this.pagePasswordManagePasswords = new PageManagePasswords(this);
+                this.pageTrainPasswords = new PagePasswordTrainer(this);
+                this.pageImportExport = new PageImportExport(this);
+                this.pagePasswordManagePasswords = new PageManagePasswords(this);
             
-            this.pagePasswordDialog = new PagePasswordDialog(this);
-            
-            
-            this.init = function() {
+                this.pagePasswordDialog = new PagePasswordDialog(this);
+            }
+                        
+            init() {
                 var appInstance = this;
 
                 this.pageTrainPasswords.init();
@@ -30,35 +29,35 @@ var App;
                 this.pagePasswordManagePasswords.init();
                 
                 this.pagePasswordDialog.init();
-            };
+            }
             
-            this.readPasswordRegistrationsFromLocalStorage = function() {
+            readPasswordRegistrationsFromLocalStorage() {
                 this.passwordRegistrations.importJSON(localStorage['passwordRegistrations']);
-            };
+            }
             
-            this.writePasswordRegistrationsToLocalStorage = function() {
+            writePasswordRegistrationsToLocalStorage() {
                 localStorage['passwordRegistrations'] = this.passwordRegistrations.exportJSON();
-            };
+            }
             
-            this.importJSON = function(json) {
+            importJSON(json) {
                 if (this.passwordRegistrations.importJSON(json)) {
                     this.writePasswordRegistrationsToLocalStorage();
                     
                     this.pageTrainPasswords.update();
                     $.mobile.changePage('#pageTrainPasswords');
                 }
-            };
+            }
 
-            this.exportJSON = function() {
+            exportJSON() {
                 return this.passwordRegistrations.exportJSON();
-            };
+            }
             
-            this.addPasswordRegistration = function(description, password) {
+            addPasswordRegistration(description, password) {
                 this.passwordRegistrations.add(description, password);
                 this.writePasswordRegistrationsToLocalStorage();
-            };
+            }
             
-            this.addPasswordAttempt = function(desc, password) {
+            addPasswordAttempt(desc, password) {
                 if (!this.passwordRegistrations)
                     return false;
                 
@@ -91,15 +90,16 @@ var App;
                 this.writePasswordRegistrationsToLocalStorage();
                 
                 return true;
-            };
+            }            
             
-            
-            this.getMostRecentPasswordRegistration = function() {
+            getMostRecentPasswordRegistration() {
                 if (!this.passwordRegistrations)
                     return null;
                 
                 return this.passwordRegistrations.getMostRecentPasswordRegistration();
-            };
+            }
         };
+        
+        return App;
     }(jQuery)
 );

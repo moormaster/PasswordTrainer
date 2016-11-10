@@ -4,17 +4,18 @@
  * and open the template in the editor.
  */
 
-var Notificator;
-Notificator = function(window) {
-    this.prototype = new INotificator(window);
+class Notificator extends INotificator{
+    constructor(window) {
+        super(window);
+        
+        this.Notification = window.Notification;
+        this.navigator = window.navigator;
+
+        if (this.Notification)
+            this.Notification.requestPermission();
+    }
     
-    this.Notification = window.Notification;
-    this.navigator = window.navigator;
-    
-    if (this.Notification)
-        this.Notification.requestPermission();
-    
-    this.hasNotificationPermission = function() {
+    hasNotificationPermission() {
         if (!this.Notification)
             return false;
         
@@ -22,9 +23,9 @@ Notificator = function(window) {
             return false;
         
         return true;
-    };
+    }
 
-    this.hasVibrationPermission = function() {
+    hasVibrationPermission() {
         if (!this.navigator)
             return false;
         
@@ -32,9 +33,9 @@ Notificator = function(window) {
             return false;
         
         return true;
-    };
+    }
     
-    this.notify = function(title, text, vibrationLengthInMs) {
+    notify(title, text, vibrationLengthInMs) {
         if (vibrationLengthInMs && this.hasVibrationPermission())
             this.navigator.vibrate(vibrationLengthInMs);
         
@@ -50,5 +51,5 @@ Notificator = function(window) {
         }
         
         return null;
-    };
+    }
 };

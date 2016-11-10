@@ -1,8 +1,8 @@
-var IJSONFormatter;
-
-IJSONFormatter = function() {
+class IJSONFormatter {
+    constructor() {}
+    
     /*
      * pretty formats the given JSON string
      */
-    this.format = function(JSONStr) {};
+    format(JSONStr) {}
 };

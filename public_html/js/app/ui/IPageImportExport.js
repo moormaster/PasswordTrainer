@@ -4,24 +4,24 @@
  * and open the template in the editor.
  */
  
-var IPageImportExport = function(app) {
-    // app instance where this page is displayed in
-    this.appInstance = null;
+class IPageImportExport {
+    constructor(app) {
+        // app instance where this page is displayed in
+        this.appInstance = null;
+    }
 
     /*
      * initialize jquery ui widgets
      */
-    this.init = function() {};
+    init() {};
 
     /*
      * perform export of password registrations
      */
-    this.exportPasswordRegistrations = function() {};
+    exportPasswordRegistrations() {};
 
     /*
      * perform import of password registrations
      */
-    this.importPasswordRegistrations = function() {};
+    importPasswordRegistrations() {};
 };
-
-

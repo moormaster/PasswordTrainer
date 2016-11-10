@@ -1,9 +1,9 @@
-var JSONFormatter;
-
-JSONFormatter = new function() {
-    this.prototype = new IJSONFormatter();
+class JSONFormatter extends IJSONFormatter {
+    constructor() {
+        super();
+    }
     
-    this.format = function(JSONStr) {
+    format (JSONStr) {
         if (!JSONStr)
             return "";
             
@@ -68,5 +68,5 @@ JSONFormatter = new function() {
         };
         
         return result;
-    };
+    }
 };

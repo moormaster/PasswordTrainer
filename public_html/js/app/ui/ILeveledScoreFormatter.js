@@ -4,33 +4,32 @@
  * and open the template in the editor.
  */
 
-var ILeveledScoreFormatter;
-
-ILeveledScoreFormatter = function() {
+class ILeveledScoreFormatter {
+    constructor() {}
+    
     /*
      * returns a formatted string describing the status of the leveled score
      * (locked time, fee amount)
      */
-    this.formatStatus = function(leveledScore) {};
+    formatStatus (leveledScore) {}
     
     /*
      * returns a formatted string describing score and level
      */
-    this.formatLeveledScore = function(leveledScore) {};
+    formatLeveledScore(leveledScore) {}
     
     /*
      * returns a formatted string describing the score points
      */
-    this.formatScore = function(leveledScore) {};
+    formatScore(leveledScore) {}
     
     /*
      * returns a formatted string describing the fee points
      */
-    this.formatFee = function(leveledScore) {};
+    formatFee(leveledScore) {}
 
     /*
      * returns a formatted string describing the level
      */
-    this.formatLevel = function(leveledScore) {};
-
+    formatLevel(leveledScore) {}
 }

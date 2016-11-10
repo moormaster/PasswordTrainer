@@ -7,17 +7,19 @@
 /*
  * PasswordHasherMock with identity function as hash function and rudimental salting
  */
-var PasswordHasherMock = function() {
-    this.prototype = new IPasswordHasher(null);
+class PasswordHasherMock extends IPasswordHasher {
+    constructor() {
+        super(null);
+    }
     
-    this.generateSaltedHash = function(password, salt) {
+    generateSaltedHash(password, salt) {
         if (!salt)
             salt = Math.floor(Math.random()*1000);
         
         return password + ':' + salt;
-    };
+    }
     
-    this.parseSaltedHash = function(saltedHash) {
+    parseSaltedHash(saltedHash) {
         var index = saltedHash.lastIndexOf(":");
         
         if (index >= 0 )
@@ -26,15 +28,17 @@ var PasswordHasherMock = function() {
                 hash: saltedHash.substring(0, index)
             };
     }
-}
+};
 
 /*
  * scoreDataComparator which simply orders by timestamp
  */
-var ScoreDataComparatorMock = function() {
-    this.prototype = new IComparator();
+class ScoreDataComparatorMock extends IComparator {
+    constructor() {
+        super()
+    }
     
-    this.compare = function(obj1, obj2) {
+    compare(obj1, obj2) {
         if (obj1 == null)
             return -1;
         
@@ -54,8 +58,8 @@ var ScoreDataComparatorMock = function() {
             return 1;
         
         return 0;
-    };
-}
+    }
+};
 
 QUnit.module("PasswordRegistrationCollection", {
     beforeEach: function() {

@@ -1,85 +1,91 @@
-var PasswordNotificator;
+var PasswordNotificator = (
+    function() {
+        var resetNotifications = function() {
+            if (!this.activeNotifications)
+                this.activeNotifications = [];
 
-PasswordNotificator = function(passwordRegistrations, window) {
-    this.prototype = new IPasswordNotificator(passwordRegistrations, window);
-        
-    this.passwordRegistrations = passwordRegistrations;
-    this.notificator = new Notificator(window);
-    
-    this.activeNotifications = [];
-    this.lastNotificationPasswordCount = null;
-    
-    this.notify = function() {
-        var date = new Date();
-        var readyPasswordDescs = gatherReadyPasswordDescriptions.call(this, date);
+            while (this.activeNotifications.length > 0) {
+                var notification = this.activeNotifications.pop();
 
-        // no pending passwords -> reset notifications
-        if (!readyPasswordDescs.length) {
-            resetNotifications(this.activeNotifications);
-            this.lastNotificationPasswordCount = null;
+                if (!notification)
+                    continue;
 
-            return;
-        }
+                notification.close();
+            }
 
-        // suppress creation of a new notification if password count lowers
-        if (readyPasswordDescs.length <= this.lastNotificationPasswordCount) {
-            this.lastNotificationPasswordCount = readyPasswordDescs.length;
-            return;
-        }
+            if (this.activeNotifications.length > 0)
+                return false;
 
-        // create new notification
-        resetNotifications.call(this);
-        var notification = this.notificator.notify("PasswordTrainer", readyPasswordDescs.length + " passwords are ready", [300, 100, 300, 100, 300]);
-        this.activeNotifications.push(notification);
-        this.lastNotificationPasswordCount = readyPasswordDescs.length;
-    };
-    
-    var resetNotifications = function() {
-        if (!this.activeNotifications)
-            this.activeNotifications = [];
-        
-        while (this.activeNotifications.length > 0) {
-            var notification = this.activeNotifications.pop();
-            
-            if (!notification)
-                continue;
-                
-            notification.close();
-        }
-        
-        if (this.activeNotifications.length > 0)
-            return false;
-        
-        return true;
-    };
-    
-    var gatherReadyPasswordDescriptions = function(date) {
-        var readyPasswordDescs = [];
+            return true;
+        };
 
-        if (!this.passwordRegistrations)
-            return null;
-        
-        if (!this.passwordRegistrations.collection)
-            return null;
-        
-        var passwordCollection = this.passwordRegistrations.collection;
+        var gatherReadyPasswordDescriptions = function(date) {
+            var readyPasswordDescs = [];
 
-        for (var desc in passwordCollection) {
-            var passwordRegistration = passwordCollection[desc];
+            if (!this.passwordRegistrations)
+                return null;
 
-            if (!passwordRegistration)
-                continue;
+            if (!this.passwordRegistrations.collection)
+                return null;
 
-            if (!passwordRegistration.scoreData)
-                continue;
+            var passwordCollection = this.passwordRegistrations.collection;
 
-            var leveledScore = new LeveledScore(passwordRegistration.scoreData);
-            if (leveledScore.getLockHoursLeft(date) > 0)
-                continue;
+            for (var desc in passwordCollection) {
+                var passwordRegistration = passwordCollection[desc];
 
-            readyPasswordDescs.push(desc);
-        }
+                if (!passwordRegistration)
+                    continue;
 
-        return readyPasswordDescs;
-    };
-};
+                if (!passwordRegistration.scoreData)
+                    continue;
+
+                var leveledScore = new LeveledScore(passwordRegistration.scoreData);
+                if (leveledScore.getLockHoursLeft(date) > 0)
+                    continue;
+
+                readyPasswordDescs.push(desc);
+            }
+
+            return readyPasswordDescs;
+        };
+
+        class PasswordNotificator extends IPasswordNotificator {
+            constructor(passwordRegistrations, window) {
+                this.prototype = new IPasswordNotificator(passwordRegistrations, window);
+
+                this.passwordRegistrations = passwordRegistrations;
+                this.notificator = new Notificator(window);
+
+                this.activeNotifications = [];
+                this.lastNotificationPasswordCount = null;
+            }
+
+            notify() {
+                var date = new Date();
+                var readyPasswordDescs = gatherReadyPasswordDescriptions.call(this, date);
+
+                // no pending passwords -> reset notifications
+                if (!readyPasswordDescs.length) {
+                    resetNotifications(this.activeNotifications);
+                    this.lastNotificationPasswordCount = null;
+
+                    return;
+                }
+
+                // suppress creation of a new notification if password count lowers
+                if (readyPasswordDescs.length <= this.lastNotificationPasswordCount) {
+                    this.lastNotificationPasswordCount = readyPasswordDescs.length;
+                    return;
+                }
+
+                // create new notification
+                resetNotifications.call(this);
+                var notification = this.notificator.notify("PasswordTrainer", readyPasswordDescs.length + " passwords are ready", [300, 100, 300, 100, 300]);
+                this.activeNotifications.push(notification);
+                this.lastNotificationPasswordCount = readyPasswordDescs.length;
+            }
+        };
+
+        return PasswordNotificator;
+    }
+)();

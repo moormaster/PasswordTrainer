@@ -1,43 +1,47 @@
 QUnit.module(
     "JSONFormatter",
-    {}
+    {
+        beforeEach: function() {
+            this.instance = new JSONFormatter();
+        }
+    }
 );
 
 QUnit.test(
     "JSONFormatter.formatJSONString()",
     function(assert) {
         assert.equal(
-            JSONFormatter.format(""),
+            this.instance.format(""),
             ""
         );
         
         assert.equal(
-            JSONFormatter.format("abc"),
+            this.instance.format("abc"),
             "abc"
         );
         
         assert.equal(
-            JSONFormatter.format("\"abc\\\",{}\""),
+            this.instance.format("\"abc\\\",{}\""),
             "\"abc\\\",{}\""
         );
         
         assert.equal(
-            JSONFormatter.format("abc,def"),
+            this.instance.format("abc,def"),
             "abc,\ndef"
         );
         
         assert.equal(
-            JSONFormatter.format("{abc}"),
+            this.instance.format("{abc}"),
             "{\n\tabc\n}"
         );
         
         assert.equal(
-            JSONFormatter.format("{{abc}}"),
+            this.instance.format("{{abc}}"),
             "{\n\t{\n\t\tabc\n\t}\n}"
         );
         
         assert.equal(
-            JSONFormatter.format("{abc,def}"),
+            this.instance.format("{abc,def}"),
             "{\n\tabc,\n\tdef\n}"
         );
     }

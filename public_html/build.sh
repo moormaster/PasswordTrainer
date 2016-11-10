@@ -31,7 +31,6 @@ build() {
 }
 
 catjsbundle() {
-    cat js/app/IImportsExportsPasswordRegistrations.js
     cat js/app/IApp.js
     cat js/app/IPasswordNotificator.js
 

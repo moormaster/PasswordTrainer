@@ -4,106 +4,112 @@
  * and open the template in the editor.
  */
 
-var LeveledScoreFormatter;
+var LeveledScoreFormatter = (
+    function() {
+        var formatTime = function(ms) {
+            if (ms < 0)
+                return "-" + formatTime(-ms);
 
-LeveledScoreFormatter = function() {
-    this.prototype = new ILeveledScoreFormatter();
-    
-    /*
-     * returns a formatted string describing the status of the leveled score
-     * (locked time, fee amount)
-     */
-    this.formatStatus = function(leveledScore) {
-        if (leveledScore.fee)
-            return this.formatFee(leveledScore) + " fee";
+            var years, days, hours, minutes, seconds;
 
-        if (leveledScore.lockHoursLeft)
-            return "locked for " + formatTime(leveledScore.lockHoursLeft*60*60*1000);
-    };
-    
-    
-    /*
-     * returns a formatted string describing score and level
-     */
-    this.formatLeveledScore = function(leveledScore) {
-        return "Score " + this.formatScore(leveledScore) + " / Level " + this.formatLevel(leveledScore);
-    };
-    
-    /*
-     * returns a formatted string describing the score points
-     */
-    this.formatScore = function(leveledScore) {
-        return Math.round(leveledScore.score*100)/100;
-    };
-    
-    /*
-     * returns a formatted string describing the fee points
-     */
-    this.formatFee = function(leveledScore) {
-        return Math.round(leveledScore.fee*100)/100;
-    };
-    
-    /*
-     * returns a formatted string describing the level
-     */
-    this.formatLevel = function(leveledScore) {
-        return leveledScore.level;
-    };
+            years = 0;
+            days = 0;
+            hours = 0;
+            minutes = 0;
+            seconds = 0;
 
-    var formatTime = function(ms) {
-        if (ms < 0)
-            return "-" + formatTime(-ms);
+            if (ms >= 1000*60*60*24*365) {
+                years = Math.floor(ms / (1000*60*60*24*365));
+                ms -= years * 1000*60*60*24*365;
+            }
 
-        var years, days, hours, minutes, seconds;
+            if (ms >= 1000*60*60*24) {
+                days = Math.floor(ms / (1000*60*60*24));
+                ms -= days * 1000*60*60*24;        
+            }
 
-        years = 0;
-        days = 0;
-        hours = 0;
-        minutes = 0;
-        seconds = 0;
+            if (ms >= 1000*60*60) {
+                hours = Math.floor(ms / (1000*60*60));
+                ms -= hours * 1000*60*60;
+            }
 
-        if (ms >= 1000*60*60*24*365) {
-            years = Math.floor(ms / (1000*60*60*24*365));
-            ms -= years * 1000*60*60*24*365;
-        }
+            if (ms >= 1000*60) {
+                minutes = Math.floor(ms / (1000*60));
+                ms -= minutes * 1000*60;
+            }
 
-        if (ms >= 1000*60*60*24) {
-            days = Math.floor(ms / (1000*60*60*24));
-            ms -= days * 1000*60*60*24;        
-        }
+            if (ms >= 1000) {
+                seconds = Math.floor(ms / 1000);
+                ms -= seconds * 1000;
+            }
 
-        if (ms >= 1000*60*60) {
-            hours = Math.floor(ms / (1000*60*60));
-            ms -= hours * 1000*60*60;
-        }
+            var string = "";
 
-        if (ms >= 1000*60) {
-            minutes = Math.floor(ms / (1000*60));
-            ms -= minutes * 1000*60;
-        }
+            if (years > 0)
+                string += (string.length>0?" ":"") + years + "y";
 
-        if (ms >= 1000) {
-            seconds = Math.floor(ms / 1000);
-            ms -= seconds * 1000;
-        }
+            if (days > 0)
+                string += (string.length>0?" ":"") + days + "d";
 
-        var string = "";
+            if (hours > 0)
+                string += (string.length>0?" ":"") + hours + "h";
 
-        if (years > 0)
-            string += (string.length>0?" ":"") + years + "y";
+            if (minutes > 0)
+                string += (string.length>0?" ":"") + minutes + "m";
 
-        if (days > 0)
-            string += (string.length>0?" ":"") + days + "d";
+            if (seconds > 0 || string.length == 0)
+                string += (string.length>0?" ":"") + seconds + "s";
 
-        if (hours > 0)
-            string += (string.length>0?" ":"") + hours + "h";
+            return string;
+        };
+        
+        class LeveledScoreFormatter extends ILeveledScoreFormatter {
+            constructor() {
+                super();
+            }
 
-        if (minutes > 0)
-            string += (string.length>0?" ":"") + minutes + "m";
+            /*
+             * returns a formatted string describing the status of the leveled score
+             * (locked time, fee amount)
+             */
+            formatStatus(leveledScore) {
+                if (leveledScore.fee)
+                    return this.formatFee(leveledScore) + " fee";
 
-        if (seconds > 0 || string.length == 0)
-            string += (string.length>0?" ":"") + seconds + "s";
+                if (leveledScore.lockHoursLeft)
+                    return "locked for " + formatTime(leveledScore.lockHoursLeft*60*60*1000);
+            }
 
-        return string;
-    };
-}
+            /*
+             * returns a formatted string describing score and level
+             */
+            formatLeveledScore(leveledScore) {
+                return "Score " + this.formatScore(leveledScore) + " / Level " + this.formatLevel(leveledScore);
+            }
+
+            /*
+             * returns a formatted string describing the score points
+             */
+            formatScore(leveledScore) {
+                return Math.round(leveledScore.score*100)/100;
+            }
+
+            /*
+             * returns a formatted string describing the fee points
+             */
+            formatFee(leveledScore) {
+                return Math.round(leveledScore.fee*100)/100;
+            }
+
+            /*
+             * returns a formatted string describing the level
+             */
+            formatLevel(leveledScore) {
+                return leveledScore.level;
+            }
+        };
+
+        return LeveledScoreFormatter;
+    }
+)();
+

@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 
-var ScoreDataFeeHoursAndLockHoursComparator;
-
-ScoreDataFeeHoursAndLockHoursComparator = function() {
-    this.prototype = new IComparator();
+class ScoreDataFeeHoursAndLockHoursComparator extends IComparator {
+    constructor() {
+        super();
+    }
     
-    this.compare = function(obj1, obj2) {
+    compare(obj1, obj2) {
         if (obj1 == null)
             return -1;
         
