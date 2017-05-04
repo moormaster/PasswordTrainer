@@ -12,7 +12,7 @@ class SaltGenerator extends ISaltGenerator {
         this.charSet = charSet;  // the desired charset
 
         if (!this.charSet)
-            this.charSet = '!"§$%&/()=?`´+*#\'~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            this.charSet = '!§$%&/()=?`´+*#\'~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     }
     
     /*
