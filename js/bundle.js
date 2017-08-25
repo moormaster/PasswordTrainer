@@ -64,6 +64,11 @@ class IApp {
      * find the password registration with minimum lock time and maximum fee time
      */
     getMostRecentPasswordRegistration() {}
+    
+    /*
+     * find password registration by description
+     */
+    getPasswordRegistrationByDescription(description) {}
 
 };
 class IPasswordNotificator {
@@ -152,6 +157,11 @@ class IPasswordRegistrationCollection {
      * (i.e. maximal feeHours or minimal lock hours)
      */
     getMostRecentPasswordRegistration() {}
+    
+    /*
+     * find password registration by description
+     */
+    getPasswordRegistrationByDescription(description) {}
 
     /*
      * import password registrations from json string
@@ -265,7 +275,7 @@ class IPagePasswordTrainer {
      * initializes jquery ui widgets and page
      */
     init() {}
-
+    
     /*
      * changes the displayed password registration
      */
@@ -728,7 +738,7 @@ var LeveledScore = (
 
             addSuccessfulAttempt(dateOfAttempt) {
                 if (dateOfAttempt == null)
-                    dateOfAttempt = new Date();
+                    dateOfAttempt = new Date().getTime();
 
                 var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
                 var lockHoursLeft = getLockHoursLeft(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, dateOfAttempt);
@@ -739,7 +749,7 @@ var LeveledScore = (
                 var lastScore = this.getScore(dateOfAttempt);
 
                 this.scoreData.lastSuccessScore = lastScore+1;
-                this.scoreData.lastSuccessTimestamp = dateOfAttempt.getTime();
+                this.scoreData.lastSuccessTimestamp = dateOfAttempt;
 
                 return true;
             }
@@ -932,6 +942,10 @@ var PasswordRegistrationCollection = (
                     }
 
                     return mostRecentInstance;
+                }
+                
+                getPasswordRegistrationByDescription(description) {
+                    return this.collection[description];
                 }
             };
             
@@ -1480,8 +1494,7 @@ var PagePasswordTrainer = (
         };
 
         var interruptInterval = function(pageInstance, interruptDurationMs) {
-            if (!clearInterval(pageInstance))
-                return false;
+            clearInterval(pageInstance);
 
             window.setTimeout(
                 function() {
@@ -1494,10 +1507,44 @@ var PagePasswordTrainer = (
         };
 
         var updateWidgets = function(successState) {
+            updateWidgetSelectionValues(this.appInstance.passwordRegistrations, this.currentPasswordRegistration, this.autoSwitchToMostRecentPasswordRegistration);
             updateWidgetDescription(this.currentPasswordRegistration);
             updateWidgetsSuccessColor((this.currentLeveledScore.lockHoursLeft > 0), successState);
             updateWidgetsStatus(this.currentLeveledScore);
         };
+        
+        var updateWidgetSelectionValues = function(availablePasswordRegistrations, currentPasswordRegistration, updateSelection) {
+            var formatter = new LeveledScoreFormatter();
+            
+            var selectedKey = $('#pageTrainPasswords #select-password').val();
+            if (updateSelection)
+                selectedKey = currentPasswordRegistration.description;
+            
+            $('#pageTrainPasswords #select-password').find('option').remove();
+            for (var key in availablePasswordRegistrations.collection) {
+                var leveledScore = new LeveledScore(availablePasswordRegistrations.collection[key].scoreData);
+                var description  = availablePasswordRegistrations.collection[key].description;
+                
+                var leveledScoreDisplay = formatter.formatLeveledScore(leveledScore);
+                var statusDisplay = formatter.formatStatus(leveledScore);
+                var display = description;
+                
+                if (!statusDisplay)
+                    display = display + ":\t" + leveledScoreDisplay;
+                else
+                    display = display + ":\t" + leveledScoreDisplay + " (" + statusDisplay + ")";
+
+                if (key == selectedKey)
+                    $('#pageTrainPasswords #select-password').append("<option value=\"" + key + "\" selected=\"selected\">" + display + "</option>");
+                else
+                    $('#pageTrainPasswords #select-password').append("<option value=\"" + key + "\">" + display + "</option>");
+            }
+            
+
+            
+            $('#pageTrainPasswords #select-password').val(selectedKey);
+            $('#pageTrainPasswords #select-password').selectmenu("refresh");
+        }
 
         var updateWidgetDescription = function(passwordRegistration) {
             if (!passwordRegistration)
@@ -1538,8 +1585,11 @@ var PagePasswordTrainer = (
                 this.prototype = new IPagePasswordTrainer(app);
 
                 this.appInstance = app;
-                this.currentPasswordRegistration;
+                this.currentPasswordRegistration = null;
+                this.mostRecentPasswordRegistration = null;
                 this.currentLeveledScore = new LeveledScore();
+                
+                this.autoSwitchToMostRecentPasswordRegistration = true;
 
                 this.intervalId = null;
             }
@@ -1549,6 +1599,7 @@ var PagePasswordTrainer = (
              */
             init() {
                 var pageInstance = this;
+                var appInstance = pageInstance.appInstance;
                 
                 $('#passwordtrainer .password').JQPasswordInput();
                 $('#passwordtrainer .password').on('passwordEntered',
@@ -1557,7 +1608,17 @@ var PagePasswordTrainer = (
                         
                         interruptInterval(pageInstance, 1000);
                         var success = pageInstance.addPasswordAttempt(password);
+
+                        pageInstance.autoSwitchToMostRecentPasswordRegistration = true;
                         updateWidgets.call(pageInstance, success);
+                    }
+                );
+        
+                $('#pageTrainPasswords #select-password').on('change',
+                    function(e, currentPasswordRegistrationKey) {
+                        pageInstance.autoSwitchToMostRecentPasswordRegistration = false;
+                        pageInstance.setPasswordRegistration(appInstance.getPasswordRegistrationByDescription($('#pageTrainPasswords #select-password').val()));
+                        updateWidgets.call(pageInstance, null);
                     }
                 );
                 
@@ -1587,7 +1648,7 @@ var PagePasswordTrainer = (
             }
             
             setMostRecentPasswordRegistration() {
-                this.setPasswordRegistration(this.appInstance.getMostRecentPasswordRegistration());
+                this.mostRecentPasswordRegistration = this.appInstance.getMostRecentPasswordRegistration();
             }
             
             addPasswordAttempt(password) {
@@ -1599,6 +1660,9 @@ var PagePasswordTrainer = (
             
             update() {
                 this.setMostRecentPasswordRegistration();
+                if (this.autoSwitchToMostRecentPasswordRegistration)
+                    this.setPasswordRegistration(this.mostRecentPasswordRegistration);
+                
                 updateWidgets.call(this);
                 
                 this.appInstance.passwordNotificator.notify();
@@ -1797,6 +1861,13 @@ var App = (
                     return null;
                 
                 return this.passwordRegistrations.getMostRecentPasswordRegistration();
+            }
+            
+            getPasswordRegistrationByDescription(description) {
+                if (!this.passwordRegistrations)
+                    return null;
+                
+                return this.passwordRegistrations.getPasswordRegistrationByDescription(description);
             }
         };
         
