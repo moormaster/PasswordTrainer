@@ -26,8 +26,7 @@ var PagePasswordTrainer = (
         };
 
         var interruptInterval = function(pageInstance, interruptDurationMs) {
-            if (!clearInterval(pageInstance))
-                return false;
+            clearInterval(pageInstance);
 
             window.setTimeout(
                 function() {
@@ -40,10 +39,20 @@ var PagePasswordTrainer = (
         };
 
         var updateWidgets = function(successState) {
+            updateWidgetSelectionValues(this.appInstance.passwordRegistrations, this.currentPasswordRegistration, this.autoSwitchToMostRecentPasswordRegistration);
             updateWidgetDescription(this.currentPasswordRegistration);
             updateWidgetsSuccessColor((this.currentLeveledScore.lockHoursLeft > 0), successState);
             updateWidgetsStatus(this.currentLeveledScore);
         };
+        
+        var updateWidgetSelectionValues = function(availablePasswordRegistrations, currentPasswordRegistration, updateSelection) {
+            $('#pageTrainPasswords #select-password').find('option').remove();
+            for (var key in availablePasswordRegistrations.collection)
+                $('#pageTrainPasswords #select-password').append("<option value=\"" + key + "\">" + availablePasswordRegistrations.collection[key].description + "</option>");
+            
+            if (updateSelection)
+                $('#pageTrainPasswords #select-password').val(currentPasswordRegistration.description).change();
+        }
 
         var updateWidgetDescription = function(passwordRegistration) {
             if (!passwordRegistration)
@@ -84,8 +93,11 @@ var PagePasswordTrainer = (
                 this.prototype = new IPagePasswordTrainer(app);
 
                 this.appInstance = app;
-                this.currentPasswordRegistration;
+                this.currentPasswordRegistration = null;
+                this.mostRecentPasswordRegistration = null;
                 this.currentLeveledScore = new LeveledScore();
+                
+                this.autoSwitchToMostRecentPasswordRegistration = true;
 
                 this.intervalId = null;
             }
@@ -95,6 +107,7 @@ var PagePasswordTrainer = (
              */
             init() {
                 var pageInstance = this;
+                var appInstance = pageInstance.appInstance;
                 
                 $('#passwordtrainer .password').JQPasswordInput();
                 $('#passwordtrainer .password').on('passwordEntered',
@@ -103,6 +116,16 @@ var PagePasswordTrainer = (
                         
                         interruptInterval(pageInstance, 1000);
                         var success = pageInstance.addPasswordAttempt(password);
+
+                        pageInstance.autoSwitchToMostRecentPasswordRegistration = true;
+                        updateWidgets.call(pageInstance, success);
+                    }
+                );
+        
+                $('#pageTrainPasswords #select-password').on('change',
+                    function(e, currentPasswordRegistrationKey) {
+                        pageInstance.autoSwitchToMostRecentPasswordRegistration = false;
+                        pageInstance.setPasswordRegistration(appInstance.getPasswordRegistrationByDescription($('#pageTrainPasswords #select-password').val()));
                         updateWidgets.call(pageInstance, success);
                     }
                 );
@@ -133,7 +156,7 @@ var PagePasswordTrainer = (
             }
             
             setMostRecentPasswordRegistration() {
-                this.setPasswordRegistration(this.appInstance.getMostRecentPasswordRegistration());
+                this.mostRecentPasswordRegistration = this.appInstance.getMostRecentPasswordRegistration();
             }
             
             addPasswordAttempt(password) {
@@ -145,6 +168,9 @@ var PagePasswordTrainer = (
             
             update() {
                 this.setMostRecentPasswordRegistration();
+                if (this.autoSwitchToMostRecentPasswordRegistration)
+                    this.setPasswordRegistration(this.mostRecentPasswordRegistration);
+                
                 updateWidgets.call(this);
                 
                 this.appInstance.passwordNotificator.notify();

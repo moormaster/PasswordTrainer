@@ -23,7 +23,7 @@ class IPagePasswordTrainer {
      * initializes jquery ui widgets and page
      */
     init() {}
-
+    
     /*
      * changes the displayed password registration
      */

@@ -24,6 +24,11 @@ class IPasswordRegistrationCollection {
      * (i.e. maximal feeHours or minimal lock hours)
      */
     getMostRecentPasswordRegistration() {}
+    
+    /*
+     * find password registration by description
+     */
+    getPasswordRegistrationByDescription(description) {}
 
     /*
      * import password registrations from json string

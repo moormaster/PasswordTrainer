@@ -70,13 +70,18 @@ and open the template in the editor.
             </div>
             
             <div data-role="content">
-                    <div id="passwordtrainer">
-                        <h2 class="passworddescription"></h2>
-                        <div>
-                            <input type="password" class="password" data-role="none"/><br>
-                            <span class="passwordscore"/>
-                        </div>
-                    </div>                
+                <div class="ui-field-contain">
+                    <label for="select-password" class="select">Select password:</label>
+                    <select name="select-password" id="select-password"></select>
+                </div>
+                
+                <div id="passwordtrainer">
+                    <h2 class="passworddescription"></h2>
+                    <div>
+                        <input type="password" class="password" data-role="none"/><br>
+                        <span class="passwordscore"/>
+                    </div>
+                </div>                
             </div>
             
             <div data-role="footer" data-position="fixed">

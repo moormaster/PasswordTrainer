@@ -98,6 +98,13 @@ var App = (
                 
                 return this.passwordRegistrations.getMostRecentPasswordRegistration();
             }
+            
+            getPasswordRegistrationByDescription(description) {
+                if (!this.passwordRegistrations)
+                    return null;
+                
+                return this.passwordRegistrations.getPasswordRegistrationByDescription(description);
+            }
         };
         
         return App;

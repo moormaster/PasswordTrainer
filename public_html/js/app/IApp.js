@@ -64,5 +64,10 @@ class IApp {
      * find the password registration with minimum lock time and maximum fee time
      */
     getMostRecentPasswordRegistration() {}
+    
+    /*
+     * find password registration by description
+     */
+    getPasswordRegistrationByDescription(description) {}
 
 };

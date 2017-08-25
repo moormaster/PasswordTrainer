@@ -113,6 +113,10 @@ var PasswordRegistrationCollection = (
 
                     return mostRecentInstance;
                 }
+                
+                getPasswordRegistrationByDescription(description) {
+                    return this.collection[description];
+                }
             };
             
             return PasswordRegistrationCollection;

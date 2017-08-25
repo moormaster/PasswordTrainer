@@ -108,7 +108,7 @@ var LeveledScore = (
 
             addSuccessfulAttempt(dateOfAttempt) {
                 if (dateOfAttempt == null)
-                    dateOfAttempt = new Date();
+                    dateOfAttempt = new Date().getTime();
 
                 var lastSuccessLevel = getLevel(this.scoreData.lastSuccessScore);
                 var lockHoursLeft = getLockHoursLeft(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, dateOfAttempt);
