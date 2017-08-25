@@ -46,12 +46,36 @@ var PagePasswordTrainer = (
         };
         
         var updateWidgetSelectionValues = function(availablePasswordRegistrations, currentPasswordRegistration, updateSelection) {
-            $('#pageTrainPasswords #select-password').find('option').remove();
-            for (var key in availablePasswordRegistrations.collection)
-                $('#pageTrainPasswords #select-password').append("<option value=\"" + key + "\">" + availablePasswordRegistrations.collection[key].description + "</option>");
+            var formatter = new LeveledScoreFormatter();
             
+            var selectedKey = $('#pageTrainPasswords #select-password').val();
             if (updateSelection)
-                $('#pageTrainPasswords #select-password').val(currentPasswordRegistration.description).change();
+                selectedKey = currentPasswordRegistration.description;
+            
+            $('#pageTrainPasswords #select-password').find('option').remove();
+            for (var key in availablePasswordRegistrations.collection) {
+                var leveledScore = new LeveledScore(availablePasswordRegistrations.collection[key].scoreData);
+                var description  = availablePasswordRegistrations.collection[key].description;
+                
+                var leveledScoreDisplay = formatter.formatLeveledScore(leveledScore);
+                var statusDisplay = formatter.formatStatus(leveledScore);
+                var display = description;
+                
+                if (!statusDisplay)
+                    display = display + ":\t" + leveledScoreDisplay;
+                else
+                    display = display + ":\t" + leveledScoreDisplay + " (" + statusDisplay + ")";
+
+                if (key == selectedKey)
+                    $('#pageTrainPasswords #select-password').append("<option value=\"" + key + "\" selected=\"selected\">" + display + "</option>");
+                else
+                    $('#pageTrainPasswords #select-password').append("<option value=\"" + key + "\">" + display + "</option>");
+            }
+            
+
+            
+            $('#pageTrainPasswords #select-password').val(selectedKey);
+            $('#pageTrainPasswords #select-password').selectmenu("refresh");
         }
 
         var updateWidgetDescription = function(passwordRegistration) {
@@ -126,7 +150,7 @@ var PagePasswordTrainer = (
                     function(e, currentPasswordRegistrationKey) {
                         pageInstance.autoSwitchToMostRecentPasswordRegistration = false;
                         pageInstance.setPasswordRegistration(appInstance.getPasswordRegistrationByDescription($('#pageTrainPasswords #select-password').val()));
-                        updateWidgets.call(pageInstance, success);
+                        updateWidgets.call(pageInstance, null);
                     }
                 );
                 

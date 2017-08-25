@@ -119,7 +119,7 @@ var LeveledScore = (
                 var lastScore = this.getScore(dateOfAttempt);
 
                 this.scoreData.lastSuccessScore = lastScore+1;
-                this.scoreData.lastSuccessTimestamp = dateOfAttempt.getTime();
+                this.scoreData.lastSuccessTimestamp = dateOfAttempt;
 
                 return true;
             }
