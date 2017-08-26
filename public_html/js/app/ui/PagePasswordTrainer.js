@@ -7,6 +7,9 @@
 var PagePasswordTrainer = (
     function($) {
         var activateInterval = function(pageInstance) {
+            if (pageInstance.intervalId)
+                return false;
+            
             pageInstance.intervalId = window.setInterval(
                 function() {
                     pageInstance.update();
@@ -60,6 +63,11 @@ var PagePasswordTrainer = (
                 var leveledScoreDisplay = formatter.formatLeveledScore(leveledScore);
                 var statusDisplay = formatter.formatStatus(leveledScore);
                 var display = description;
+                
+                // password registrations which are locked are not part of the selection choice
+                // unless they are selected
+                if (key != currentPasswordRegistration.description && leveledScore.lockHoursLeft > 0)
+                    continue;
                 
                 if (!statusDisplay)
                     display = display + ":\t" + leveledScoreDisplay;
@@ -145,7 +153,27 @@ var PagePasswordTrainer = (
                         updateWidgets.call(pageInstance, success);
                     }
                 );
-        
+                
+                $('#pageTrainPasswords #select-password').on('focus',
+                    function(e) {
+                        clearInterval(pageInstance);
+                    }
+                );
+                
+                $('#pageTrainPasswords #select-password').on('blur',
+                    function(e) {
+                        activateInterval(pageInstance);
+                    }
+                );
+                
+                $('#pageTrainPasswords #select-password').on('click',
+                    function(e) {
+                        activateInterval(pageInstance);
+                        
+                        $(e.target).blur();
+                    }
+                );
+                
                 $('#pageTrainPasswords #select-password').on('change',
                     function(e, currentPasswordRegistrationKey) {
                         pageInstance.autoSwitchToMostRecentPasswordRegistration = false;
