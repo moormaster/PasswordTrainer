@@ -16,6 +16,8 @@ var PagePasswordTrainer = (
                 },
                 1000
             );
+            
+            return true;
         };
 
         var clearInterval = function(pageInstance) {
@@ -168,9 +170,7 @@ var PagePasswordTrainer = (
                 
                 $('#pageTrainPasswords #select-password').on('click',
                     function(e) {
-                        activateInterval(pageInstance);
-                        
-                        $(e.target).blur();
+
                     }
                 );
                 
@@ -179,6 +179,9 @@ var PagePasswordTrainer = (
                         pageInstance.autoSwitchToMostRecentPasswordRegistration = false;
                         pageInstance.setPasswordRegistration(appInstance.getPasswordRegistrationByDescription($('#pageTrainPasswords #select-password').val()));
                         updateWidgets.call(pageInstance, null);
+                        
+                        if (activateInterval(pageInstance))
+                            $(e.target).blur();
                     }
                 );
                 
