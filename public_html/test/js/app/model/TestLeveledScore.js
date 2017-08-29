@@ -14,12 +14,12 @@ QUnit.module(
                 
                 var d = leveledScore.lastSuccessTimestamp;
                 if (d == null)
-                    d = new Date(1970, 1, 1, 10, 00);
+                    d = new Date(1970, 1, 1, 10, 00).getTime();
 
                 var h = leveledScore.getLockHoursLeft(d) + feeHours;
                 
                 
-                return leveledScore.addSuccessfulAttempt(new Date(d.getTime() + 1000*60*60*h));
+                return leveledScore.addSuccessfulAttempt(d + 1000*60*60*h);
             };
             
             var getScoreFixture = function(attemptsCount, lastAttemptFeeHours) {
