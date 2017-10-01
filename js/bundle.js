@@ -72,7 +72,7 @@ class IApp {
 
 };
 class IPasswordNotificator {
-    constructor(passwordRegistrations, window) {
+    constructor(passwordRegistrations, notificator) {
         // App instance
         this.app = null;
     }
@@ -82,12 +82,6 @@ class IPasswordNotificator {
      */
     notify() {}
 };
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 class IComparator{
     constructor() {}
     
@@ -132,25 +126,29 @@ class ILeveledScore {
     get level() {}
 };
 class IPasswordRegistrationCollection {
-    constructor(passwordHasher, scoreDataComparator) {
-        this.passwordHasher = null;
+    constructor(scoreDataComparator) {
         this.scoreDataComparator = null;
-
-        // collection of password registrations
-        this.collection = null;
     }
     
     /*
      * add new password registration
      */
-    add(description, password) {}
+    add(description, hash) {}
     
     /*
-     * recreate the hash for the given password without losing score info
-     * 
-     * returns true on success
+     * updates password registration from the given structure
      */
-    rehash(description, password) {}
+    update(description, registration) {}
+    
+    /*
+     * returns the cloned password registration for the given description
+     */
+    get(description) {}
+    
+    /*
+     * returns a map of all registrations
+     */
+    getAll() {}
     
     /*
      * find the password registration which is minimal according to the scoreDataComparator
@@ -178,12 +176,6 @@ class IPasswordRegistrationCollection {
      */
     exportJSON() {}
 };
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 class ILeveledScoreFormatter {
     constructor() {}
     
@@ -213,11 +205,6 @@ class ILeveledScoreFormatter {
      */
     formatLevel(leveledScore) {}
 }
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 class IPagePasswordDialog {
     constructor(app) {
         // app instance where this page is displayed in
@@ -229,11 +216,6 @@ class IPagePasswordDialog {
      */
     init() {}
 };
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 class IPageManagePasswords {
     constructor (app) {
         // app instance where this page is displayed in
@@ -250,12 +232,6 @@ class IPageManagePasswords {
      */
     update() {};
 };
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 class IPagePasswordTrainer {
     constructor(app) {
         // app instance where this page is displayed in
@@ -292,11 +268,6 @@ class IPagePasswordTrainer {
     addPasswordAttempt(password) {}
 };
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
  
 class IPageImportExport {
     constructor(app) {
@@ -319,11 +290,6 @@ class IPageImportExport {
      */
     importPasswordRegistrations() {};
 };
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 class IPasswordHasher {
     constructor(saltGenerator) {
         // the salt generator which shall be used
@@ -343,11 +309,6 @@ class IPasswordHasher {
     parseSaltedHash(hash) {}
 };
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 class ISaltGenerator {
     constructor (length, charSet) {
         this.length = null;   // the desired length of the salt
@@ -368,13 +329,8 @@ class IJSONFormatter {
      */
     format(JSONStr) {}
 };
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 class INotificator {
-    constructor(window) {}
+    constructor() {}
     
     /*
      * returns true if application may send notifications
@@ -391,12 +347,6 @@ class INotificator {
      */
     notify(title, text) {};
 };
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 class MD5PasswordHasher extends IPasswordHasher {
     constructor(saltGenerator) {
         super(saltGenerator);
@@ -429,12 +379,6 @@ class MD5PasswordHasher extends IPasswordHasher {
         return {salt: "", hash: hash};
     }
 };
-
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 class SaltGenerator extends ISaltGenerator {
     constructor(length, charSet) {
@@ -535,21 +479,21 @@ class JSONFormatter extends IJSONFormatter {
         return result;
     }
 };
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-class Notificator extends INotificator{
-    constructor(window) {
-        super(window);
+class NavigatorNotificator extends INotificator{
+    constructor() {
+        super();
         
-        this.Notification = window.Notification;
-        this.navigator = window.navigator;
+        this.navigator = navigator;
+
+        // use current window instance per default
+        this.setWindow(window);
 
         if (this.Notification)
             this.Notification.requestPermission();
+    }
+    
+    setWindow(window) {
+        this.Notification = window.Notification;
     }
     
     hasNotificationPermission() {
@@ -590,12 +534,6 @@ class Notificator extends INotificator{
         return null;
     }
 };
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 class ScoreDataFeeHoursAndLockHoursComparator extends IComparator {
     constructor() {
         super();
@@ -852,12 +790,22 @@ var PasswordRegistrationCollection = (
 
                 return true;
             };
+            
+            /*
+             * Clones data of a password registration
+             */
+            var clonePasswordRegistrationData = function(sourceRegistration, targetRegistration) {
+                targetRegistration.description = sourceRegistration.description;
+                targetRegistration.hash = sourceRegistration.hash;
+                targetRegistration.scoreData.lastSuccessScore = sourceRegistration.scoreData.lastSuccessScore;
+                targetRegistration.scoreData.lastSuccessTimestamp = sourceRegistration.scoreData.lastSuccessTimestamp;
+
+            };
 
             class PasswordRegistrationCollection extends IPasswordRegistrationCollection {
-                constructor(passwordHasher, scoreDataComparator) {
-                    super(passwordHasher);
+                constructor(scoreDataComparator) {
+                    super(scoreDataComparator);
 
-                    this.passwordHasher = passwordHasher;
                     this.scoreDataComparator = scoreDataComparator;
 
                     this.collection = {};
@@ -895,35 +843,73 @@ var PasswordRegistrationCollection = (
                 /*
                  * add new password registration
                  */
-                add(description, password) {
+                add(description, hash) {
                     this.collection[description] =
                     {
                         description:    description,
-                        hash:           this.passwordHasher.generateSaltedHash(password, null),
+                        hash:           hash,
                         scoreData:      {
                             lastSuccessScore:   null,
                             lastSuccessTimestamp:  null
                         }
                     };
                 }
-
+                
                 /*
-                 * recreate the hash for the given password without losing score info
-                 */
-                rehash(description, password) {
+                * updates password registration from the given structure
+                */
+                update(description, registration) {
                     if (!this.collection[description])
                         return false;
+                   
+                    if (registration.description != description) {
+                        // description was changed
+                       
+                        // check if slot for new description name is free
+                        if (this.collection[registration.description])
+                            return false;
+                       
+                        // move registration to new slot
+                        this.collection[registration.description] = this.collection[description];
+                        this.collection[description] = null;
+                    }
+                   
+                    // set new values
+                    var targetRegistration = this.collection[registration.description];
+                    clonePasswordRegistrationData(registration, targetRegistration);
+                }
+                
+                /*
+                 * returns the cloned password registration for the given description
+                 */
+                get(description) {
+                    if (!this.collection[description])
+                        return null;
+                    
+                    var registration =  {
+                                            description:    null,
+                                            hash:           null,
+                                            scoreData:      {
+                                                lastSuccessScore:   null,
+                                                lastSuccessTimestamp:  null
+                                            }
+                                        };
 
-                    var hash = this.collection[description].hash;
-                    var parsedHash = this.passwordHasher.parseSaltedHash(hash);
-
-                    // dont rehash if wrong password was given
-                    if (this.passwordHasher.generateSaltedHash(password, parsedHash.salt) != hash)
-                        return false;
-
-                    this.collection[description].hash = this.passwordHasher.generateSaltedHash(password, null);
-
-                    return true;
+                    clonePasswordRegistrationData(this.collection[description], registration);
+                    
+                    return registration;
+                }
+                
+                /*
+                * returns a map of all registrations
+                */
+                getAll() {
+                    var map = [];
+                    
+                    for (var desc in this.collection)
+                        map[desc] = this.get(desc);
+                    
+                    return map;
                 }
 
                 getMostRecentPasswordRegistration() {
@@ -952,12 +938,6 @@ var PasswordRegistrationCollection = (
             return PasswordRegistrationCollection;
         }
 )();
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 (
     function($) {
         $.fn.JQPassword = function(sub, options) {
@@ -1021,12 +1001,6 @@ var PasswordRegistrationCollection = (
         }
     }
 )(jQuery);
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 (
     function($) {
         $.fn.JQPasswordInput = function(sub, options) {
@@ -1102,12 +1076,6 @@ var PasswordRegistrationCollection = (
         };
     }
 )(jQuery);
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 (
     function($) {
         function elemInit(elem, instance) {
@@ -1190,12 +1158,6 @@ var PasswordRegistrationCollection = (
         };
     }
 )(jQuery);
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 var LeveledScoreFormatter = (
     function() {
         var formatTime = function(ms) {
@@ -1305,11 +1267,6 @@ var LeveledScoreFormatter = (
     }
 )();
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 var PagePasswordDialog = (
     function($) {
         class PagePasswordDialog extends IPagePasswordDialog{
@@ -1343,11 +1300,6 @@ var PagePasswordDialog = (
         return PagePasswordDialog;
     }
 )(jQuery);
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 var PageManagePasswords = (
     function($) {
         var updateTable = function(tableSelector, passwordRegistrations) {
@@ -1365,9 +1317,9 @@ var PageManagePasswords = (
             if (!passwordRegistrations)
                 return;
 
-            var i=0;
-            for (var desc in passwordRegistrations.collection) {
-                var passwordRegistration = passwordRegistrations.collection[desc];
+            var passwordRegistrationsMap = passwordRegistrations.getAll();
+            for (var desc in passwordRegistrationsMap) {
+                var passwordRegistration = passwordRegistrationsMap[desc];
 
                 var formatter = new LeveledScoreFormatter();
                 var leveledScore = new LeveledScore(passwordRegistration.scoreData);
@@ -1417,13 +1369,7 @@ var PageManagePasswords = (
         
         return PageManagePasswords;
     }
-)(jQuery);/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
- 
-var PageImportExport = (
+)(jQuery);var PageImportExport = (
     function($) {
         class PageImportExport extends IPageImportExport {
             constructor(app) {
@@ -1466,12 +1412,6 @@ var PageImportExport = (
         return PageImportExport;
     }
 )(jQuery);
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 var PagePasswordTrainer = (
     function($) {
         var activateInterval = function(pageInstance) {
@@ -1526,10 +1466,12 @@ var PagePasswordTrainer = (
                 selectedKey = currentPasswordRegistration.description;
             
             $('#pageTrainPasswords #select-password').find('option').remove();
-            for (var key in availablePasswordRegistrations.collection) {
-                var leveledScore = new LeveledScore(availablePasswordRegistrations.collection[key].scoreData);
-                var description  = availablePasswordRegistrations.collection[key].description;
+            var passwordRegistrations = availablePasswordRegistrations.getAll();
+            for (var key in availablePasswordRegistrations) {
+                var leveledScore = new LeveledScore(availablePasswordRegistrations[key].scoreData);
+                var description  = availablePasswordRegistrations[key].description;
                 
+                var leveledScoreDisplay = formatter.formatLeveledScore(leveledScore);
                 var statusDisplay = formatter.formatStatus(leveledScore);
                 var display = description;
                 
@@ -1538,7 +1480,10 @@ var PagePasswordTrainer = (
                 if (key != currentPasswordRegistration.description && leveledScore.lockHoursLeft > 0)
                     continue;
                 
-                display = display;
+                if (!statusDisplay)
+                    display = display + ":\t" + leveledScoreDisplay;
+                else
+                    display = display + ":\t" + leveledScoreDisplay + " (" + statusDisplay + ")";
 
                 if (key == selectedKey)
                     $('#pageTrainPasswords #select-password').append("<option value=\"" + key + "\" selected=\"selected\">" + display + "</option>");
@@ -1726,13 +1671,10 @@ var PasswordNotificator = (
             if (!this.passwordRegistrations)
                 return null;
 
-            if (!this.passwordRegistrations.collection)
-                return null;
+            var passwordRegistrationsMap = this.passwordRegistrations.getAll();
 
-            var passwordCollection = this.passwordRegistrations.collection;
-
-            for (var desc in passwordCollection) {
-                var passwordRegistration = passwordCollection[desc];
+            for (var desc in passwordRegistrationsMap) {
+                var passwordRegistration = passwordRegistrationsMap[desc];
 
                 if (!passwordRegistration)
                     continue;
@@ -1751,11 +1693,11 @@ var PasswordNotificator = (
         };
 
         class PasswordNotificator extends IPasswordNotificator {
-            constructor(passwordRegistrations, window) {
-                super(passwordRegistrations, window);
+            constructor(passwordRegistrations, notificator) {
+                super(passwordRegistrations, notificator);
 
                 this.passwordRegistrations = passwordRegistrations;
-                this.notificator = new Notificator(window);
+                this.notificator = notificator;
 
                 this.activeNotifications = [];
                 this.lastNotificationPasswordCount = null;
@@ -1789,21 +1731,16 @@ var PasswordNotificator = (
 
         return PasswordNotificator;
     }
-)();/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-var App = (
+)();var App = (
     function($) {
         class App extends IApp {
             constructor() {
                 super();
             
                 this.passwordHasher = new MD5PasswordHasher();
-                this.passwordRegistrations = new PasswordRegistrationCollection(this.passwordHasher, new ScoreDataFeeHoursAndLockHoursComparator());
+                this.passwordRegistrations = new PasswordRegistrationCollection(new ScoreDataFeeHoursAndLockHoursComparator());
 
-                this.passwordNotificator = new PasswordNotificator(this.passwordRegistrations, window);
+                this.passwordNotificator = new PasswordNotificator(this.passwordRegistrations, new NavigatorNotificator());
             
                 this.pageTrainPasswords = new PagePasswordTrainer(this);
                 this.pageImportExport = new PageImportExport(this);
@@ -1835,7 +1772,8 @@ var App = (
                     this.writePasswordRegistrationsToLocalStorage();
                     
                     this.pageTrainPasswords.update();
-                    $.mobile.changePage('#pageTrainPasswords');
+                    if ($)
+                        $.mobile.changePage('#pageTrainPasswords');
                 }
             }
 
@@ -1844,7 +1782,8 @@ var App = (
             }
             
             addPasswordRegistration(description, password) {
-                this.passwordRegistrations.add(description, password);
+                var hash = this.passwordHasher.generateSaltedHash(password, null)
+                this.passwordRegistrations.add(description, hash);
                 this.writePasswordRegistrationsToLocalStorage();
             }
             
@@ -1852,10 +1791,7 @@ var App = (
                 if (!this.passwordRegistrations)
                     return false;
                 
-                if (!this.passwordRegistrations.collection)
-                    return false;
-                
-                var passwordRegistration = this.passwordRegistrations.collection[desc];
+                var passwordRegistration = this.passwordRegistrations.get(desc);
                 
                 if (!passwordRegistration)
                     return false;
@@ -1876,12 +1812,13 @@ var App = (
                     return false;
                 
                 // rehash with a new salt on every attempt
-                this.passwordRegistrations.rehash(desc, password);
+                passwordRegistration.hash = this.passwordHasher.generateSaltedHash(password, null);
+                this.passwordRegistrations.update(desc, passwordRegistration);
                     
                 this.writePasswordRegistrationsToLocalStorage();
                 
                 return true;
-            }            
+            }
             
             getMostRecentPasswordRegistration() {
                 if (!this.passwordRegistrations)
@@ -1901,12 +1838,6 @@ var App = (
         return App;
     }(jQuery)
 );
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 (
     function($) {
         var app;
