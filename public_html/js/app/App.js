@@ -39,7 +39,8 @@ var App = (
                     this.writePasswordRegistrationsToLocalStorage();
                     
                     this.pageTrainPasswords.update();
-                    $.mobile.changePage('#pageTrainPasswords');
+                    if ($)
+                        $.mobile.changePage('#pageTrainPasswords');
                 }
             }
 
