@@ -22,12 +22,22 @@ var PasswordRegistrationCollection = (
 
                 return true;
             };
+            
+            /*
+             * Clones data of a password registration
+             */
+            var clonePasswordRegistrationData = function(sourceRegistration, targetRegistration) {
+                targetRegistration.description = sourceRegistration.description;
+                targetRegistration.hash = sourceRegistration.hash;
+                targetRegistration.scoreData.lastSuccessScore = sourceRegistration.scoreData.lastSuccessScore;
+                targetRegistration.scoreData.lastSuccessTimestamp = sourceRegistration.scoreData.lastSuccessTimestamp;
+
+            };
 
             class PasswordRegistrationCollection extends IPasswordRegistrationCollection {
-                constructor(passwordHasher, scoreDataComparator) {
-                    super(passwordHasher);
+                constructor(scoreDataComparator) {
+                    super(scoreDataComparator);
 
-                    this.passwordHasher = passwordHasher;
                     this.scoreDataComparator = scoreDataComparator;
 
                     this.collection = {};
@@ -65,35 +75,73 @@ var PasswordRegistrationCollection = (
                 /*
                  * add new password registration
                  */
-                add(description, password) {
+                add(description, hash) {
                     this.collection[description] =
                     {
                         description:    description,
-                        hash:           this.passwordHasher.generateSaltedHash(password, null),
+                        hash:           hash,
                         scoreData:      {
                             lastSuccessScore:   null,
                             lastSuccessTimestamp:  null
                         }
                     };
                 }
-
+                
                 /*
-                 * recreate the hash for the given password without losing score info
-                 */
-                rehash(description, password) {
+                * updates password registration from the given structure
+                */
+                update(description, registration) {
                     if (!this.collection[description])
                         return false;
+                   
+                    if (registration.description != description) {
+                        // description was changed
+                       
+                        // check if slot for new description name is free
+                        if (this.collection[registration.description])
+                            return false;
+                       
+                        // move registration to new slot
+                        this.collection[registration.description] = this.collection[description];
+                        this.collection[description] = null;
+                    }
+                   
+                    // set new values
+                    var targetRegistration = this.collection[registration.description];
+                    clonePasswordRegistrationData(registration, targetRegistration);
+                }
+                
+                /*
+                 * returns the cloned password registration for the given description
+                 */
+                get(description) {
+                    if (!this.collection[description])
+                        return null;
+                    
+                    var registration =  {
+                                            description:    null,
+                                            hash:           null,
+                                            scoreData:      {
+                                                lastSuccessScore:   null,
+                                                lastSuccessTimestamp:  null
+                                            }
+                                        };
 
-                    var hash = this.collection[description].hash;
-                    var parsedHash = this.passwordHasher.parseSaltedHash(hash);
-
-                    // dont rehash if wrong password was given
-                    if (this.passwordHasher.generateSaltedHash(password, parsedHash.salt) != hash)
-                        return false;
-
-                    this.collection[description].hash = this.passwordHasher.generateSaltedHash(password, null);
-
-                    return true;
+                    clonePasswordRegistrationData(this.collection[description], registration);
+                    
+                    return registration;
+                }
+                
+                /*
+                * returns a map of all registrations
+                */
+                getAll() {
+                    var map = [];
+                    
+                    for (var desc in this.collection)
+                        map[desc] = this.get(desc);
+                    
+                    return map;
                 }
 
                 getMostRecentPasswordRegistration() {
