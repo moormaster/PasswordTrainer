@@ -1,5 +1,5 @@
 class INotificator {
-    constructor(window) {}
+    constructor() {}
     
     /*
      * returns true if application may send notifications

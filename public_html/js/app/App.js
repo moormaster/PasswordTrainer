@@ -5,7 +5,7 @@ var App = (
                 super();
             
                 this.passwordHasher = new MD5PasswordHasher();
-                this.passwordRegistrations = new PasswordRegistrationCollection(this.passwordHasher, new ScoreDataFeeHoursAndLockHoursComparator());
+                this.passwordRegistrations = new PasswordRegistrationCollection(new ScoreDataFeeHoursAndLockHoursComparator());
 
                 this.passwordNotificator = new PasswordNotificator(this.passwordRegistrations, new NavigatorNotificator());
             
@@ -49,7 +49,8 @@ var App = (
             }
             
             addPasswordRegistration(description, password) {
-                this.passwordRegistrations.add(description, password);
+                var hash = this.passwordHasher.generateSaltedHash(password, null)
+                this.passwordRegistrations.add(description, hash);
                 this.writePasswordRegistrationsToLocalStorage();
             }
             
@@ -57,10 +58,7 @@ var App = (
                 if (!this.passwordRegistrations)
                     return false;
                 
-                if (!this.passwordRegistrations.collection)
-                    return false;
-                
-                var passwordRegistration = this.passwordRegistrations.collection[desc];
+                var passwordRegistration = this.passwordRegistrations.get(desc);
                 
                 if (!passwordRegistration)
                     return false;
@@ -81,7 +79,8 @@ var App = (
                     return false;
                 
                 // rehash with a new salt on every attempt
-                this.passwordRegistrations.rehash(desc, password);
+                passwordRegistration.hash = this.passwordHasher.generateSaltedHash(password, null);
+                this.passwordRegistrations.update(desc, passwordRegistration);
                     
                 this.writePasswordRegistrationsToLocalStorage();
                 
