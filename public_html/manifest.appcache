@@ -1,7 +1,7 @@
 CACHE MANIFEST
 
 CACHE:
-# 2017-09-30 15:52
+# 2017-09-30 15:23
 
 favicon.ico
 index.html
@@ -38,7 +38,7 @@ js/util/hash/ISaltGenerator.js
 js/util/hash/SaltGenerator.js
 js/util/json/JSONFormatter.js
 js/util/notification/INotificator.js
-js/util/notification/Notificator.js
+js/util/notification/NavigatorNotificator.js
 libs/crypto-js/rollups/md5.js
 libs/jquery/jquery.js
 libs/jquery-mobile/images/ajax-loader.gif

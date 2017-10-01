@@ -7,7 +7,7 @@ var App = (
                 this.passwordHasher = new MD5PasswordHasher();
                 this.passwordRegistrations = new PasswordRegistrationCollection(this.passwordHasher, new ScoreDataFeeHoursAndLockHoursComparator());
 
-                this.passwordNotificator = new PasswordNotificator(this.passwordRegistrations, window);
+                this.passwordNotificator = new PasswordNotificator(this.passwordRegistrations, new NavigatorNotificator());
             
                 this.pageTrainPasswords = new PagePasswordTrainer(this);
                 this.pageImportExport = new PageImportExport(this);
@@ -85,7 +85,7 @@ var App = (
                 this.writePasswordRegistrationsToLocalStorage();
                 
                 return true;
-            }            
+            }
             
             getMostRecentPasswordRegistration() {
                 if (!this.passwordRegistrations)

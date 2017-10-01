@@ -1,12 +1,18 @@
-class Notificator extends INotificator{
-    constructor(window) {
-        super(window);
+class NavigatorNotificator extends INotificator{
+    constructor() {
+        super();
         
-        this.Notification = window.Notification;
-        this.navigator = window.navigator;
+        this.navigator = navigator;
+
+        // use current window instance per default
+        this.setWindow(window);
 
         if (this.Notification)
             this.Notification.requestPermission();
+    }
+    
+    setWindow(window) {
+        this.Notification = window.Notification;
     }
     
     hasNotificationPermission() {

@@ -25,13 +25,10 @@ var PasswordNotificator = (
             if (!this.passwordRegistrations)
                 return null;
 
-            if (!this.passwordRegistrations.collection)
-                return null;
+            var passwordRegistrationsMap = this.passwordRegistrations.getAll();
 
-            var passwordCollection = this.passwordRegistrations.collection;
-
-            for (var desc in passwordCollection) {
-                var passwordRegistration = passwordCollection[desc];
+            for (var desc in passwordRegistrationsMap) {
+                var passwordRegistration = passwordRegistrationsMap[desc];
 
                 if (!passwordRegistration)
                     continue;
@@ -50,11 +47,11 @@ var PasswordNotificator = (
         };
 
         class PasswordNotificator extends IPasswordNotificator {
-            constructor(passwordRegistrations, window) {
-                super(passwordRegistrations, window);
+            constructor(passwordRegistrations, notificator) {
+                super(passwordRegistrations, notificator);
 
                 this.passwordRegistrations = passwordRegistrations;
-                this.notificator = new Notificator(window);
+                this.notificator = notificator;
 
                 this.activeNotifications = [];
                 this.lastNotificationPasswordCount = null;

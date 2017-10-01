@@ -1,5 +1,5 @@
 class IPasswordNotificator {
-    constructor(passwordRegistrations, window) {
+    constructor(passwordRegistrations, notificator) {
         // App instance
         this.app = null;
     }

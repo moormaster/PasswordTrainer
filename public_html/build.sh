@@ -57,7 +57,7 @@ catjsbundle() {
 
     cat js/util/json/JSONFormatter.js
 
-    cat js/util/notification/Notificator.js
+    cat js/util/notification/NavigatorNotificator.js
 
     cat js/app/comparator/ScoreDataFeeHoursAndLockHoursComparator.js
 
