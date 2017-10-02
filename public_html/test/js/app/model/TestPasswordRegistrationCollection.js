@@ -1,4 +1,30 @@
 /*
+ * PasswordHasherMock with identity function as hash function and rudimental salting
+ */
+class PasswordHasherMock extends IPasswordHasher {
+    constructor() {
+        super(null);
+    }
+    
+    generateSaltedHash(password, salt) {
+        if (!salt)
+            salt = Math.floor(Math.random()*1000);
+        
+        return password + ':' + salt;
+    }
+    
+    parseSaltedHash(saltedHash) {
+        var index = saltedHash.lastIndexOf(":");
+        
+        if (index >= 0 )
+            return {
+                salt: saltedHash.substr(index+1), 
+                hash: saltedHash.substring(0, index)
+            };
+    }
+};
+
+/*
  * scoreDataComparator which simply orders by timestamp
  */
 class ScoreDataComparatorMock extends IComparator {
@@ -31,7 +57,7 @@ class ScoreDataComparatorMock extends IComparator {
 
 QUnit.module("PasswordRegistrationCollection", {
     beforeEach: function() {
-        this.passwordRegistrationCollection = new PasswordRegistrationCollection(new ScoreDataComparatorMock());
+        this.passwordRegistrationCollection = new PasswordRegistrationCollection(new PasswordHasherMock(), new ScoreDataComparatorMock());
 
         this.passwordRegistrationCollection.add("description1", "abc");
         this.passwordRegistrationCollection.add("description2", "cde");
@@ -46,81 +72,40 @@ QUnit.module("PasswordRegistrationCollection", {
     }
 });
 
-QUnit.test("get()",
-    function(assert)  {
-        var originalRegistration = this.passwordRegistrationCollection.get("description1");
-        var registration = this.passwordRegistrationCollection.get("description1");
-        var registration2 = this.passwordRegistrationCollection.get("description2");
-        
-        assert.ok(originalRegistration !== registration, "get() should return copies of password registration");
-        assert.ok(registration.description == "description1", "get() should return registration1");
-        assert.ok(registration2.description == "description2", "get() should return registration2");
-    }
-);
-
-QUnit.test("getAll()",
-    function(assert)  {
-        var registrationsMap = this.passwordRegistrationCollection.getAll();
-        
-        assert.ok(registrationsMap["description1"].description == "description1", "registration should be mapped to key description1");
-        assert.ok(registrationsMap["description2"].description == "description2", "registration should be mapped to key description2");
-    }
-);
-
 QUnit.test("add()",
     function(assert) {
-        this.assertCollectionLength(assert, this.passwordRegistrationCollection.getAll(), 2, "passwords should have been added");
+        this.assertCollectionLength(assert, this.passwordRegistrationCollection.collection, 2, "passwords should have been added");
         
-        var hashBefore = this.passwordRegistrationCollection.get("description1").hash;
+        var hashBefore = this.passwordRegistrationCollection.collection["description1"].hash;
         this.passwordRegistrationCollection.add("description1", "different password");
-        var hashAfter = this.passwordRegistrationCollection.get("description1").hash;
+        var hashAfter = this.passwordRegistrationCollection.collection["description1"].hash;
         
-        this.assertCollectionLength(assert, this.passwordRegistrationCollection.getAll(), 2, "no passwords shall be added when updating");
+        this.assertCollectionLength(assert, this.passwordRegistrationCollection.collection, 2, "no passwords shall be added when updating");
         assert.ok(hashBefore != hashAfter, "password hash should be different");
     }
 );
 
-QUnit.test("update()",
+QUnit.test("rehash()",
     function(assert) {
-        this.passwordRegistrationCollection.add("rehash", "hash:salt");
+        this.passwordRegistrationCollection.add("rehash", "mypassword");
         
+        var hashBefore = this.passwordRegistrationCollection.collection["rehash"].hash;
+        assert.notOk(this.passwordRegistrationCollection.rehash("rehash", "differentpassword"), "rehash should fail due to wrong password");
+        var hashAfter = this.passwordRegistrationCollection.collection["rehash"].hash;
         
-        // 1) update the hash
-        var originalRegistration = this.passwordRegistrationCollection.get("rehash");
-        var registration = this.passwordRegistrationCollection.get("rehash");
+        assert.ok(hashBefore == hashAfter, "salted hash should be equal");
+
+        assert.ok(this.passwordRegistrationCollection.rehash("rehash", "mypassword"), "rehash should be successful with correct password");
+        var hashAfter = this.passwordRegistrationCollection.collection["rehash"].hash;
         
-        registration.hash = "newhash:newsalt";
-        
-        this.passwordRegistrationCollection.update("rehash", registration);
-        registration = this.passwordRegistrationCollection.get("rehash");
-        
-        assert.ok(originalRegistration.description == registration.description, "description should not change");
-        assert.ok(originalRegistration.hash != registration.hash, "salted hash should have changed");
-        assert.ok(originalRegistration.scoreData.lastSuccessScore == registration.scoreData.lastSuccessScore, "rehash should not change scoreData");
-        assert.ok(originalRegistration.scoreData.lastSuccessTimestamp == registration.scoreData.lastSuccessTimestamp, "rehash should not change scoreData");
-        
-        // 2) update description
-        originalRegistration = this.passwordRegistrationCollection.get("rehash");
-        registration.description = "newdescription";
-        this.passwordRegistrationCollection.update("rehash", registration);
-        registration = this.passwordRegistrationCollection.get("newdescription");
-        
-        assert.ok(originalRegistration.description != registration.description, "description should be changed");
-        assert.ok(originalRegistration.hash == registration.hash, "salted hash should not change");
-        assert.ok(originalRegistration.scoreData.lastSuccessScore == registration.scoreData.lastSuccessScore, "rehash should not change scoreData");
-        assert.ok(originalRegistration.scoreData.lastSuccessTimestamp == registration.scoreData.lastSuccessTimestamp, "rehash should not change scoreData");
-        assert.ok(this.passwordRegistrationCollection.get("rehash") == null, "registration should have disappeared at description slot");
+        assert.ok(hashBefore != hashAfter, "salted hash should NOT be equal due to correct password");
     }
 );
 
 QUnit.test("getMostRecentPasswordRegistration()",
     function(assert) {
-        var passwordRegistration = this.passwordRegistrationCollection.get("description1");
-        
-        passwordRegistration.scoreData.lastSuccessScore = 1;
-        passwordRegistration.scoreData.lastSuccessTimestamp = new Date().getTime();
-        
-        this.passwordRegistrationCollection.update("description1", passwordRegistration);
+        this.passwordRegistrationCollection.collection["description1"].scoreData.lastSuccessScore = 1;
+        this.passwordRegistrationCollection.collection["description1"].scoreData.lastSuccessTimestamp = new Date().getTime();
         
         var mostRecent = this.passwordRegistrationCollection.getMostRecentPasswordRegistration();
         

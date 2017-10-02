@@ -1,27 +1,23 @@
 class IPasswordRegistrationCollection {
-    constructor(scoreDataComparator) {
+    constructor(passwordHasher, scoreDataComparator) {
+        this.passwordHasher = null;
         this.scoreDataComparator = null;
+
+        // collection of password registrations
+        this.collection = null;
     }
     
     /*
      * add new password registration
      */
-    add(description, hash) {}
+    add(description, password) {}
     
     /*
-     * updates password registration from the given structure
+     * recreate the hash for the given password without losing score info
+     * 
+     * returns true on success
      */
-    update(description, registration) {}
-    
-    /*
-     * returns the cloned password registration for the given description
-     */
-    get(description) {}
-    
-    /*
-     * returns a map of all registrations
-     */
-    getAll() {}
+    rehash(description, password) {}
     
     /*
      * find the password registration which is minimal according to the scoreDataComparator

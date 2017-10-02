@@ -52,10 +52,9 @@ var PagePasswordTrainer = (
                 selectedKey = currentPasswordRegistration.description;
             
             $('#pageTrainPasswords #select-password').find('option').remove();
-            var passwordRegistrations = availablePasswordRegistrations.getAll();
-            for (var key in availablePasswordRegistrations) {
-                var leveledScore = new LeveledScore(availablePasswordRegistrations[key].scoreData);
-                var description  = availablePasswordRegistrations[key].description;
+            for (var key in availablePasswordRegistrations.collection) {
+                var leveledScore = new LeveledScore(availablePasswordRegistrations.collection[key].scoreData);
+                var description  = availablePasswordRegistrations.collection[key].description;
                 
                 var statusDisplay = formatter.formatStatus(leveledScore);
                 var display = description;

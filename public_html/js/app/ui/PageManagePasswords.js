@@ -15,9 +15,9 @@ var PageManagePasswords = (
             if (!passwordRegistrations)
                 return;
 
-            var passwordRegistrationsMap = passwordRegistrations.getAll();
-            for (var desc in passwordRegistrationsMap) {
-                var passwordRegistration = passwordRegistrationsMap[desc];
+            var i=0;
+            for (var desc in passwordRegistrations.collection) {
+                var passwordRegistration = passwordRegistrations.collection[desc];
 
                 var formatter = new LeveledScoreFormatter();
                 var leveledScore = new LeveledScore(passwordRegistration.scoreData);
