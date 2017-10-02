@@ -44,7 +44,7 @@ var PagePasswordTrainer = (
             updateWidgetsStatus(this.currentLeveledScore);
         };
         
-        var updateWidgetSelectionValues = function(availablePasswordRegistrationsCollection, currentPasswordRegistration, updateSelection) {
+        var updateWidgetSelectionValues = function(availablePasswordRegistrations, currentPasswordRegistration, updateSelection) {
             var formatter = new LeveledScoreFormatter();
             
             var selectedKey = $('#pageTrainPasswords #select-password').val();
@@ -52,7 +52,7 @@ var PagePasswordTrainer = (
                 selectedKey = currentPasswordRegistration.description;
             
             $('#pageTrainPasswords #select-password').find('option').remove();
-            var availablePasswordRegistrations = availablePasswordRegistrationsCollection.getAll();
+            var passwordRegistrations = availablePasswordRegistrations.getAll();
             for (var key in availablePasswordRegistrations) {
                 var leveledScore = new LeveledScore(availablePasswordRegistrations[key].scoreData);
                 var description  = availablePasswordRegistrations[key].description;
