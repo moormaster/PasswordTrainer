@@ -57,6 +57,7 @@ var PagePasswordTrainer = (
                 var leveledScore = new LeveledScore(availablePasswordRegistrations[key].scoreData);
                 var description  = availablePasswordRegistrations[key].description;
                 
+                var leveledScoreDisplay = formatter.formatLeveledScore(leveledScore);
                 var statusDisplay = formatter.formatStatus(leveledScore);
                 var display = description;
                 
@@ -65,7 +66,10 @@ var PagePasswordTrainer = (
                 if (key != currentPasswordRegistration.description && leveledScore.lockHoursLeft > 0)
                     continue;
                 
-                display = display;
+                if (!statusDisplay)
+                    display = display + ":\t" + leveledScoreDisplay;
+                else
+                    display = display + ":\t" + leveledScoreDisplay + " (" + statusDisplay + ")";
 
                 if (key == selectedKey)
                     $('#pageTrainPasswords #select-password').append("<option value=\"" + key + "\" selected=\"selected\">" + display + "</option>");
