@@ -1458,7 +1458,7 @@ var PagePasswordTrainer = (
             updateWidgetsStatus(this.currentLeveledScore);
         };
         
-        var updateWidgetSelectionValues = function(availablePasswordRegistrations, currentPasswordRegistration, updateSelection) {
+        var updateWidgetSelectionValues = function(availablePasswordRegistrationsCollection, currentPasswordRegistration, updateSelection) {
             var formatter = new LeveledScoreFormatter();
             
             var selectedKey = $('#pageTrainPasswords #select-password').val();
@@ -1466,12 +1466,11 @@ var PagePasswordTrainer = (
                 selectedKey = currentPasswordRegistration.description;
             
             $('#pageTrainPasswords #select-password').find('option').remove();
-            var passwordRegistrations = availablePasswordRegistrations.getAll();
+            var availablePasswordRegistrations = availablePasswordRegistrationsCollection.getAll();
             for (var key in availablePasswordRegistrations) {
                 var leveledScore = new LeveledScore(availablePasswordRegistrations[key].scoreData);
                 var description  = availablePasswordRegistrations[key].description;
                 
-                var leveledScoreDisplay = formatter.formatLeveledScore(leveledScore);
                 var statusDisplay = formatter.formatStatus(leveledScore);
                 var display = description;
                 
@@ -1480,10 +1479,7 @@ var PagePasswordTrainer = (
                 if (key != currentPasswordRegistration.description && leveledScore.lockHoursLeft > 0)
                     continue;
                 
-                if (!statusDisplay)
-                    display = display + ":\t" + leveledScoreDisplay;
-                else
-                    display = display + ":\t" + leveledScoreDisplay + " (" + statusDisplay + ")";
+                display = display;
 
                 if (key == selectedKey)
                     $('#pageTrainPasswords #select-password').append("<option value=\"" + key + "\" selected=\"selected\">" + display + "</option>");
