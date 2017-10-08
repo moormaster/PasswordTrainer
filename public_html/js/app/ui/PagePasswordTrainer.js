@@ -38,7 +38,7 @@ var PagePasswordTrainer = (
         };
 
         var updateWidgets = function(successState) {
-            updateWidgetSelectionValues(this.appInstance.passwordRegistrations, this.currentPasswordRegistration, this.autoSwitchToMostRecentPasswordRegistration);
+            updateWidgetSelectionValues(this.appInstance.applicationModel.passwordRegistrations, this.currentPasswordRegistration, this.autoSwitchToMostRecentPasswordRegistration);
             updateWidgetDescription(this.currentPasswordRegistration);
             updateWidgetsSuccessColor((this.currentLeveledScore.lockHoursLeft > 0), successState);
             updateWidgetsStatus(this.currentLeveledScore);

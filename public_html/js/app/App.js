@@ -5,9 +5,11 @@ var App = (
                 super();
             
                 this.passwordHasher = new MD5PasswordHasher();
-                this.passwordRegistrations = new PasswordRegistrationCollection(new ScoreDataFeeHoursAndLockHoursComparator());
-
-                this.passwordNotificator = new PasswordNotificator(this.passwordRegistrations, new NavigatorNotificator());
+                
+                var passwordRegistrations = new PasswordRegistrationCollection(new ScoreDataFeeHoursAndLockHoursComparator());
+                this.applicationModel = new ApplicationModel(passwordRegistrations);
+                
+                this.passwordNotificator = new PasswordNotificator(passwordRegistrations, new NavigatorNotificator());
             
                 this.pageTrainPasswords = new PagePasswordTrainer(this);
                 this.pageImportExport = new PageImportExport(this);
@@ -26,17 +28,17 @@ var App = (
                 this.pagePasswordDialog.init();
             }
             
-            readPasswordRegistrationsFromLocalStorage() {
-                this.passwordRegistrations.importJSON(localStorage['passwordRegistrations']);
+            readFromLocalStorage() {
+                this.applicationModel.importJSON(localStorage['passwordRegistrations']);
             }
             
-            writePasswordRegistrationsToLocalStorage() {
-                localStorage['passwordRegistrations'] = this.passwordRegistrations.exportJSON();
+            writeToLocalStorage() {
+                localStorage['passwordRegistrations'] = this.applicationModel.exportJSON();
             }
             
             importJSON(json) {
-                if (this.passwordRegistrations.importJSON(json)) {
-                    this.writePasswordRegistrationsToLocalStorage();
+                if (this.applicationModel.importJSON(json)) {
+                    this.writeToLocalStorage();
                     
                     this.pageTrainPasswords.update();
                     if ($)
@@ -45,20 +47,23 @@ var App = (
             }
 
             exportJSON() {
-                return this.passwordRegistrations.exportJSON();
+                return this.applicationModel.exportJSON();
             }
             
             addPasswordRegistration(description, password) {
                 var hash = this.passwordHasher.generateSaltedHash(password, null)
-                this.passwordRegistrations.add(description, hash);
-                this.writePasswordRegistrationsToLocalStorage();
+                this.applicationModel.passwordRegistrations.add(description, hash);
+                this.writeToLocalStorage();
             }
             
             addPasswordAttempt(desc, password) {
-                if (!this.passwordRegistrations)
+                if (!this.applicationModel)
                     return false;
                 
-                var passwordRegistration = this.passwordRegistrations.get(desc);
+                if (!this.applicationModel.passwordRegistrations)
+                    return false;
+                
+                var passwordRegistration = this.applicationModel.passwordRegistrations.get(desc);
                 
                 if (!passwordRegistration)
                     return false;
@@ -80,25 +85,31 @@ var App = (
                 
                 // rehash with a new salt on every attempt
                 passwordRegistration.hash = this.passwordHasher.generateSaltedHash(password, null);
-                this.passwordRegistrations.update(desc, passwordRegistration);
+                this.applicationModel.passwordRegistrations.update(desc, passwordRegistration);
                     
-                this.writePasswordRegistrationsToLocalStorage();
+                this.writeToLocalStorage();
                 
                 return true;
             }
             
             getMostRecentPasswordRegistration() {
-                if (!this.passwordRegistrations)
+                if (!this.applicationModel)
+                    return null;
+                        
+                if (!this.applicationModel.passwordRegistrations)
                     return null;
                 
-                return this.passwordRegistrations.getMostRecentPasswordRegistration();
+                return this.applicationModel.passwordRegistrations.getMostRecentPasswordRegistration();
             }
             
             getPasswordRegistrationByDescription(description) {
-                if (!this.passwordRegistrations)
+                if (!this.applicationModel)
+                    return null;
+                    
+                if (!this.applicationModel.passwordRegistrations)
                     return null;
                 
-                return this.passwordRegistrations.getPasswordRegistrationByDescription(description);
+                return this.applicationModel.passwordRegistrations.getPasswordRegistrationByDescription(description);
             }
         };
         

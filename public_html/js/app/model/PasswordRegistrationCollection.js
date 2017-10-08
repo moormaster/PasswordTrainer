@@ -42,19 +42,13 @@ var PasswordRegistrationCollection = (
 
                     this.collection = {};
                 }
-
+                
                 /*
-                 * import password registrations from json string
+                 * import from object structure
                  *
-                 * returns true if json string contains a valid persistence
-                 * of password registrations.
+                 * returns true if successful
                  */
-                importJSON(json) {
-                    var passwordRegistrations = "";
-
-                    if (json)
-                        passwordRegistrations = JSON.parse(json);
-
+                import(passwordRegistrations) {
                     if (!isPasswordRegistrationIntegrityOk(passwordRegistrations))
                         return false;
 
@@ -64,12 +58,12 @@ var PasswordRegistrationCollection = (
                 }
 
                 /*
-                 * export password registrations to a json string
+                 * export password registrations to an object structure
                  *
-                 * returns the json string
+                 * returns the object structure
                  */
-                exportJSON() {
-                    return JSON.stringify(this.collection);
+                export() {
+                    return this.collection;
                 }
 
                 /*

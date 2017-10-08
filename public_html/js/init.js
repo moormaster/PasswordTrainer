@@ -6,7 +6,7 @@
             function() {
                 app = new App();
                 app.init();
-                app.readPasswordRegistrationsFromLocalStorage();
+                app.readFromLocalStorage();
             }
         );
     }(jQuery)

@@ -1,5 +1,7 @@
-class IPasswordRegistrationCollection {
+class IPasswordRegistrationCollection extends IModel {
     constructor(scoreDataComparator) {
+        super(scoreDataComparator);
+        
         this.scoreDataComparator = null;
     }
     
@@ -35,17 +37,9 @@ class IPasswordRegistrationCollection {
     getPasswordRegistrationByDescription(description) {}
 
     /*
-     * import password registrations from json string
+     * import from object structure
      *
-     * returns true if json string contains a valid persistence
-     * of password registrations.
+     * returns true if successful
      */
-    importJSON(json) {}
-
-    /*
-     * export password registrations to a json string
-     *
-     * returns the json string
-     */
-    exportJSON() {}
+    import(passwordRegistrations) {}
 };

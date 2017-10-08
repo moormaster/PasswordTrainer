@@ -1,7 +1,7 @@
 class IApp {
     constructor() {
-        // password registrations
-        this.passwordRegistrations = null;
+        // storage i.e. of password registrations
+        this.applicationModel = null;
         
         /* 
         * page instances
@@ -28,18 +28,18 @@ class IApp {
     /*
      * restore password registrations from localStorage
      */
-    readPasswordRegistrationsFromLocalStorage() {}
+    readFromLocalStorage() {}
 
     /*
      * persist password registration to local storage
      */
-    writePasswordRegistrationsToLocalStorage() {}
+    writeToLocalStorage() {}
     
     /*
      * import password registrations from json string
      *
      * returns true if json string contains a valid persistence
-     * of password registrations.
+     * of password registrations and import was successful.
      */
     importJSON(json) {}
 

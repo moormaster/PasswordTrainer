@@ -61,7 +61,7 @@ var PageManagePasswords = (
              * update page display
              */
             update() {
-                updateTable(this.tableSelector, this.appInstance.passwordRegistrations);
+                updateTable(this.tableSelector, this.appInstance.applicationModel.passwordRegistrations);
             }
         };
         

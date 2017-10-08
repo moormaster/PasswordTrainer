@@ -1,7 +1,7 @@
 CACHE MANIFEST
 
 CACHE:
-# 2017-10-01 19:22
+# 2017-10-08 13:29
 
 favicon.ico
 index.html
@@ -14,8 +14,11 @@ js/app/comparator/ScoreDataFeeHoursAndLockHoursComparator.js
 js/app/IApp.js
 js/app/IPasswordNotificator.js
 js/app/model/ILeveledScore.js
+js/app/model/IModel.js
+js/app/model/IApplicationModel.js
 js/app/model/IPasswordRegistrationCollection.js
 js/app/model/LeveledScore.js
+js/app/model/ApplicationModel.js
 js/app/model/PasswordRegistrationCollection.js
 js/app/PasswordNotificator.js
 js/app/ui/ILeveledScoreFormatter.js
