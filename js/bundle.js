@@ -1,7 +1,7 @@
 class IApp {
     constructor() {
-        // password registrations
-        this.passwordRegistrations = null;
+        // storage i.e. of password registrations
+        this.applicationModel = null;
         
         /* 
         * page instances
@@ -28,18 +28,18 @@ class IApp {
     /*
      * restore password registrations from localStorage
      */
-    readPasswordRegistrationsFromLocalStorage() {}
+    readFromLocalStorage() {}
 
     /*
      * persist password registration to local storage
      */
-    writePasswordRegistrationsToLocalStorage() {}
+    writeToLocalStorage() {}
     
     /*
      * import password registrations from json string
      *
      * returns true if json string contains a valid persistence
-     * of password registrations.
+     * of password registrations and import was successful.
      */
     importJSON(json) {}
 
@@ -95,6 +95,49 @@ class IComparator{
      */
     compare(obj1, obj2) {}
 }
+
+if (typeof exports == "object")
+    exports.IComparator = IComparator;
+class IModel {
+    /*
+     * import from object structure
+     *
+     * returns true if successful
+     */
+    import(object) {}
+
+    /*
+     * export password registrations to an object structure
+     *
+     * returns the object structure
+     */
+    export() {}
+};
+
+if (typeof exports == "object")
+    exports.IModel = IModel;
+class IApplicationModel extends IModel {
+    constructor(passwordRegistrationCollection) {
+        super(passwordRegistrationCollection);
+        
+        this.passwordRegistrations = null;
+    }
+
+    /*
+     * import password registrations from json string
+     *
+     * returns true if json string contains a valid persistence
+     * of password registrations and import was successful.
+     */
+    importJSON(json) {}
+
+    /*
+     * export password registrations to a json string
+     *
+     * returns the json string
+     */
+    exportJSON() {}
+};
 class ILeveledScore {
     constructor(scoreData) {
         this.scoreData = null;
@@ -125,8 +168,16 @@ class ILeveledScore {
     get feePerHour() {}
     get level() {}
 };
-class IPasswordRegistrationCollection {
+
+if (typeof exports == "object")
+    exports.ILeveledScore = ILeveledScore;
+if (typeof require == "function")
+    IModel = require('./IModel.js').IModel;
+
+class IPasswordRegistrationCollection extends IModel {
     constructor(scoreDataComparator) {
+        super(scoreDataComparator);
+        
         this.scoreDataComparator = null;
     }
     
@@ -162,20 +213,15 @@ class IPasswordRegistrationCollection {
     getPasswordRegistrationByDescription(description) {}
 
     /*
-     * import password registrations from json string
+     * import from object structure
      *
-     * returns true if json string contains a valid persistence
-     * of password registrations.
+     * returns true if successful
      */
-    importJSON(json) {}
-
-    /*
-     * export password registrations to a json string
-     *
-     * returns the json string
-     */
-    exportJSON() {}
+    import(passwordRegistrations) {}
 };
+
+if (typeof exports == "object")
+    exports.IPasswordRegistrationCollection = IPasswordRegistrationCollection;
 class ILeveledScoreFormatter {
     constructor() {}
     
@@ -205,6 +251,9 @@ class ILeveledScoreFormatter {
      */
     formatLevel(leveledScore) {}
 }
+
+if (typeof exports == "object")
+    exports.ILeveledScoreFormatter = ILeveledScoreFormatter;
 class IPagePasswordDialog {
     constructor(app) {
         // app instance where this page is displayed in
@@ -267,8 +316,6 @@ class IPagePasswordTrainer {
      */
     addPasswordAttempt(password) {}
 };
-
- 
 class IPageImportExport {
     constructor(app) {
         // app instance where this page is displayed in
@@ -309,6 +356,8 @@ class IPasswordHasher {
     parseSaltedHash(hash) {}
 };
 
+if (typeof exports == "object")
+    exports.IPasswordHasher = IPasswordHasher;
 class ISaltGenerator {
     constructor (length, charSet) {
         this.length = null;   // the desired length of the salt
@@ -321,6 +370,9 @@ class ISaltGenerator {
      */
     generate() {}
 };
+
+if (typeof exports == "object")
+    exports.ISaltGenerator = ISaltGenerator;
 class IJSONFormatter {
     constructor() {}
     
@@ -329,6 +381,9 @@ class IJSONFormatter {
      */
     format(JSONStr) {}
 };
+
+if (typeof exports == "object")
+    exports.IJSONFormatter = IJSONFormatter;
 class INotificator {
     constructor() {}
     
@@ -347,6 +402,12 @@ class INotificator {
      */
     notify(title, text) {};
 };
+if (typeof require == "function") {
+    IPasswordHasher = require('./IPasswordHasher.js').IPasswordHasher;
+    SaltGenerator = require('./SaltGenerator.js').SaltGenerator;
+    CryptoJS = require('crypto-js');
+}
+
 class MD5PasswordHasher extends IPasswordHasher {
     constructor(saltGenerator) {
         super(saltGenerator);
@@ -380,6 +441,11 @@ class MD5PasswordHasher extends IPasswordHasher {
     }
 };
 
+if (typeof exports == "object")
+    exports.MD5PasswordHasher = MD5PasswordHasher;
+if (typeof require == "function")
+    ISaltGenerator = require('./ISaltGenerator.js').ISaltGenerator;
+
 class SaltGenerator extends ISaltGenerator {
     constructor(length, charSet) {
         super(length, charSet);
@@ -407,6 +473,12 @@ class SaltGenerator extends ISaltGenerator {
         return salt;
     }
 };
+
+if (typeof exports == "object")
+    exports.SaltGenerator = SaltGenerator;
+if (typeof require == "function")
+    IJSONFormatter = require('./IJSONFormatter.js').IJSONFormatter;
+
 class JSONFormatter extends IJSONFormatter {
     constructor() {
         super();
@@ -479,6 +551,9 @@ class JSONFormatter extends IJSONFormatter {
         return result;
     }
 };
+
+if (typeof exports == "object")
+    exports.JSONFormatter = JSONFormatter;
 class NavigatorNotificator extends INotificator{
     constructor() {
         super();
@@ -534,6 +609,11 @@ class NavigatorNotificator extends INotificator{
         return null;
     }
 };
+if (typeof require == "function") {
+    IComparator = require('./IComparator.js').IComparator;
+    LeveledScore = require('../model/LeveledScore.js').LeveledScore;
+}
+
 class ScoreDataFeeHoursAndLockHoursComparator extends IComparator {
     constructor() {
         super();
@@ -552,20 +632,83 @@ class ScoreDataFeeHoursAndLockHoursComparator extends IComparator {
         // maximum fee hours first
         if (leveledScore1.feeHoursPassed > leveledScore2.feeHoursPassed)
             return -1;
-        
+
         if (leveledScore1.feeHoursPassed < leveledScore2.feeHoursPassed)
             return 1;
-        
+
         // minimum lock hours first
         if (leveledScore1.lockHoursLeft < leveledScore2.lockHoursLeft)
             return -1;
-        
+
         if (leveledScore1.lockHoursLeft > leveledScore2.lockHoursLeft)
             return 1;
-        
+
         return 0;
     }
 };
+
+if (typeof exports == "object")
+    exports.ScoreDataFeeHoursAndLockHoursComparator = ScoreDataFeeHoursAndLockHoursComparator;
+class ApplicationModel extends IApplicationModel {
+    constructor(passwordRegistrationCollection) {
+        super(passwordRegistrationCollection);
+        
+        this.passwordRegistrations = passwordRegistrationCollection;
+    }
+
+    /*
+     * import password registrations from json string
+     *
+     * returns true if json string contains a valid persistence
+     * of password registrations and import was successful.
+     */
+    importJSON(json) {
+        var objectStructure = null;
+
+        if (json)
+            objectStructure = JSON.parse(json);
+
+        if (!this.import(objectStructure))
+            return false;
+
+        return true;
+    }
+
+    /*
+     * export password registrations to a json string
+     *
+     * returns the json string
+     */
+    exportJSON() {
+        return JSON.stringify(this.export());
+    }
+    
+    /*
+     * import from object structure
+     *
+     * returns true if successful
+     */
+    import(object) {
+        if (!this.passwordRegistrations.import(object))
+            return false;
+        
+        return true;
+    }
+
+    /*
+     * export password registrations to an object structure
+     *
+     * returns the object structure
+     */
+    export() {
+        var objectStructure = this.passwordRegistrations.export();
+        
+        return objectStructure;
+    }
+};
+if (typeof require == "function")
+    ILeveledScore = require('./ILeveledScore').ILeveledScore;
+
 var LeveledScore = (
     function() {
         var fib = function(i) {
@@ -766,6 +909,12 @@ var LeveledScore = (
         return LeveledScore;
     }
 )();
+
+if (typeof exports == "object")
+    exports.LeveledScore = LeveledScore;
+if (typeof require == "function")
+    IPasswordRegistrationCollection = require('./IPasswordRegistrationCollection.js').IPasswordRegistrationCollection;
+
 var PasswordRegistrationCollection = (
         function() {
             /*
@@ -810,19 +959,13 @@ var PasswordRegistrationCollection = (
 
                     this.collection = {};
                 }
-
+                
                 /*
-                 * import password registrations from json string
+                 * import from object structure
                  *
-                 * returns true if json string contains a valid persistence
-                 * of password registrations.
+                 * returns true if successful
                  */
-                importJSON(json) {
-                    var passwordRegistrations = "";
-
-                    if (json)
-                        passwordRegistrations = JSON.parse(json);
-
+                import(passwordRegistrations) {
                     if (!isPasswordRegistrationIntegrityOk(passwordRegistrations))
                         return false;
 
@@ -832,12 +975,12 @@ var PasswordRegistrationCollection = (
                 }
 
                 /*
-                 * export password registrations to a json string
+                 * export password registrations to an object structure
                  *
-                 * returns the json string
+                 * returns the object structure
                  */
-                exportJSON() {
-                    return JSON.stringify(this.collection);
+                export() {
+                    return this.collection;
                 }
 
                 /*
@@ -938,6 +1081,9 @@ var PasswordRegistrationCollection = (
             return PasswordRegistrationCollection;
         }
 )();
+
+if (typeof exports == "object")
+    exports.PasswordRegistrationCollection = PasswordRegistrationCollection;
 (
     function($) {
         $.fn.JQPassword = function(sub, options) {
@@ -1158,6 +1304,9 @@ var PasswordRegistrationCollection = (
         };
     }
 )(jQuery);
+if (typeof require == "function")
+    ILeveledScoreFormatter = require('./ILeveledScoreFormatter.js').ILeveledScoreFormatter;
+
 var LeveledScoreFormatter = (
     function() {
         var formatTime = function(ms) {
@@ -1267,6 +1416,8 @@ var LeveledScoreFormatter = (
     }
 )();
 
+if (typeof exports == "object")
+    exports.LeveledScoreFormatter = LeveledScoreFormatter;
 var PagePasswordDialog = (
     function($) {
         class PagePasswordDialog extends IPagePasswordDialog{
@@ -1363,13 +1514,14 @@ var PageManagePasswords = (
              * update page display
              */
             update() {
-                updateTable(this.tableSelector, this.appInstance.passwordRegistrations);
+                updateTable(this.tableSelector, this.appInstance.applicationModel.passwordRegistrations);
             }
         };
         
         return PageManagePasswords;
     }
-)(jQuery);var PageImportExport = (
+)(jQuery);
+var PageImportExport = (
     function($) {
         class PageImportExport extends IPageImportExport {
             constructor(app) {
@@ -1452,7 +1604,7 @@ var PagePasswordTrainer = (
         };
 
         var updateWidgets = function(successState) {
-            updateWidgetSelectionValues(this.appInstance.passwordRegistrations, this.currentPasswordRegistration, this.autoSwitchToMostRecentPasswordRegistration);
+            updateWidgetSelectionValues(this.appInstance.applicationModel.passwordRegistrations, this.currentPasswordRegistration, this.autoSwitchToMostRecentPasswordRegistration);
             updateWidgetDescription(this.currentPasswordRegistration);
             updateWidgetsSuccessColor((this.currentLeveledScore.lockHoursLeft > 0), successState);
             updateWidgetsStatus(this.currentLeveledScore);
@@ -1727,16 +1879,19 @@ var PasswordNotificator = (
 
         return PasswordNotificator;
     }
-)();var App = (
+)();
+var App = (
     function($) {
         class App extends IApp {
             constructor() {
                 super();
             
                 this.passwordHasher = new MD5PasswordHasher();
-                this.passwordRegistrations = new PasswordRegistrationCollection(new ScoreDataFeeHoursAndLockHoursComparator());
-
-                this.passwordNotificator = new PasswordNotificator(this.passwordRegistrations, new NavigatorNotificator());
+                
+                var passwordRegistrations = new PasswordRegistrationCollection(new ScoreDataFeeHoursAndLockHoursComparator());
+                this.applicationModel = new ApplicationModel(passwordRegistrations);
+                
+                this.passwordNotificator = new PasswordNotificator(passwordRegistrations, new NavigatorNotificator());
             
                 this.pageTrainPasswords = new PagePasswordTrainer(this);
                 this.pageImportExport = new PageImportExport(this);
@@ -1755,17 +1910,17 @@ var PasswordNotificator = (
                 this.pagePasswordDialog.init();
             }
             
-            readPasswordRegistrationsFromLocalStorage() {
-                this.passwordRegistrations.importJSON(localStorage['passwordRegistrations']);
+            readFromLocalStorage() {
+                this.applicationModel.importJSON(localStorage['passwordRegistrations']);
             }
             
-            writePasswordRegistrationsToLocalStorage() {
-                localStorage['passwordRegistrations'] = this.passwordRegistrations.exportJSON();
+            writeToLocalStorage() {
+                localStorage['passwordRegistrations'] = this.applicationModel.exportJSON();
             }
             
             importJSON(json) {
-                if (this.passwordRegistrations.importJSON(json)) {
-                    this.writePasswordRegistrationsToLocalStorage();
+                if (this.applicationModel.importJSON(json)) {
+                    this.writeToLocalStorage();
                     
                     this.pageTrainPasswords.update();
                     if ($)
@@ -1774,20 +1929,23 @@ var PasswordNotificator = (
             }
 
             exportJSON() {
-                return this.passwordRegistrations.exportJSON();
+                return this.applicationModel.exportJSON();
             }
             
             addPasswordRegistration(description, password) {
                 var hash = this.passwordHasher.generateSaltedHash(password, null)
-                this.passwordRegistrations.add(description, hash);
-                this.writePasswordRegistrationsToLocalStorage();
+                this.applicationModel.passwordRegistrations.add(description, hash);
+                this.writeToLocalStorage();
             }
             
             addPasswordAttempt(desc, password) {
-                if (!this.passwordRegistrations)
+                if (!this.applicationModel)
                     return false;
                 
-                var passwordRegistration = this.passwordRegistrations.get(desc);
+                if (!this.applicationModel.passwordRegistrations)
+                    return false;
+                
+                var passwordRegistration = this.applicationModel.passwordRegistrations.get(desc);
                 
                 if (!passwordRegistration)
                     return false;
@@ -1809,25 +1967,31 @@ var PasswordNotificator = (
                 
                 // rehash with a new salt on every attempt
                 passwordRegistration.hash = this.passwordHasher.generateSaltedHash(password, null);
-                this.passwordRegistrations.update(desc, passwordRegistration);
+                this.applicationModel.passwordRegistrations.update(desc, passwordRegistration);
                     
-                this.writePasswordRegistrationsToLocalStorage();
+                this.writeToLocalStorage();
                 
                 return true;
             }
             
             getMostRecentPasswordRegistration() {
-                if (!this.passwordRegistrations)
+                if (!this.applicationModel)
+                    return null;
+                        
+                if (!this.applicationModel.passwordRegistrations)
                     return null;
                 
-                return this.passwordRegistrations.getMostRecentPasswordRegistration();
+                return this.applicationModel.passwordRegistrations.getMostRecentPasswordRegistration();
             }
             
             getPasswordRegistrationByDescription(description) {
-                if (!this.passwordRegistrations)
+                if (!this.applicationModel)
+                    return null;
+                    
+                if (!this.applicationModel.passwordRegistrations)
                     return null;
                 
-                return this.passwordRegistrations.getPasswordRegistrationByDescription(description);
+                return this.applicationModel.passwordRegistrations.getPasswordRegistrationByDescription(description);
             }
         };
         
@@ -1842,7 +2006,7 @@ var PasswordNotificator = (
             function() {
                 app = new App();
                 app.init();
-                app.readPasswordRegistrationsFromLocalStorage();
+                app.readFromLocalStorage();
             }
         );
     }(jQuery)

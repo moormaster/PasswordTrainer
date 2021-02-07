@@ -1,9 +1,9 @@
 /*!
-* jQuery Mobile 1.4.5
-* Git HEAD hash: 68e55e78b292634d3991c795f06f5e37a512decc <> Date: Fri Oct 31 2014 17:33:30 UTC
+* jQuery Mobile 1.4.1
+* Git HEAD hash: 3455adaa46cd408e7775e662557432aafd43a725 <> Date: Thu Feb 13 2014 12:05:10 UTC
 * http://jquerymobile.com
 *
-* Copyright 2010, 2014 jQuery Foundation, Inc. and othercontributors
+* Copyright 2010, 2014 jQuery Foundation, Inc. and other contributors
 * Released under the MIT license.
 * http://jquery.org/license
 *
@@ -243,9 +243,7 @@ div.ui-mobile-viewport {
 	-ms-user-select: none;
 	user-select: none;
 }
-.ui-btn-icon-notext,
-.ui-header button.ui-btn.ui-btn-icon-notext,
-.ui-footer button.ui-btn.ui-btn-icon-notext {
+.ui-btn-icon-notext {
 	padding: 0;
 	width: 1.75em;
 	height: 1.75em;
@@ -264,10 +262,6 @@ div.ui-mobile-viewport {
 	font-size: 12.5px;
 	display: inline-block;
 	vertical-align: middle;
-}
-.ui-header .ui-controlgroup .ui-btn-icon-notext,
-.ui-footer .ui-controlgroup .ui-btn-icon-notext {
-    font-size: 12.5px;
 }
 /* To ensure same top and left/right position when ui-btn-left/right are added to something other than buttons. */
 .ui-header .ui-btn-left,
@@ -389,9 +383,7 @@ button.ui-btn,
 	-moz-appearance: none;
 	width: 100%;
 }
-button.ui-btn-inline,
-.ui-header button.ui-btn,
-.ui-footer button.ui-btn {
+button.ui-btn-inline {
 	width: auto;
 }
 /* Firefox adds a 1px border in a button element. We negate this to make sure they have the same height as other buttons in controlgroups. */
@@ -1232,6 +1224,7 @@ button.ui-btn-icon-notext,
 		width: 78%;
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
+		-ms-box-sizing: border-box;
 		box-sizing: border-box;
 	}
 	/* ui-hide-label deprecated in 1.4. TODO: Remove in 1.5 */
@@ -1245,9 +1238,6 @@ button.ui-btn-icon-notext,
 	.ui-field-contain > label ~ .ui-btn-inline {
 		width: auto;
 		margin-right: .625em;
-	}
-	.ui-field-contain > label ~ .ui-btn-inline.ui-btn-icon-notext {
-		width: 1.75em;
 	}
 }
 /* content configurations. */
@@ -1301,9 +1291,7 @@ li.ui-block-e {
 [class*="ui-block-"] > .ui-checkbox,
 [class*="ui-block-"] > .ui-radio,
 [class*="ui-block-"] > button.ui-btn-inline,
-[class*="ui-block-"] > button.ui-btn-icon-notext,
-.ui-header [class*="ui-block-"] > button.ui-btn,
-.ui-footer [class*="ui-block-"] > button.ui-btn {
+[class*="ui-block-"] > button.ui-btn-icon-notext {
 	margin-right: .3125em;
 	margin-left: .3125em;
 }
@@ -1452,11 +1440,6 @@ li.ui-block-e {
 	display: block;
 	margin: 0;
 	border-right-width: 0;
-}
-.ui-header .ui-navbar li button.ui-btn,
-.ui-footer .ui-navbar li button.ui-btn {
-	margin: 0;
-	width: 100%;
 }
 .ui-navbar .ui-btn:focus {
 	z-index: 1;
@@ -2504,7 +2487,7 @@ ol.ui-listview > li > .ui-btn,
 ol.ui-listview > li.ui-li-static {
 	vertical-align: middle;
 }
-ol.ui-listview > li > .ui-btn:first-child:before,
+ol.ui-listview > li > .ui-btn:before,
 ol.ui-listview > li.ui-li-static:before,
 ol.ui-listview > li.ui-field-contain > label:before,
 ol.ui-listview > li.ui-field-contain > .ui-controlgroup-label:before {
@@ -2594,6 +2577,7 @@ input.ui-slider-input {
 	appearance: none;
 	-webkit-box-sizing: content-box;
 	-moz-box-sizing: content-box;
+	-ms-box-sizing: content-box;
 	box-sizing: content-box;
 }
 .ui-slider-input::-webkit-outer-spin-button,
@@ -2714,13 +2698,14 @@ div.ui-slider-switch.ui-mini {
 .ui-field-contain div.ui-slider-switch {
 	margin: 0;
 }
-/* ui-hide-label deprecated in 1.4. TODO: Remove in 1.5 */
-.ui-field-contain div.ui-slider-switch,
-.ui-field-contain.ui-hide-label div.ui-slider-switch,
-html .ui-popup .ui-field-contain div.ui-slider-switch {
-	display: inline-block;
-	width: 5.8em;
-}
+@media (min-width: 28em) {
+	/* ui-hide-label deprecated in 1.4. TODO: Remove in 1.5 */
+	.ui-field-contain div.ui-slider-switch,
+	.ui-field-contain.ui-hide-label div.ui-slider-switch {
+		display: inline-block;
+		width: 5.8em;
+	}
+}	
 /* slider tooltip
 -----------------------------------------------------------------------------------------------------------*/
 .ui-slider-popup {
@@ -2807,9 +2792,6 @@ div.ui-rangeslider label {
 	border-width: 1px;
 	border-style: solid;
 }
-.ui-mini {
-	margin: .446em;
-}
 .ui-input-text input,
 .ui-input-search input,
 textarea.ui-input-text {
@@ -2819,6 +2801,7 @@ textarea.ui-input-text {
 	width: 100%;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
 	box-sizing: border-box;
 	outline: 0;
 }
@@ -2992,6 +2975,7 @@ textarea.ui-input-text.ui-textinput-autogrow {
 	border-style: solid;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
 	box-sizing: border-box;
 	border-radius: inherit;
 	overflow: visible;
@@ -3002,19 +2986,19 @@ textarea.ui-input-text.ui-textinput-autogrow {
 	padding: 1px;
 	text-indent: 1em; /* Override this to center text if you use a label other than "off" */
 }
-/* Override field container CSS to prevent the flipswitch from becomming full width */
-html .ui-field-contain > label + .ui-flipswitch,
-html .ui-popup .ui-field-contain > label + .ui-flipswitch {
-	display: inline-block;
-	width: 5.875em; /* If you override the width for .ui-flipswitch you should repeat the same value here */
-	-webkit-box-sizing: content-box;
-	-moz-box-sizing: content-box;
-	box-sizing: content-box;
-}
-.ui-field-contain .ui-flipswitch.ui-flipswitch-active,
-.ui-popup .ui-field-contain .ui-flipswitch.ui-flipswitch-active {
-	width: 1.875em;
-}
+@media (min-width: 28em) {
+	.ui-field-contain > label + .ui-flipswitch {
+		display: inline-block;
+		width: 5.875em; /* If you override the width for .ui-flipswitch you should repeat the same value here */
+		-webkit-box-sizing: content-box;
+		-moz-box-sizing: content-box;
+		-ms-box-sizing: content-box;
+		box-sizing: content-box;
+	}
+	.ui-field-contain .ui-flipswitch.ui-flipswitch-active {
+		width: 1.875em;
+	}
+}	
 .ui-table {
 	border: 0;
 	border-collapse: collapse;
@@ -3173,6 +3157,10 @@ html .ui-popup .ui-field-contain > label + .ui-flipswitch {
 }
 /* Breakpoint to show as a standard table at 560px (35em x 16px) or wider */ 
 @media ( min-width: 35em ) {
+	/* Fixes table rendering when switching between breakpoints in Safari <= 5. See https://github.com/jquery/jquery-mobile/issues/5380 */
+	.ui-table-reflow.ui-responsive {
+		display: table-row-group;
+	}
 	/* Show the table header rows */ 
 	.ui-table-reflow.ui-responsive td,
 	.ui-table-reflow.ui-responsive th,
@@ -3217,8 +3205,6 @@ html .ui-popup .ui-field-contain > label + .ui-flipswitch {
 	max-height: 100%;
 	overflow: hidden;
 	visibility: hidden;
-	left: 0;
-	clip: rect(1px,1px,1px,1px);
 }
 .ui-panel-fixed {
 	position: fixed;
