@@ -1,3 +1,6 @@
+if (typeof require == "function")
+    IPasswordRegistrationCollection = require('./IPasswordRegistrationCollection.js').IPasswordRegistrationCollection;
+
 var PasswordRegistrationCollection = (
         function() {
             /*
@@ -164,3 +167,6 @@ var PasswordRegistrationCollection = (
             return PasswordRegistrationCollection;
         }
 )();
+
+if (typeof exports == "object")
+    exports.PasswordRegistrationCollection = PasswordRegistrationCollection;

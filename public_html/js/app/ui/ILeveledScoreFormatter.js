@@ -27,3 +27,6 @@ class ILeveledScoreFormatter {
      */
     formatLevel(leveledScore) {}
 }
+
+if (typeof exports == "object")
+    exports.ILeveledScoreFormatter = ILeveledScoreFormatter;

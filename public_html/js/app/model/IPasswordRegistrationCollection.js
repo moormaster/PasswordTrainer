@@ -1,3 +1,6 @@
+if (typeof require == "function")
+    IModel = require('./IModel.js').IModel;
+
 class IPasswordRegistrationCollection extends IModel {
     constructor(scoreDataComparator) {
         super(scoreDataComparator);
@@ -43,3 +46,6 @@ class IPasswordRegistrationCollection extends IModel {
      */
     import(passwordRegistrations) {}
 };
+
+if (typeof exports == "object")
+    exports.IPasswordRegistrationCollection = IPasswordRegistrationCollection;

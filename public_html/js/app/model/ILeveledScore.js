@@ -28,3 +28,6 @@ class ILeveledScore {
     get feePerHour() {}
     get level() {}
 };
+
+if (typeof exports == "object")
+    exports.ILeveledScore = ILeveledScore;

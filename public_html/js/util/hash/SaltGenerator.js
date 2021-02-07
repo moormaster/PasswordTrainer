@@ -1,3 +1,6 @@
+if (typeof require == "function")
+    ISaltGenerator = require('./ISaltGenerator.js').ISaltGenerator;
+
 class SaltGenerator extends ISaltGenerator {
     constructor(length, charSet) {
         super(length, charSet);
@@ -25,3 +28,6 @@ class SaltGenerator extends ISaltGenerator {
         return salt;
     }
 };
+
+if (typeof exports == "object")
+    exports.SaltGenerator = SaltGenerator;

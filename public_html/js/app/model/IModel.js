@@ -13,3 +13,6 @@ class IModel {
      */
     export() {}
 };
+
+if (typeof exports == "object")
+    exports.IModel = IModel;

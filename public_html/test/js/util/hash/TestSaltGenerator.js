@@ -1,50 +1,30 @@
-QUnit.module("SaltGenerator", {
-    beforeEach: function() {
-        this.saltGeneratorSetups = {
-            "default-charset-0-len": { length: 0, charSet: null },
-            "default-charset-10-len": { length: 10, charSet: null },
-            
-            "hex-charset-6-len": { length: 6, charSet: '0123456789ABCDEF' }
-        };
-        
-        this.testSaltGeneratorWithSetup = function(assert, setupName) {
-            var setup = this.saltGeneratorSetups[setupName];
-            assert.ok(!!setup, "salt setup not found '" + setupName + "'");
-            
-            var saltGenerator = new SaltGenerator(setup.length, setup.charSet);
-            var salt = saltGenerator.generate();
+const assert = require('chai').assert;
+const SaltGenerator = require('../../../../js/util/hash/SaltGenerator.js').SaltGenerator;
 
-            this.assertSaltAccordingToSetup(assert, salt, setup);
-        }
-        
-        this.assertSaltAccordingToSetup = function(assert, salt, setup) {
-            assert.equal(salt.length, setup.length, "salt length should be " + setup.length);
+describe("SaltGenerator", function() {
+    [   { length: 0, charSet: null, description: "default-charset-0-len" },
+        { length: 10, charSet: null, description: "default-charset-10-len" },
+        { length: 6, charSet: "0123456789ABCDEF", description: "hex-charset-6-len" }
+    ].forEach(({length, charSet, description}) => {
+        describe("SaltGenerator.generate() - " + description, function() {
+            beforeEach(function() {
+                this.saltGenerator = new SaltGenerator(length, charSet);
+            });
+
+            it("should generate a random string of the correct length", function() {
+                var salt = this.saltGenerator.generate();
+                assert.equal(salt.length, length);
+            });
             
-            // check salt against the custom charset from setup
-            if (setup.charSet) {
-                var i;
-                for (i=0; i<salt.length; i++) {
-                    assert.ok(setup.charSet.indexOf(salt[i]) >= 0, "salt character '" + salt[i] + "' should be part of the char set")
-                }
+
+            if (charSet) {
+                it("should contain only characters from the defined charSet", function() {
+                    var salt = this.saltGenerator.generate();
+                    
+                    for (var c in salt)
+                        assert.isOk(charSet.indexOf(c) >= 0, "salt character '" + c + "' should be part of the char set")
+                });
             }
-        }
-    }
+        });
+    });
 });
-
-QUnit.test("SaltGenerator.generate() - default-charset-0-len",
-    function(assert) {
-        this.testSaltGeneratorWithSetup(assert, "default-charset-0-len");
-    }
-);
-
-QUnit.test("SaltGenerator.generate() - default-charset-10-len",
-    function(assert) {
-        this.testSaltGeneratorWithSetup(assert, "default-charset-10-len");
-    }
-);
-
-QUnit.test("SaltGenerator.generate() - hex-charset-6-len",
-    function(assert) {
-        this.testSaltGeneratorWithSetup(assert, "hex-charset-6-len");
-    }
-);

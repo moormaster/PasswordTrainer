@@ -22,7 +22,7 @@ build() {
 
     cp -r css "${BUILDDIR}/"
     cp -r img "${BUILDDIR}/"
-    cp -r libs "${BUILDDIR}/"
+    cp -rL libs "${BUILDDIR}/"
     cp index_build.html "${BUILDDIR}/index.html"
     cp manifest_build.appcache "${BUILDDIR}/manifest.appcache"
 
@@ -36,6 +36,8 @@ catjsbundle() {
 
     cat js/app/comparator/IComparator.js
 
+    cat js/app/model/IModel.js
+    cat js/app/model/IApplicationModel.js
     cat js/app/model/ILeveledScore.js
     cat js/app/model/IPasswordRegistrationCollection.js
 
@@ -61,6 +63,7 @@ catjsbundle() {
 
     cat js/app/comparator/ScoreDataFeeHoursAndLockHoursComparator.js
 
+    cat js/app/model/ApplicationModel.js
     cat js/app/model/LeveledScore.js
     cat js/app/model/PasswordRegistrationCollection.js
 

@@ -1,205 +1,274 @@
-QUnit.module(
-    "LeveledScore",
-    {
-        beforeEach: function() {
-            var addAttempt = function(leveledScore, feeHours) {
-                if (!feeHours)
-                    feeHours = 0;
-                
-                var d = leveledScore.lastSuccessTimestamp;
-                if (d == null)
-                    d = new Date(1970, 1, 1, 10, 00).getTime();
+const assert = require('chai').assert;
+const LeveledScore = require('../../../../js/app/model/LeveledScore.js').LeveledScore;
 
-                var h = leveledScore.getLockHoursLeft(d) + feeHours;
-                
-                
-                return leveledScore.addSuccessfulAttempt(d + 1000*60*60*h);
-            };
-            
-            var getScoreFixture = function(attemptsCount, lastAttemptFeeHours) {
-                if (!lastAttemptFeeHours)
-                    lastAttemptFeeHours = 0;
-                
-                var score = new LeveledScore();
-                
-                for (var i=0; i<attemptsCount-1; i++)
-                    addAttempt(score);
-                
-                if (attemptsCount > 0)
-                    addAttempt(score, lastAttemptFeeHours);
+const numberOfScores = 5;
 
-                return score;
-            };
-            
-            this.assertNumEqual = function(assert, actual, expected, diff, message) {
-                if (Math.abs(actual - expected) <= diff)
-                    assert.ok(true, message);
-                else
-                    assert.equal(actual, expected, message);
-                
-            };
-            
-            this.scores = [];
-            this.scoresWithOneHourFee = [];
-            
-            for (var i=0; i<5;i++) {
-                this.scores[i] = getScoreFixture(i);
-                this.scoresWithOneHourFee[i] = getScoreFixture(i, 1);
-            }
+describe("LeveledScore", function () {
+    beforeEach(function() {
+        var addAttempt = function(leveledScore, feeHours) {
+            if (!feeHours)
+                feeHours = 0;
+
+            var d = leveledScore.scoreData.lastSuccessTimestamp;
+            if (d == null)
+                d = new Date(1970, 1, 1, 10, 00).getTime();
+
+            var h = leveledScore.getLockHoursLeft(d) + feeHours;
+
+            return leveledScore.addSuccessfulAttempt(d + 1000*60*60*h);
+        };
+
+        this.addAttempts = function(leveledScore, numberOfAttempts) {
+            for (var i=0; i<numberOfAttempts; i++)
+                addAttempt(leveledScore);
         }
-    }
-);
-
-QUnit.test(
-    "LevelScore.getScore()", 
-    function(assert) {
-        assert.equal(
-            this.scores[0].getScore(this.scores[0].scoreData.lastSuccessTimestamp),                     
-            0, "should be 0 initialy");
         
-        for (var i=1; i<this.scores.length; i++)
+        this.addAttemptWithFeeTime = function(leveledScore, feeHours) {
+            addAttempt(leveledScore, feeHours);
+        }
+
+        this.assertNumEqual = function(actual, expected, diff) {
+            if (Math.abs(actual - expected) <= diff)
+                assert.isOk(true);
+            else
+                assert.equal(actual, expected);
+
+        };
+        
+        this.leveledScore = new LeveledScore();
+    });
+
+    it("should be 0 initially", function() {
+        assert.equal(
+            this.leveledScore.getScore(this.leveledScore.scoreData.lastSuccessTimestamp),
+            0);
+    });
+
+    [   { expectedScore: 1, afterNumberOfAttempts: 1 },
+        { expectedScore: 2, afterNumberOfAttempts: 2 },
+        { expectedScore: 3, afterNumberOfAttempts: 3 },
+        { expectedScore: 4, afterNumberOfAttempts: 4 }
+    ].forEach(
+        ({expectedScore, afterNumberOfAttempts}) => {
+        it("should be " + expectedScore + " after " + afterNumberOfAttempts + " attempt(s)", function() {
+            this.addAttempts(this.leveledScore, afterNumberOfAttempts);
+
             assert.equal(
-                this.scores[i].getScore(this.scores[i].scoreData.lastSuccessTimestamp),       
-                i, "should be " + i + " after " + i + " attempt(s)"
-            );
-    }
-);
+                this.leveledScore.getScore(this.leveledScore.scoreData.lastSuccessTimestamp),
+                expectedScore);
+        });
+    });
 
-QUnit.test(
-    "LevelScore.getFee()", 
-    function(assert) {
-        var expectedFee = [0, 1/2.0, 1/3.0, 1/5.0, 1/5.0];
-        var fee1AfterHours = [0, 2, 3, 5, 5];
-        var score0AfterHours = [0, 2*1, 3*2, 5*3, 5*4];
-        
-        for (var i=0; i<this.scores.length; i++) {
-            this.assertNumEqual(assert,
-                this.scores[i].getFee(
-                    this.scores[i].scoreData.lastSuccessTimestamp 
-                    + (this.scores[i].lockHours)*60*60*1000
-                ),
-                0,
-                0.001,
-                "should be 0 after " + i + " attempt(s) with 0h fee time passed"
-            );
+    describe("LevelScore.getFee()", function() {
+        [   {expectedFeePerHour: 0,        afterHoursPassed: 0, scoreReachesZeroAfterHours: 0,     afterNumberOfAttempts: 0},
+            {expectedFeePerHour: 1/2.0,    afterHoursPassed: 2, scoreReachesZeroAfterHours: 2*1,   afterNumberOfAttempts: 1},
+            {expectedFeePerHour: 1/3.0,    afterHoursPassed: 3, scoreReachesZeroAfterHours: 3*2,   afterNumberOfAttempts: 2},
+            {expectedFeePerHour: 1/5.0,    afterHoursPassed: 5, scoreReachesZeroAfterHours: 5*3,   afterNumberOfAttempts: 3},
+            {expectedFeePerHour: 1/5.0,    afterHoursPassed: 5, scoreReachesZeroAfterHours: 5*4,   afterNumberOfAttempts: 4}
+        ].forEach(
+            ({expectedFeePerHour, afterHoursPassed, scoreReachesZeroAfterHours, afterNumberOfAttempts}) => {
+                it("should be 0 after " + afterNumberOfAttempts + " attempt(s) with 0h fee time passed", function() {
+                    this.addAttempts(this.leveledScore, afterNumberOfAttempts);
 
-            this.assertNumEqual(assert,
-                this.scores[i].getFee(
-                    this.scores[i].scoreData.lastSuccessTimestamp 
-                    + (this.scores[i].lockHours+1)*60*60*1000
-                ),
-                Math.min(i, expectedFee[i]),
-                0.001,
-                "should be " + Math.min(i, expectedFee[i]) + " after " + i + " attempt(s) with 1h fee time passed"
-            );
+                    this.assertNumEqual(
+                        this.leveledScore.getFee(
+                            this.leveledScore.scoreData.lastSuccessTimestamp 
+                            + (this.leveledScore.lockHours)*60*60*1000
+                        ),
+                        0,
+                        0.001
+                    );
+                });
 
-            this.assertNumEqual(assert,
-                this.scores[i].getFee(
-                    this.scores[i].scoreData.lastSuccessTimestamp 
-                    + (this.scores[i].lockHours+fee1AfterHours[i])*60*60*1000
-                ),
-                Math.min(i, fee1AfterHours[i]*expectedFee[i]),
-                0.001,
-                "should be " + Math.min(i, fee1AfterHours[i]*expectedFee[i]) + " after " + i + " attempt(s) with " + fee1AfterHours[i] + "h fee time passed"
-            );
+                it("should be " + expectedFeePerHour + " after " + afterNumberOfAttempts + " attempt(s) with 1h fee time passed", function() {
+                    this.addAttempts(this.leveledScore, afterNumberOfAttempts);
+                    
+                    this.assertNumEqual(
+                        this.leveledScore.getFee(
+                            this.leveledScore.scoreData.lastSuccessTimestamp 
+                            + (this.leveledScore.lockHours+1)*60*60*1000
+                        ),
+                        expectedFeePerHour,
+                        0.001
+                    );
+                });
 
-            if (i>0)
-                this.assertNumEqual(assert,
-                    this.scores[i].getFee(
-                        this.scores[i].scoreData.lastSuccessTimestamp 
-                        + (this.scores[i].lockHours+score0AfterHours[i])*60*60*1000
-                    ),
-                    Math.min(i, score0AfterHours[i]*expectedFee[i]),
-                    0.001,
-                    "should be " + Math.min(i, score0AfterHours[i]*expectedFee[i]) + " after " + i + " attempt(s) with " + score0AfterHours[i] + "h fee time passed"
-                );
+                it("should be " + afterHoursPassed*expectedFeePerHour + " after " + afterNumberOfAttempts + " attempt(s) with " + afterHoursPassed + "h fee time passed", function() {
+                    this.addAttempts(this.leveledScore, afterNumberOfAttempts);
+                    
+                    this.assertNumEqual(
+                        this.leveledScore.getFee(
+                            this.leveledScore.scoreData.lastSuccessTimestamp 
+                            + (this.leveledScore.lockHours+afterHoursPassed)*60*60*1000
+                        ),
+                        afterHoursPassed*expectedFeePerHour,
+                        0.001
+                    );
+                });
 
-        }
-    }
-);
+                if (afterNumberOfAttempts>0) {
+                    it("should be " + scoreReachesZeroAfterHours*expectedFeePerHour + " after " + afterNumberOfAttempts + " attempt(s) with " + scoreReachesZeroAfterHours + "h fee time passed", function() {
+                        this.addAttempts(this.leveledScore, afterNumberOfAttempts);
+                        
+                        this.assertNumEqual(
+                            this.leveledScore.getFee(
+                                this.leveledScore.scoreData.lastSuccessTimestamp 
+                                + (this.leveledScore.lockHours+scoreReachesZeroAfterHours)*60*60*1000
+                            ),
+                            scoreReachesZeroAfterHours*expectedFeePerHour,
+                            0.001
+                        );
+                    });
+                }
 
-QUnit.test(
-    "LevelScore.getLevel()", 
-    function(assert) {
-        assert.equal(
-            this.scores[0].getLevel(this.scores[0].scoreData.lastSuccessTimestamp),    
-            1, "should be 1 initialy"
+            }
         );
-        
+    });
+
+    describe("LevelScore.getLevel()", function() {
+        it("should be 1 initialy", function() {
+            assert.equal(
+                this.leveledScore.getLevel(this.leveledScore.scoreData.lastSuccessTimestamp),    
+                1
+            );
+        });
+
         var expectedLevel = [1, 2, 3, 4, 4];
         
-        for (var i=1; i<this.scores.length; i++)
-            assert.equal(this.scores[i].getLevel(
-                this.scores[i].scoreData.lastSuccessTimestamp),                                
-                expectedLevel[i], "should be " + expectedLevel[i] + " for less than " + (i+1) + " attempt(s)"
-            );
-    }
-);
+        [   {expectedLevel: 1, afterNumberOfAttempts: 0},
+            {expectedLevel: 2, afterNumberOfAttempts: 1},
+            {expectedLevel: 3, afterNumberOfAttempts: 2},
+            {expectedLevel: 4, afterNumberOfAttempts: 3},
+            {expectedLevel: 4, afterNumberOfAttempts: 4}
+        ].forEach(({expectedLevel, afterNumberOfAttempts}) => {
+           it("should be " + expectedLevel + " for less than " + (afterNumberOfAttempts+1) + " attempt(s)", function() {
+               this.addAttempts(this.leveledScore, afterNumberOfAttempts);
+               
+                assert.equal(this.leveledScore.getLevel(
+                    this.leveledScore.scoreData.lastSuccessTimestamp),
+                    expectedLevel
+                );
+            });
+        });
+    });
 
-QUnit.test(
-    "LevelScore.lockHours", 
-    function(assert) {
-        var expectedLockHours = [0, 1, 2, 3, 3];
-        var level = [1, 2, 3, 4, 4];
-        
-        for (var i=0; i<this.scores.length; i++)
-            assert.equal(this.scores[i].lockHours, expectedLockHours[i], "should be " + expectedLockHours[i] + " in level " + level[i]);
-    }
-);
+    describe("LevelScore.lockHours", function() {
+        [   {expectedLockHours: 0, forLevel: 1, afterNumberOfAttempts: 0},
+            {expectedLockHours: 1, forLevel: 2, afterNumberOfAttempts: 1},
+            {expectedLockHours: 2, forLevel: 3, afterNumberOfAttempts: 2},
+            {expectedLockHours: 3, forLevel: 4, afterNumberOfAttempts: 3},
+            {expectedLockHours: 3, forLevel: 4, afterNumberOfAttempts: 4}
+        ].forEach(({expectedLockHours, forLevel, afterNumberOfAttempts}) => {
+            it("should be " + expectedLockHours + " in level " + forLevel, function() {
+                this.addAttempts(this.leveledScore, afterNumberOfAttempts);
 
-QUnit.test(
-    "LevelScore.feePerHour", 
-    function(assert) {
+                assert.equal(this.leveledScore.lockHours, expectedLockHours);
+            });
+        });
+    });
+
+    describe("LevelScore.feePerHour", function() {
         var expectedFeePerHour = [0, 1/2.0, 1/3.0, 1/5.0, 1/5.0];
         var level = [1, 2, 3, 4, 4];
-
-        for (var i=0; i<this.scores.length; i++)
-            assert.equal(this.scores[i].feePerHour, expectedFeePerHour[i], "should be " + expectedFeePerHour[i] + " in level " + level[i]);
-    }
-);
-
-
-QUnit.test(
-    "LevelScore.addSuccessfulAttempt()", 
-    function(assert) {
-        var score = new LeveledScore();
         
-        assert.ok(score.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 00)),        
-                "first attempt should be possible");
-        assert.equal(score.getScore(new Date(1970, 1, 1, 10, 00)),                                              
-            1,  "score should be 1 after first attempt");
-        
-        assert.notOk(score.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 59)),     
-                "second attempt should fail due to lock time");
-        assert.ok(score.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 00)),        
-                "second attempt should be possible after lock time");
-        assert.equal(score.getScore(new Date(1970, 1, 1, 11, 00)),                                              
-            2,  "score should be 2 after second attempt");
-        
-        assert.notOk(score.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 59)),     
-                "third attempt should fail due to lock time");
-        assert.notOk(score.addSuccessfulAttempt(new Date(1970, 1, 1, 12, 59)),     
-                "third attempt should fail due to lock time");
-        assert.ok(score.addSuccessfulAttempt(new Date(1970, 1, 1, 13, 0)),         
-                "third attempt should be possible after increased lock time");
-        assert.equal(score.getScore(new Date(1970, 1, 1, 13, 0)),                                              
-            3,  "score should be 3 after third attempt");
-    }
-);
+        [   {expectedFeePerHour: 0,     forLevel: 1, afterNumberOfAttempts: 0},
+            {expectedFeePerHour: 1/2.0, forLevel: 2, afterNumberOfAttempts: 1},
+            {expectedFeePerHour: 1/3.0, forLevel: 3, afterNumberOfAttempts: 2},
+            {expectedFeePerHour: 1/5.0, forLevel: 4, afterNumberOfAttempts: 3},
+            {expectedFeePerHour: 1/5.0, forLevel: 4, afterNumberOfAttempts: 4},
+        ].forEach(({expectedFeePerHour, forLevel, afterNumberOfAttempts}) => {
+            it("should be " + expectedFeePerHour + " in level " + forLevel, function() {
+                this.addAttempts(this.leveledScore, afterNumberOfAttempts);
 
-QUnit.test(
-    "LevelScore.addSuccessfulAttempt() with one fee hour", 
-    function(assert) {
-        var expectedScore = [0, 1, 2 - 1/2.0, 3 - 1/3.0, 4 - 1/5.0]
+                assert.equal(this.leveledScore.feePerHour, expectedFeePerHour, );
+            });
+        });
+    });
+
+    describe("LevelScore.addSuccessfulAttempt()", function() {
+        it("should allow the first attempt", function() {
+            assert.isOk(this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 00)));
+        });
         
-        for (var i=0; i<this.scoresWithOneHourFee.length; i++)
-            this.assertNumEqual(
-                assert,
-                this.scoresWithOneHourFee[i].getScore(this.scoresWithOneHourFee[i].scoreData.lastSuccessTimestamp),
-                expectedScore[i],  
-                0.001,
-                "score should be " + expectedScore[i] + " after " + i + " attempt(s)"
+        it("should increase score to 1 after first attempt", function() {
+            this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 00));
+            assert.equal(
+                this.leveledScore.getScore(new Date(1970, 1, 1, 10, 00)),
+                1
             );
-    }
-);
+        });
+        
+        it("should deny second attempt when lock time is not up", function() {
+            this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 00));
+            
+            assert.isNotOk(this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 59)));
+        });
+        
+        it("should allow second attempt after lock time has passed", function() {
+            this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 00));
+            
+            assert.isOk(this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 00)));
+        });
+        
+        it("score should increase score to 2 after second successful attempt", function() {
+            this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 00));
+            this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 00));
+            
+            assert.equal(
+                this.leveledScore.getScore(new Date(1970, 1, 1, 11, 00)),
+                2
+            );
+        });
+        
+        it("should deny third attempt when lock time is not up", function() {
+            this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 00));
+            this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 00));
+            
+            assert.isNotOk(this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 59)));
+        });
+        
+        it("should deny third attempt when increased lock time is not up", function() {
+            this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 00));
+            this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 00));
+            
+            assert.isNotOk(this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 12, 59)));
+        });
+        
+        it("should allow third attempt after increased lock time has passed", function() {
+            this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 00));
+            this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 00));
+            
+            assert.isOk(this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 13, 0)));
+        });
+        
+        it("should increase score to 3 after third successful attempt", function() {
+            this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 00));
+            this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 00));
+            this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 13, 0))
+            
+            assert.equal(
+                this.leveledScore.getScore(new Date(1970, 1, 1, 13, 0)),
+                3
+            );
+        });
+    });
 
+    describe("LevelScore.addSuccessfulAttempt() with one fee hour", function() {
+        [   {expectedScore: 1,          afterNumberOfAttempts: 1},
+            {expectedScore: 2 - 1/2.0,  afterNumberOfAttempts: 2},
+            {expectedScore: 3 - 1/3.0,  afterNumberOfAttempts: 3},
+            {expectedScore: 4 - 1/5.0,  afterNumberOfAttempts: 4}
+        ].forEach(({expectedScore, afterNumberOfAttempts}) => {
+            it("should increase score to " + expectedScore + " after " + afterNumberOfAttempts + " attempt(s)", function() {
+                this.addAttempts(this.leveledScore, afterNumberOfAttempts-1);
+                this.addAttemptWithFeeTime(this.leveledScore, 1);
+                
+                this.assertNumEqual(
+                    this.leveledScore.getScore(this.leveledScore.scoreData.lastSuccessTimestamp),
+                    expectedScore,  
+                    0.001
+                );
+            });
+        });
+    });
+});

@@ -1,60 +1,57 @@
-QUnit.module("LeveledScoreFormatter", {
-    beforeEach: function() {
-        this.formatter = new LeveledScoreFormatter();
-    }
-});
+const assert = require('chai').assert;
+const LeveledScoreFormatter = require('../../../../js/app/ui/LeveledScoreFormatter.js').LeveledScoreFormatter;
 
-QUnit.test("formatStatus()",
-    function(assert) {
-        assert.equal(this.formatter.formatStatus({fee: 0, lockHoursLeft: 1}), "locked for 1h");
-        assert.equal(this.formatter.formatStatus({fee: 1, lockHoursLeft: 0}), "1 fee");
-    }
-);
-
-QUnit.test("formatLeveledScore",
-    function(assert) {
-        assert.equal(this.formatter.formatLeveledScore({score: 42, level: 10}), "Score 42 / Level 10");
-    }
-);
-
-QUnit.test("formatScore", 
-    function(assert) {
-        var testcase = [
-            {value: 1.0, expected: "1"},
+describe("LeveledScoreFormatter", function() {
+    beforeEach(function() {
+        this.leveledScoreFormatter = new LeveledScoreFormatter();
+    });
+    
+    describe("formatStatus()", function() {
+        [   { args: {fee: 0, lockHoursLeft: 1}, description: "locked password",    expected: "locked for 1h"},
+            { args: {fee: 1, lockHoursLeft: 0}, description: "password with a passed fee delay",    expected: "1 fee"}
+        ].forEach(({args, description, expected}) => {
+            it("should format " + description + " as " + expected, function() {
+                assert.equal(this.leveledScoreFormatter.formatStatus(args), expected);
+            });
+        });
+    });
+    
+    describe("formatLeveledScore()", function() {
+        it("should format level and score", function() {
+            assert.equal(this.leveledScoreFormatter.formatLeveledScore({score: 42, level: 10}), "Score 42 / Level 10");
+        });
+    });
+    
+    describe("formatScore()", function() {
+        [   {value: 1.0, expected: "1"},
             {value: 1.2345, expected: "1.23"},
             {value: 9.8765, expected: "9.88"}
-        ];
-        
-        for (var i=0;i<testcase.length;i++) {
-           assert.equal(this.formatter.formatScore({score: testcase[i].value}), testcase[i].expected, "value " + testcase[i].value + " should be formatted as " + testcase[i].expected);
-        }
-    }
-)
-
-QUnit.test("formatFee", 
-    function(assert) {
-        var testcase = [
-            {value: 1.0, expected: "1"},
+        ].forEach(({value, expected}) => {
+            it("should format value " + value + " as " + expected, function() {
+                assert.equal(this.leveledScoreFormatter.formatScore({score: value}), expected);
+            });
+        });
+    });
+    
+    describe("formatFee", function() {
+        [   {value: 1.0, expected: "1"},
             {value: 1.2345, expected: "1.23"},
             {value: 9.8765, expected: "9.88"}
-        ];
-        
-        for (var i=0;i<testcase.length;i++) {
-           assert.equal(this.formatter.formatFee({fee: testcase[i].value}), testcase[i].expected, "value " + testcase[i].value + " should be formatted as " + testcase[i].expected);
-        }
-    }
-)
-
-QUnit.test("formatLevel", 
-    function(assert) {
-        var testcase = [
-            {value: 1.0, expected: "1"},
+        ].forEach(({value, expected}) => {
+            it("should format value " + value + " as " + expected, function() {
+                assert.equal(this.leveledScoreFormatter.formatFee({fee: value}), expected);
+            });
+        });
+    });
+    
+    describe("formatLevel", function() {
+        [   {value: 1.0, expected: "1"},
             {value: 5.0, expected: "5"},
             {value: 10.0, expected: "10"}
-        ];
-        
-        for (var i=0;i<testcase.length;i++) {
-           assert.equal(this.formatter.formatLevel({level: testcase[i].value}), testcase[i].expected, "value " + testcase[i].value + " should be formatted as " + testcase[i].expected);
-        }
-    }
-)
+        ].forEach(({value, expected}) => {
+            it("should format value " + value + " as " + expected, function() {
+                assert.equal(this.leveledScoreFormatter.formatLevel({level: value}), expected);
+            });
+        });
+    });
+});

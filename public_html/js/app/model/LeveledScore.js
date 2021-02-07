@@ -1,3 +1,6 @@
+if (typeof require == "function")
+    ILeveledScore = require('./ILeveledScore').ILeveledScore;
+
 var LeveledScore = (
     function() {
         var fib = function(i) {
@@ -198,3 +201,6 @@ var LeveledScore = (
         return LeveledScore;
     }
 )();
+
+if (typeof exports == "object")
+    exports.LeveledScore = LeveledScore;

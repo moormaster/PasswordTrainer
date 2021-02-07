@@ -11,3 +11,6 @@ class IComparator{
      */
     compare(obj1, obj2) {}
 }
+
+if (typeof exports == "object")
+    exports.IComparator = IComparator;

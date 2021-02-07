@@ -1,0 +1,25 @@
+{
+    "name": "PasswordTrainer",
+    "version": "1.0.0",
+    "keywords": [
+        "util",
+        "functional",
+        "server",
+        "client",
+        "browser"
+    ],
+    "author": "moormaster",
+    "contributors": [],
+    "dependencies": {
+        "crypto-js": "4.0.0",
+        "jquery": "1.12.4",
+        "jquery-mobile": "1.4.1"
+    },
+    "devDependencies": {
+        "chai": "4.3.0",
+        "mocha": "8.2.1"
+    },
+    "scripts": {
+        "test": "mocha public_html/test/**/*.js"
+    }
+}

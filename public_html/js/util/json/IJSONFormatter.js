@@ -6,3 +6,6 @@ class IJSONFormatter {
      */
     format(JSONStr) {}
 };
+
+if (typeof exports == "object")
+    exports.IJSONFormatter = IJSONFormatter;

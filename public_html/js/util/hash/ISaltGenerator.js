@@ -10,3 +10,6 @@ class ISaltGenerator {
      */
     generate() {}
 };
+
+if (typeof exports == "object")
+    exports.ISaltGenerator = ISaltGenerator;

@@ -1,3 +1,6 @@
+if (typeof require == "function")
+    IJSONFormatter = require('./IJSONFormatter.js').IJSONFormatter;
+
 class JSONFormatter extends IJSONFormatter {
     constructor() {
         super();
@@ -70,3 +73,6 @@ class JSONFormatter extends IJSONFormatter {
         return result;
     }
 };
+
+if (typeof exports == "object")
+    exports.JSONFormatter = JSONFormatter;

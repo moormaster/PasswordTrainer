@@ -17,3 +17,5 @@ class IPasswordHasher {
     parseSaltedHash(hash) {}
 };
 
+if (typeof exports == "object")
+    exports.IPasswordHasher = IPasswordHasher;

@@ -1,3 +1,9 @@
+if (typeof require == "function") {
+    IPasswordHasher = require('./IPasswordHasher.js').IPasswordHasher;
+    SaltGenerator = require('./SaltGenerator.js').SaltGenerator;
+    CryptoJS = require('crypto-js');
+}
+
 class MD5PasswordHasher extends IPasswordHasher {
     constructor(saltGenerator) {
         super(saltGenerator);
@@ -31,3 +37,5 @@ class MD5PasswordHasher extends IPasswordHasher {
     }
 };
 
+if (typeof exports == "object")
+    exports.MD5PasswordHasher = MD5PasswordHasher;
