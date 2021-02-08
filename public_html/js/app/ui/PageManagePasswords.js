@@ -7,7 +7,9 @@ var PageManagePasswords = (
                         <td>\
                                 <span class=\"passwordscore\"></span> / <span class=\"passwordlevel\"></span>\
                         </td>\
-                        <td class=\"passwordstatus\"></td>\
+                        <td style=\"background-color: lightgrey\">\
+                            <span class=\"passwordlockprogressbar passwordstatus\" style=\"background-color: white; display: block; white-space: nowrap\"/>\
+                        </td>\
                     </tr>";
 
             tableSelector.find('.password').remove();
@@ -29,6 +31,7 @@ var PageManagePasswords = (
                 passwordSelector.JQPassword("score", {value: formatter.formatScore(leveledScore)});
                 passwordSelector.JQPassword("level", {value: formatter.formatLevel(leveledScore)});
                 passwordSelector.JQPassword("status", {value: formatter.formatStatus(leveledScore)});
+                passwordSelector.JQPassword("lockprogressinpercent", {value: 100*( 1 - leveledScore.lockHoursLeft / leveledScore.lockHours) });
             }
         };
 

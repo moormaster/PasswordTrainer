@@ -25,6 +25,8 @@
                 case "status":
                    return setStatus.call(this, options.value);
                    break;
+               case "lockprogressinpercent":
+                   return setLockProgressInPercent.call(this, options.value)
             };
         };
         
@@ -58,6 +60,10 @@
         
         var setStatus = function(value) {
             return this.find('.passwordstatus').text(value);
+        }
+        
+        var setLockProgressInPercent = function(value) {
+            return this.find('.passwordlockprogressbar').css('width', value + '%');
         }
     }
 )(jQuery);
