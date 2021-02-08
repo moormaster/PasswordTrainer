@@ -1111,6 +1111,8 @@ if (typeof exports == "object")
                 case "status":
                    return setStatus.call(this, options.value);
                    break;
+               case "lockprogressinpercent":
+                   return setLockProgressInPercent.call(this, options.value)
             };
         };
         
@@ -1144,6 +1146,10 @@ if (typeof exports == "object")
         
         var setStatus = function(value) {
             return this.find('.passwordstatus').text(value);
+        }
+        
+        var setLockProgressInPercent = function(value) {
+            return this.find('.passwordlockprogressbar').css('width', value + '%');
         }
     }
 )(jQuery);
@@ -1460,7 +1466,9 @@ var PageManagePasswords = (
                         <td>\
                                 <span class=\"passwordscore\"></span> / <span class=\"passwordlevel\"></span>\
                         </td>\
-                        <td class=\"passwordstatus\"></td>\
+                        <td style=\"background-color: lightgrey\">\
+                            <span class=\"passwordlockprogressbar passwordstatus\" style=\"background-color: white; display: block; white-space: nowrap\"/>\
+                        </td>\
                     </tr>";
 
             tableSelector.find('.password').remove();
@@ -1482,6 +1490,7 @@ var PageManagePasswords = (
                 passwordSelector.JQPassword("score", {value: formatter.formatScore(leveledScore)});
                 passwordSelector.JQPassword("level", {value: formatter.formatLevel(leveledScore)});
                 passwordSelector.JQPassword("status", {value: formatter.formatStatus(leveledScore)});
+                passwordSelector.JQPassword("lockprogressinpercent", {value: 100*( 1 - leveledScore.lockHoursLeft / leveledScore.lockHours) });
             }
         };
 
