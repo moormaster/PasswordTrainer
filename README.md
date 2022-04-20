@@ -8,4 +8,4 @@
   - too much time between two guesses results in score fee's
 
 ## Online version
-http://moormaster.github.io/PasswordTrainer
+https://moormaster.github.io/PasswordTrainer
