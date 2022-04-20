@@ -12,8 +12,8 @@
     "contributors": [],
     "dependencies": {
         "crypto-js": "4.0.0",
-        "jquery": "1.12.4",
-        "jquery-mobile": "1.4.1"
+        "jquery": "^2.1.0",
+        "jquery-mobile": "1.x"
     },
     "devDependencies": {
         "chai": "4.3.0",
