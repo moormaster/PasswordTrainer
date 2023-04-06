@@ -31,29 +31,6 @@ build() {
 }
 
 catjsbundle() {
-    cat js/app/IApp.js
-    cat js/app/IPasswordNotificator.js
-
-    cat js/app/comparator/IComparator.js
-
-    cat js/app/model/IModel.js
-    cat js/app/model/IApplicationModel.js
-    cat js/app/model/ILeveledScore.js
-    cat js/app/model/IPasswordRegistrationCollection.js
-
-    cat js/app/ui/ILeveledScoreFormatter.js
-    cat js/app/ui/IPagePasswordDialog.js
-    cat js/app/ui/IPageManagePasswords.js
-    cat js/app/ui/IPagePasswordTrainer.js
-    cat js/app/ui/IPageImportExport.js
-
-    cat js/util/hash/IPasswordHasher.js
-    cat js/util/hash/ISaltGenerator.js
-
-    cat js/util/json/IJSONFormatter.js
-
-    cat js/util/notification/INotificator.js
-
     cat js/util/hash/MD5PasswordHasher.js
     cat js/util/hash/SaltGenerator.js
 

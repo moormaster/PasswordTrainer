@@ -1,11 +1,10 @@
-if (typeof require == "function")
-    IJSONFormatter = require('./IJSONFormatter.js').IJSONFormatter;
-
-class JSONFormatter extends IJSONFormatter {
+class JSONFormatter {
     constructor() {
-        super();
     }
     
+    /*
+     * pretty formats the given JSON string
+     */
     format (JSONStr) {
         if (!JSONStr)
             return "";

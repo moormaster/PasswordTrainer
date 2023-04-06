@@ -1,6 +1,3 @@
-if (typeof require == "function")
-    ILeveledScore = require('./ILeveledScore').ILeveledScore;
-
 var LeveledScore = (
     function() {
         var fib = function(i) {
@@ -91,10 +88,8 @@ var LeveledScore = (
             return feeHoursPassed;
         };
 
-        class LeveledScore extends ILeveledScore {
+        class LeveledScore {
             constructor(scoreData) {
-                super(scoreData);
-
                 this.setScoreData(scoreData);
             }
 
@@ -109,6 +104,9 @@ var LeveledScore = (
                 }
             }
 
+            /*
+             * add successful password attempt to score
+             */
             addSuccessfulAttempt(dateOfAttempt) {
                 if (dateOfAttempt == null)
                     dateOfAttempt = new Date().getTime();
@@ -165,6 +163,9 @@ var LeveledScore = (
                 return getFeeHoursPassed(lastSuccessLevel, this.scoreData.lastSuccessTimestamp, readDate);
             }
 
+            /*
+             * score properties by current date/time
+             */
             get score() {
                 return this.getScore(new Date());
             }

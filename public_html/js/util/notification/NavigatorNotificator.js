@@ -1,7 +1,5 @@
-class NavigatorNotificator extends INotificator{
+class NavigatorNotificator {
     constructor() {
-        super();
-        
         this.navigator = navigator;
 
         // use current window instance per default
@@ -15,6 +13,9 @@ class NavigatorNotificator extends INotificator{
         this.Notification = window.Notification;
     }
     
+    /*
+     * returns true if application may send notifications
+     */
     hasNotificationPermission() {
         if (!this.Notification)
             return false;
@@ -25,6 +26,9 @@ class NavigatorNotificator extends INotificator{
         return true;
     }
 
+    /*
+     * returns true if application may vibrate
+     */
     hasVibrationPermission() {
         if (!this.navigator)
             return false;
@@ -35,6 +39,9 @@ class NavigatorNotificator extends INotificator{
         return true;
     }
     
+    /*
+     * sends a new notification and returns an notification instance
+     */
     notify(title, text, vibrationLengthInMs) {
         if (vibrationLengthInMs && this.hasVibrationPermission())
             this.navigator.vibrate(vibrationLengthInMs);

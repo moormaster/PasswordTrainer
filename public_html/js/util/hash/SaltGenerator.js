@@ -1,10 +1,5 @@
-if (typeof require == "function")
-    ISaltGenerator = require('./ISaltGenerator.js').ISaltGenerator;
-
-class SaltGenerator extends ISaltGenerator {
+class SaltGenerator {
     constructor(length, charSet) {
-        super(length, charSet);
-    
         this.length = length;   // the desired length of the salt
         this.charSet = charSet;  // the desired charset
 

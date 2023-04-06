@@ -1,12 +1,13 @@
 var PageImportExport = (
     function($) {
-        class PageImportExport extends IPageImportExport {
+        class PageImportExport {
             constructor(app) {
-                super(app);
-            
                 this.appInstance = app;
             }
-            
+
+            /*
+             * initialize jquery ui widgets
+             */
             init() {
                 var pageInstance = this;
                 
@@ -23,6 +24,9 @@ var PageImportExport = (
                 );
             }
             
+            /*
+             * perform export of password registrations
+             */
             exportPasswordRegistrations() {
                 var json = this.appInstance.exportJSON();
                 var formatter = new JSONFormatter();
@@ -31,6 +35,9 @@ var PageImportExport = (
                 $('#importexportfield').val(json);
             }
             
+            /*
+             * perform import of password registrations
+             */
             importPasswordRegistrations() {
                 var json = $('#importexportfield').val();
                 

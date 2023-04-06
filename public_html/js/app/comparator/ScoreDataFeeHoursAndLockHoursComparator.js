@@ -1,13 +1,18 @@
-if (typeof require == "function") {
-    IComparator = require('./IComparator.js').IComparator;
+if (typeof require == "function")
     LeveledScore = require('../model/LeveledScore.js').LeveledScore;
-}
 
-class ScoreDataFeeHoursAndLockHoursComparator extends IComparator {
+class ScoreDataFeeHoursAndLockHoursComparator {
     constructor() {
-        super();
     }
     
+    /*
+     * compares obj1 to obj2
+     * 
+     * returns
+     *      -1 if obj1 is null or obj1 < obj2
+     *      0  if obj1 is equally to obj2
+     *      1  if obj1 > obj2 or obj2 is null
+     */
     compare(obj1, obj2) {
         if (obj1 == null)
             return -1;

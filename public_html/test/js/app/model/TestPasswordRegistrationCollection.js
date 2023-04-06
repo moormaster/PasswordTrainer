@@ -1,13 +1,11 @@
 const assert = require('chai').assert;
-const IComparator = require('../../../../js/app/comparator/IComparator.js').IComparator;
 const PasswordRegistrationCollection = require('../../../../js/app/model/PasswordRegistrationCollection.js').PasswordRegistrationCollection;
 
 /*
  * scoreDataComparator which simply orders by timestamp
  */
-class ScoreDataComparatorMock extends IComparator {
+class ScoreDataComparatorMock {
     constructor() {
-        super()
     }
     
     compare(obj1, obj2) {

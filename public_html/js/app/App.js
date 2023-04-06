@@ -1,23 +1,31 @@
 var App = (
     function($) {
-        class App extends IApp {
+        class App {
             constructor() {
-                super();
-            
                 this.passwordHasher = new MD5PasswordHasher();
                 
+                // storage i.e. of password registrations
                 var passwordRegistrations = new PasswordRegistrationCollection(new ScoreDataFeeHoursAndLockHoursComparator());
                 this.applicationModel = new ApplicationModel(passwordRegistrations);
                 
+                /*
+                 * password notificator
+                 */
                 this.passwordNotificator = new PasswordNotificator(passwordRegistrations, new NavigatorNotificator());
             
+                /* 
+                 * page instances
+                 */
                 this.pageTrainPasswords = new PagePasswordTrainer(this);
                 this.pageImportExport = new PageImportExport(this);
                 this.pagePasswordManagePasswords = new PageManagePasswords(this);
             
                 this.pagePasswordDialog = new PagePasswordDialog(this);
             }
-                        
+            
+            /*
+             * initialize jquery widgets and pages
+             */
             init() {
                 var appInstance = this;
 
@@ -28,14 +36,26 @@ var App = (
                 this.pagePasswordDialog.init();
             }
             
+            /*
+             * restore password registrations from localStorage
+             */
             readFromLocalStorage() {
                 this.applicationModel.importJSON(localStorage['passwordRegistrations']);
             }
             
+            /*
+             * persist password registration to local storage
+             */
             writeToLocalStorage() {
                 localStorage['passwordRegistrations'] = this.applicationModel.exportJSON();
             }
             
+            /*
+             * import password registrations from json string
+             *
+             * returns true if json string contains a valid persistence
+             * of password registrations and import was successful.
+             */
             importJSON(json) {
                 if (this.applicationModel.importJSON(json)) {
                     this.writeToLocalStorage();
@@ -46,16 +66,27 @@ var App = (
                 }
             }
 
+            /*
+             * export password registrations to a json string
+             *
+             * returns the json string
+             */
             exportJSON() {
                 return this.applicationModel.exportJSON();
             }
             
+            /*
+             * register a new password
+             */
             addPasswordRegistration(description, password) {
                 var hash = this.passwordHasher.generateSaltedHash(password, null)
                 this.applicationModel.passwordRegistrations.add(description, hash);
                 this.writeToLocalStorage();
             }
             
+            /*
+             * add a password input attempt with the given password on the given password registration
+             */
             addPasswordAttempt(desc, password) {
                 if (!this.applicationModel)
                     return false;
@@ -92,6 +123,9 @@ var App = (
                 return true;
             }
             
+            /*
+             * find the password registration with minimum lock time and maximum fee time
+             */
             getMostRecentPasswordRegistration() {
                 if (!this.applicationModel)
                     return null;
@@ -102,6 +136,9 @@ var App = (
                 return this.applicationModel.passwordRegistrations.getMostRecentPasswordRegistration();
             }
             
+            /*
+             * find password registration by description
+             */
             getPasswordRegistrationByDescription(description) {
                 if (!this.applicationModel)
                     return null;

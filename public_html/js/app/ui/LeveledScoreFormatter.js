@@ -1,6 +1,3 @@
-if (typeof require == "function")
-    ILeveledScoreFormatter = require('./ILeveledScoreFormatter.js').ILeveledScoreFormatter;
-
 var LeveledScoreFormatter = (
     function() {
         var formatTime = function(ms) {
@@ -60,9 +57,8 @@ var LeveledScoreFormatter = (
             return string;
         };
         
-        class LeveledScoreFormatter extends ILeveledScoreFormatter {
+        class LeveledScoreFormatter {
             constructor() {
-                super();
             }
 
             /*

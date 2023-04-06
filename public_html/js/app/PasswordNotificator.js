@@ -46,10 +46,8 @@ var PasswordNotificator = (
             return readyPasswordDescs;
         };
 
-        class PasswordNotificator extends IPasswordNotificator {
+        class PasswordNotificator {
             constructor(passwordRegistrations, notificator) {
-                super(passwordRegistrations, notificator);
-
                 this.passwordRegistrations = passwordRegistrations;
                 this.notificator = notificator;
 
@@ -57,6 +55,9 @@ var PasswordNotificator = (
                 this.lastNotificationPasswordCount = null;
             }
 
+            /*
+             * show notification about the number of ready password registrations
+             */
             notify() {
                 var date = new Date();
                 var readyPasswordDescs = gatherReadyPasswordDescriptions.call(this, date);

@@ -1,14 +1,14 @@
 var PagePasswordDialog = (
     function($) {
-        class PagePasswordDialog extends IPagePasswordDialog{
+        class PagePasswordDialog {
             constructor(app) {
-                super(app);
-                
-                this.prototype = new IPagePasswordDialog(app);
-            
+                // app instance where this page is displayed in
                 this.appInstance = app;
             }
             
+            /*
+             * initialize jquery ui widgets
+             */
             init() {
                 var pageInstance = this;
                 

@@ -35,12 +35,8 @@ var PageManagePasswords = (
             }
         };
 
-        class PageManagePasswords extends IPageManagePasswords {
+        class PageManagePasswords {
             constructor(app) {
-                super(app);
-                
-                this.prototype = new IPageManagePasswords(app);
-                
                 // app instance where this page is displayed in
                 this.appInstance = app;
             }

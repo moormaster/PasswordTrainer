@@ -1,7 +1,5 @@
-class ApplicationModel extends IApplicationModel {
+class ApplicationModel {
     constructor(passwordRegistrationCollection) {
-        super(passwordRegistrationCollection);
-        
         this.passwordRegistrations = passwordRegistrationCollection;
     }
 

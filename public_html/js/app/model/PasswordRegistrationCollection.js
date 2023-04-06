@@ -1,6 +1,3 @@
-if (typeof require == "function")
-    IPasswordRegistrationCollection = require('./IPasswordRegistrationCollection.js').IPasswordRegistrationCollection;
-
 var PasswordRegistrationCollection = (
         function() {
             /*
@@ -37,10 +34,8 @@ var PasswordRegistrationCollection = (
 
             };
 
-            class PasswordRegistrationCollection extends IPasswordRegistrationCollection {
+            class PasswordRegistrationCollection {
                 constructor(scoreDataComparator) {
-                    super(scoreDataComparator);
-
                     this.scoreDataComparator = scoreDataComparator;
 
                     this.collection = {};
@@ -141,6 +136,10 @@ var PasswordRegistrationCollection = (
                     return map;
                 }
 
+                /*
+                 * find the password registration which is minimal according to the scoreDataComparator
+                 * (i.e. maximal feeHours or minimal lock hours)
+                 */
                 getMostRecentPasswordRegistration() {
                     if (!this.scoreDataComparator)
                         return null;
@@ -158,7 +157,10 @@ var PasswordRegistrationCollection = (
 
                     return mostRecentInstance;
                 }
-                
+
+                /*
+                 * find password registration by description
+                 */
                 getPasswordRegistrationByDescription(description) {
                     return this.collection[description];
                 }

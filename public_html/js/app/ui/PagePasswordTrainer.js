@@ -111,20 +111,23 @@ var PagePasswordTrainer = (
                 $('#passwordtrainer').JQPasswordInput("status", {text: leveledScoreDisplay + " (" + statusDisplay + ")"});
         };
         
-        class PagePasswordTrainer extends IPagePasswordTrainer {
+        class PagePasswordTrainer {
             constructor(app) {
-                super(app);
-
-                this.prototype = new IPagePasswordTrainer(app);
-
+                // app instance where this page is displayed in
                 this.appInstance = app;
+
+                // password registration instance which is currently shown
                 this.currentPasswordRegistration = null;
-                this.mostRecentPasswordRegistration = null;
+
+ 
+                // leveled score instance of the password registration
                 this.currentLeveledScore = new LeveledScore();
                 
-                this.autoSwitchToMostRecentPasswordRegistration = true;
-
+                // refresh interval id
                 this.intervalId = null;
+
+                this.mostRecentPasswordRegistration = null;
+                this.autoSwitchToMostRecentPasswordRegistration = true;
             }
             
             /*
