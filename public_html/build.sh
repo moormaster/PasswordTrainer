@@ -1,5 +1,7 @@
 #!/bin/bash
 
+SCRIPTDIR="$( realpath "$( dirname "$0" )" )"
+
 usage() {
     echo "usage: $0 <BUILDDIR>"
 }
@@ -24,10 +26,13 @@ build() {
     cp -r img "${BUILDDIR}/"
     cp -rL libs "${BUILDDIR}/"
     cp index_build.html "${BUILDDIR}/index.html"
-    cp manifest_build.appcache "${BUILDDIR}/manifest.appcache"
 
     mkdir ${BUILDDIR}/js
     catjsbundle > ${BUILDDIR}/js/bundle.js
+
+    pushd "${BUILDDIR}"
+    ${SCRIPTDIR}/gen-manifest-appcache.sh > manifest.appcache
+    popd
 }
 
 catjsbundle() {
