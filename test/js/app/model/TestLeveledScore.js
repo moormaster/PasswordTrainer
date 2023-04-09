@@ -1,7 +1,7 @@
 // vi: ts=4 et
 
 const assert = require('chai').assert;
-const LeveledScore = require('../../../../js/app/model/LeveledScore.js').LeveledScore;
+const LeveledScore = require('../../../../public/js/app/model/LeveledScore.js').LeveledScore;
 
 const numberOfScores = 5;
 

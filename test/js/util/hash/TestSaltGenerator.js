@@ -1,7 +1,7 @@
 // vi: ts=4 et
 
 const assert = require('chai').assert;
-const SaltGenerator = require('../../../../js/util/hash/SaltGenerator.js').SaltGenerator;
+const SaltGenerator = require('../../../../public/js/util/hash/SaltGenerator.js').SaltGenerator;
 
 describe("SaltGenerator", function() {
     [   { length: 0, charSet: null, description: "default-charset-0-len" },

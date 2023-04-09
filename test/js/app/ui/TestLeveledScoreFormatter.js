@@ -1,7 +1,7 @@
 // vi: ts=4 et
 
 const assert = require('chai').assert;
-const LeveledScoreFormatter = require('../../../../js/app/ui/LeveledScoreFormatter.js').LeveledScoreFormatter;
+const LeveledScoreFormatter = require('../../../../public/js/app/ui/LeveledScoreFormatter.js').LeveledScoreFormatter;
 
 describe("LeveledScoreFormatter", function() {
     beforeEach(function() {
