@@ -1,7 +1,7 @@
 // vi: ts=4 et
 
 const assert = require('chai').assert;
-const PasswordRegistrationCollection = require('../../../../js/app/model/PasswordRegistrationCollection.js').PasswordRegistrationCollection;
+const PasswordRegistrationCollection = require('../../../../public/js/app/model/PasswordRegistrationCollection.js').PasswordRegistrationCollection;
 
 /*
  * scoreDataComparator which simply orders by timestamp

@@ -25,7 +25,7 @@ jobs:
           npm install
           npm run test:unit
           npm run lint
-          npx prettier --check public_html/src/ public_html/test/
+          npx prettier --check src/ test/
           npm run build -- --base=/PasswordTrainer/
           scripts/gen-manifest-appcache.sh > dist/manifest.appcache
 
