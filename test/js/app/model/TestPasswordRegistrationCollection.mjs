@@ -1,8 +1,7 @@
 // vi: ts=2 et
 
-const assert = require('chai').assert
-const PasswordRegistrationCollection =
-  require('../../../../public/js/app/model/PasswordRegistrationCollection.js').PasswordRegistrationCollection
+import { assert } from 'chai'
+import { PasswordRegistrationCollection } from '../../../../js/app/model/PasswordRegistrationCollection.mjs'
 
 /*
  * scoreDataComparator which simply orders by timestamp

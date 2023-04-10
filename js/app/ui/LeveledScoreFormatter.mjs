@@ -99,5 +99,3 @@ export var LeveledScoreFormatter = (function () {
 
   return LeveledScoreFormatter
 })()
-
-if (typeof exports == 'object') exports.LeveledScoreFormatter = LeveledScoreFormatter

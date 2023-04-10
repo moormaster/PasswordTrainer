@@ -193,5 +193,3 @@ export var LeveledScore = (function () {
 
   return LeveledScore
 })()
-
-if (typeof exports == 'object') exports.LeveledScore = LeveledScore
