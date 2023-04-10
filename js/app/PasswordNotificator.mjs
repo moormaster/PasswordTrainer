@@ -1,5 +1,7 @@
 // vi: ts=2 et
 
+import { LeveledScore } from './model/LeveledScore.mjs'
+
 export var PasswordNotificator = (function () {
   var resetNotifications = function () {
     if (!this.activeNotifications) this.activeNotifications = []

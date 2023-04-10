@@ -1,10 +1,13 @@
 // vi: ts=2 et
 
 import { PasswordNotificator } from './PasswordNotificator.mjs'
+import { ScoreDataFeeHoursAndLockHoursComparator } from './comparator/ScoreDataFeeHoursAndLockHoursComparator.mjs'
+import { LeveledScore } from './model/LeveledScore.mjs'
 import { MD5PasswordHasher } from '../util/hash/MD5PasswordHasher.mjs'
 import { NavigatorNotificator } from '../util/notification/NavigatorNotificator.mjs'
 import { SaltGenerator } from '../util/hash/SaltGenerator.mjs'
 
+import { PageManagePasswords } from './ui/PageManagePasswords.mjs'
 import { PagePasswordTrainer } from './ui/PagePasswordTrainer.mjs'
 import { PageImportExport } from './ui/PageImportExport.mjs'
 
