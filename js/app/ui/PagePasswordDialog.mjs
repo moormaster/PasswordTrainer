@@ -1,5 +1,7 @@
 // vi: ts=2 et
 
+import '../ui/JQPasswordRegistration.mjs'
+
 export var PagePasswordDialog = (function ($) {
   class PagePasswordDialog {
     constructor(app) {

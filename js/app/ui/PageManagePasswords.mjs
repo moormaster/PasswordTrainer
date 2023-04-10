@@ -1,7 +1,8 @@
 // vi: ts=2 et
 
-import { LeveledScore } from '../model/LeveledScore.mjs'
 import { LeveledScoreFormatter } from './LeveledScoreFormatter.mjs'
+import { LeveledScore } from '../model/LeveledScore.mjs'
+import '../ui/JQPassword.mjs'
 
 export var PageManagePasswords = (function ($) {
   var updateTable = function (tableSelector, passwordRegistrations) {

@@ -1,7 +1,8 @@
 // vi: ts=4 et
 
-import { LeveledScore } from '../model/LeveledScore.mjs'
 import { LeveledScoreFormatter } from './LeveledScoreFormatter.mjs'
+import { LeveledScore } from '../model/LeveledScore.mjs'
+import '../ui/JQPasswordInput.mjs'
 
 export var PagePasswordTrainer = (function ($) {
   var activateInterval = function (pageInstance) {
