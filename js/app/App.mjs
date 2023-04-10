@@ -9,6 +9,7 @@ import { NavigatorNotificator } from '../util/notification/NavigatorNotificator.
 import { SaltGenerator } from '../util/hash/SaltGenerator.mjs'
 
 import { PageManagePasswords } from './ui/PageManagePasswords.mjs'
+import { PagePasswordDialog } from './ui/PagePasswordDialog.mjs'
 import { PagePasswordTrainer } from './ui/PagePasswordTrainer.mjs'
 import { PageImportExport } from './ui/PageImportExport.mjs'
 
