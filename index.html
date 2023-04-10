@@ -9,16 +9,10 @@
 
     <link rel="apple-touch-icon-precomposed" href="img/icon.png" />
 
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="libs/jquery-mobile/jquery.mobile.css"
-    />
+    <link rel="stylesheet" type="text/css" href="libs/jquery-mobile/jquery.mobile.css" />
     <link rel="stylesheet" type="text/css" href="css/JQPasswordInput.css" />
 
     <!-- js libs -->
-    <script src="libs/crypto-js/core.js"></script>
-    <script src="libs/crypto-js/md5.js"></script>
     <script src="libs/jquery/jquery.js"></script>
     <script src="libs/jquery-mobile/jquery.mobile.js"></script>
 
@@ -29,8 +23,7 @@
 
     <!-- js classes / components -->
     <script src="js/util/json/JSONFormatter.js"></script>
-    <script src="js/util/hash/MD5PasswordHasher.js"></script>
-    <script src="js/util/hash/SaltGenerator.js"></script>
+    <script type="module" src="js/util/hash/MD5PasswordHasher.mjs"></script>
     <script src="js/util/notification/NavigatorNotificator.js"></script>
     <script src="js/app/comparator/ScoreDataFeeHoursAndLockHoursComparator.js"></script>
     <script src="js/app/model/LeveledScore.js"></script>
@@ -46,9 +39,9 @@
     <script src="js/app/ui/PagePasswordTrainer.js"></script>
 
     <!-- js classes / main -->
-    <script src="js/app/App.js"></script>
+    <script type="module" src="js/app/App.mjs"></script>
 
-    <script src="js/init.js"></script>
+    <script type="module" src="js/init.mjs"></script>
   </head>
   <body>
     <div data-role="page" id="pageTrainPasswords">
@@ -75,11 +68,7 @@
         <div data-role="navbar">
           <ul>
             <li>
-              <a
-                href="#pageTrainPasswords"
-                class="ui-btn-active ui-state-persist"
-                >Train</a
-              >
+              <a href="#pageTrainPasswords" class="ui-btn-active ui-state-persist">Train</a>
             </li>
             <li><a href="#pageManagePasswords">Manage</a></li>
             <li><a href="#pageImportExport">Import/Export</a></li>
@@ -109,11 +98,7 @@
           <ul>
             <li><a href="#pageTrainPasswords">Train</a></li>
             <li>
-              <a
-                href="#pageManagePasswords"
-                class="ui-btn-active ui-state-persist"
-                >Manage</a
-              >
+              <a href="#pageManagePasswords" class="ui-btn-active ui-state-persist">Manage</a>
             </li>
             <li><a href="#pageImportExport">Import/Export</a></li>
           </ul>
@@ -136,9 +121,7 @@
             <li><a href="#pageTrainPasswords">Train</a></li>
             <li><a href="#pageManagePasswords">Manage</a></li>
             <li>
-              <a href="#pageImportExport" class="ui-btn-active ui-state-persist"
-                >Import/Export</a
-              >
+              <a href="#pageImportExport" class="ui-btn-active ui-state-persist">Import/Export</a>
             </li>
           </ul>
         </div>
