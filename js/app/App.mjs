@@ -3,6 +3,7 @@
 import { PasswordNotificator } from './PasswordNotificator.mjs'
 import { ScoreDataFeeHoursAndLockHoursComparator } from './comparator/ScoreDataFeeHoursAndLockHoursComparator.mjs'
 import { ApplicationModel } from './model/ApplicationModel.mjs'
+import { PasswordRegistrationCollection } from './model/PasswordRegistrationCollection.mjs'
 import { LeveledScore } from './model/LeveledScore.mjs'
 import { MD5PasswordHasher } from '../util/hash/MD5PasswordHasher.mjs'
 import { NavigatorNotificator } from '../util/notification/NavigatorNotificator.mjs'
