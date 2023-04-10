@@ -68,5 +68,3 @@ export class JSONFormatter {
     return result
   }
 }
-
-if (typeof exports == 'object') exports.JSONFormatter = JSONFormatter
