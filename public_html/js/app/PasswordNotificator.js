@@ -64,7 +64,7 @@ var PasswordNotificator = (
 
                 // no pending passwords -> reset notifications
                 if (!readyPasswordDescs.length) {
-                    resetNotifications(this.activeNotifications);
+                    resetNotifications.call(this, this.activeNotifications);
                     this.lastNotificationPasswordCount = null;
 
                     return;
