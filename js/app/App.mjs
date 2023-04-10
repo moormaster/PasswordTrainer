@@ -1,6 +1,7 @@
 // vi: ts=2 et
 
 import { PasswordNotificator } from './PasswordNotificator.mjs'
+import { PagePasswordTrainer } from './ui/PagePasswordTrainer.mjs'
 import { MD5PasswordHasher } from '../util/hash/MD5PasswordHasher.mjs'
 import { NavigatorNotificator } from '../util/notification/NavigatorNotificator.mjs'
 import { SaltGenerator } from '../util/hash/SaltGenerator.mjs'
