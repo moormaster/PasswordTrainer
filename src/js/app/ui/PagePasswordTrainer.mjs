@@ -1,8 +1,15 @@
 // vi: ts=4 et
 
+import { createApp } from 'vue'
+import { PasswordInputComponent } from 'PasswordInputComponent.vue'
+
+// Vuetify
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+
 import { LeveledScoreFormatter } from './LeveledScoreFormatter.mjs'
 import { LeveledScore } from '../model/LeveledScore.mjs'
-import '../ui/JQPasswordInput.mjs'
+import './JQPasswordInput.mjs'
 
 export var PagePasswordTrainer = (function ($) {
   var activateInterval = function (pageInstance) {
