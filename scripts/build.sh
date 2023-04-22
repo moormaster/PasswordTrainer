@@ -12,7 +12,7 @@ build() {
     if [ "${BUILDDIR}" == "" ]
     then
         usage
-	return 1
+        return 1
     fi
 
     echo building to BUILDDIR: ${BUILDDIR}
@@ -22,9 +22,9 @@ build() {
         mkdir "${BUILDDIR}"
     fi
 
-    cp -r css "${BUILDDIR}/"
-    cp -r img "${BUILDDIR}/"
-    cp -rL libs "${BUILDDIR}/"
+    cp -r public/css "${BUILDDIR}/"
+    cp -r public/img "${BUILDDIR}/"
+    cp -rL public/libs "${BUILDDIR}/"
     cp index_build.html "${BUILDDIR}/index.html"
 
     mkdir ${BUILDDIR}/js
@@ -36,33 +36,33 @@ build() {
 }
 
 catjsbundle() {
-    cat js/util/hash/MD5PasswordHasher.js
-    cat js/util/hash/SaltGenerator.js
+    cat src/js/util/hash/MD5PasswordHasher.js
+    cat src/js/util/hash/SaltGenerator.js
 
-    cat js/util/json/JSONFormatter.js
+    cat src/js/util/json/JSONFormatter.js
 
-    cat js/util/notification/NavigatorNotificator.js
+    cat src/js/util/notification/NavigatorNotificator.js
 
-    cat js/app/comparator/ScoreDataFeeHoursAndLockHoursComparator.js
+    cat src/js/app/comparator/ScoreDataFeeHoursAndLockHoursComparator.js
 
-    cat js/app/model/ApplicationModel.js
-    cat js/app/model/LeveledScore.js
-    cat js/app/model/PasswordRegistrationCollection.js
+    cat src/js/app/model/ApplicationModel.js
+    cat src/js/app/model/LeveledScore.js
+    cat src/js/app/model/PasswordRegistrationCollection.js
 
-    cat js/app/ui/JQPassword.js
-    cat js/app/ui/JQPasswordInput.js
-    cat js/app/ui/JQPasswordRegistration.js
+    cat src/js/app/ui/JQPassword.js
+    cat src/js/app/ui/JQPasswordInput.js
+    cat src/js/app/ui/JQPasswordRegistration.js
 
-    cat js/app/ui/LeveledScoreFormatter.js
-    cat js/app/ui/PagePasswordDialog.js
-    cat js/app/ui/PageManagePasswords.js
-    cat js/app/ui/PageImportExport.js
-    cat js/app/ui/PagePasswordTrainer.js
+    cat src/js/app/ui/LeveledScoreFormatter.js
+    cat src/js/app/ui/PagePasswordDialog.js
+    cat src/js/app/ui/PageManagePasswords.js
+    cat src/js/app/ui/PageImportExport.js
+    cat src/js/app/ui/PagePasswordTrainer.js
 
-    cat js/app/PasswordNotificator.js
-    cat js/app/App.js
+    cat src/js/app/PasswordNotificator.js
+    cat src/js/app/App.js
 
-    cat js/init.js
+    cat src/js/init.js
 }
 
 BUILDDIR="$1"
