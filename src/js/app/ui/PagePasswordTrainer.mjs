@@ -1,7 +1,7 @@
 // vi: ts=4 et
 
 import { createApp } from 'vue'
-import { PasswordInputComponent } from 'PasswordInputComponent.vue'
+import PasswordInputComponent from '../../../components/PasswordInputComponent.vue'
 
 // Vuetify
 import 'vuetify/styles'
@@ -9,7 +9,6 @@ import { createVuetify } from 'vuetify'
 
 import { LeveledScoreFormatter } from './LeveledScoreFormatter.mjs'
 import { LeveledScore } from '../model/LeveledScore.mjs'
-import './JQPasswordInput.mjs'
 
 export var PagePasswordTrainer = (function ($) {
   var activateInterval = function (pageInstance) {
@@ -42,14 +41,15 @@ export var PagePasswordTrainer = (function ($) {
   }
 
   var updateWidgets = function (successState) {
-    updateWidgetSelectionValues(
+    updateWidgetSelectionValues.call(
+      this,
       this.appInstance.applicationModel.passwordRegistrations,
       this.currentPasswordRegistration,
       this.autoSwitchToMostRecentPasswordRegistration,
     )
-    updateWidgetDescription(this.currentPasswordRegistration)
-    updateWidgetsSuccessColor(this.currentLeveledScore.lockHoursLeft > 0, successState)
-    updateWidgetsStatus(this.currentLeveledScore)
+    updateWidgetDescription.call(this, this.currentPasswordRegistration)
+    updateWidgetsSuccessColor.call(this, this.currentLeveledScore.lockHoursLeft > 0, successState)
+    updateWidgetsStatus.call(this, this.currentLeveledScore)
   }
 
   var updateWidgetSelectionValues = function (
@@ -91,23 +91,20 @@ export var PagePasswordTrainer = (function ($) {
   }
 
   var updateWidgetDescription = function (passwordRegistration) {
-    if (!passwordRegistration) $('#passwordtrainer').JQPasswordInput('description', { text: '' })
-    else
-      $('#passwordtrainer').JQPasswordInput('description', {
-        text: passwordRegistration.description,
-      })
+    if (!passwordRegistration) this.passwordInput.$data.description = ''
+    else this.passwordInput.$data.description = passwordRegistration.description
   }
 
   var updateWidgetsSuccessColor = function (lockedState, successState) {
-    $('#passwordtrainer').JQPasswordInput('successColor', { isSuccessful: successState })
-
     switch (successState) {
       case false:
       case true:
+        this.passwordInput.$data.state = successState ? 'success' : 'failure'
         break
 
       default:
-        $('#passwordtrainer').JQPasswordInput('lock', { isLocked: lockedState })
+        this.passwordInput.$data.state = null
+        this.passwordInput.$data.isReadonly = lockedState
         break
     }
   }
@@ -117,12 +114,8 @@ export var PagePasswordTrainer = (function ($) {
     var leveledScoreDisplay = formatter.formatLeveledScore(leveledScore)
     var statusDisplay = formatter.formatStatus(leveledScore)
 
-    if (!statusDisplay)
-      $('#passwordtrainer').JQPasswordInput('status', { text: leveledScoreDisplay })
-    else
-      $('#passwordtrainer').JQPasswordInput('status', {
-        text: leveledScoreDisplay + ' (' + statusDisplay + ')',
-      })
+    if (!statusDisplay) this.passwordInput.$data.status = leveledScoreDisplay
+    else this.passwordInput.$data.status = leveledScoreDisplay + ' (' + statusDisplay + ')'
   }
 
   class PagePasswordTrainer {
@@ -141,6 +134,9 @@ export var PagePasswordTrainer = (function ($) {
 
       this.mostRecentPasswordRegistration = null
       this.autoSwitchToMostRecentPasswordRegistration = true
+
+      // vue component instances
+      this.passwordInput = null
     }
 
     /*
@@ -150,9 +146,14 @@ export var PagePasswordTrainer = (function ($) {
       var pageInstance = this
       var appInstance = pageInstance.appInstance
 
-      $('#passwordtrainer .password').JQPasswordInput()
-      $('#passwordtrainer .password').on('passwordEntered', function (e, password) {
-        $(this).val('')
+      // current entry point to vue-js / vuetify
+      const vuetify = createVuetify()
+      const passwordInputComponent = createApp(PasswordInputComponent)
+      this.passwordInput = passwordInputComponent.use(vuetify).mount('#passwordtrainer')
+
+      // subscribe to event from eventBus
+      this.passwordInput.emitter.on('passwordEntered', function (password) {
+        pageInstance.passwordInput.$data.value = ''
 
         interruptInterval(pageInstance, 1000)
         var success = pageInstance.addPasswordAttempt(password)
