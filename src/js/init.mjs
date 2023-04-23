@@ -17,7 +17,7 @@ import { App } from './app/App.mjs'
 
   $(document).ready(function () {
     app = new App()
-    app.init()
     app.readFromLocalStorage()
+    app.init()
   })
 })(jQuery)

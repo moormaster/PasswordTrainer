@@ -1,20 +1,20 @@
 // vi: ts=2 et
 
 <script>
-import mitt from 'mitt'
-
 export default {
   data() {
     return {
-      state: null, // "success" | "failure" | null
-      description: '',
-      isReadonly: false,
-      status: '',
-      value: '',
+      lastModelValue: '',
     }
   },
 
-  emits: ['passwordEntered'],
+  props: {
+    description: String,
+    isReadonly: Boolean,
+    message: String,
+    modelValue: String,
+    state: String, // "success" | "failure" | null
+  },
 
   computed: {
     colorClass() {
@@ -25,20 +25,19 @@ export default {
     },
   },
 
+  emits: ['passwordEntered'],
+
   methods: {
     emitPasswordEntered(value) {
       // emit vue3 event
       this.$emit('passwordEntered', value)
-
-      // emit event to this.emiter eventBus for pure js handlers
-      // Note: make sure that only the root vue component has an eventBus
-      this.emitter.emit('passwordEntered', value)
     },
   },
 
-  mounted() {
-    // mitt eventBus - move to parent vue component as soon as it is implemented
-    this.emitter = mitt()
+  mounted() {},
+
+  updated() {
+    this.lastModelValue = this.modelValue
   },
 }
 </script>
@@ -52,10 +51,11 @@ export default {
       data-role="none"
       :disabled="isReadonly"
       :class="colorClass"
-      v-model="value"
-      @blur="emitPasswordEntered($data.value)"
+      :model-value="modelValue"
+      @update:model-value="(v) => (lastModelValue = v)"
+      @blur="emitPasswordEntered(lastModelValue)"
     /><br />
-    <span class="passwordscore">{{ status }}</span>
+    <span class="passwordscore">{{ message }}</span>
   </div>
 </template>
 
