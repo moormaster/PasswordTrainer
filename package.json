@@ -27,7 +27,6 @@
     "crypto-js": "^4.2.0",
     "jquery": "^2.1.0",
     "jquery-mobile": "1.x",
-    "mitt": "^3.0.0",
     "vite-plugin-vuetify": "^2.0.4",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",

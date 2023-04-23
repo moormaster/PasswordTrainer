@@ -1,5 +1,12 @@
 // vi: ts=2 et
 
+import { createApp, computed } from 'vue'
+import PagePasswordTrainer from '../../components/PagePasswordTrainer.vue'
+
+// Vuetify
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+
 import { PasswordNotificator } from './PasswordNotificator.mjs'
 import { ScoreDataFeeHoursAndLockHoursComparator } from './comparator/ScoreDataFeeHoursAndLockHoursComparator.mjs'
 import { ApplicationModel } from './model/ApplicationModel.mjs'
@@ -11,7 +18,6 @@ import { SaltGenerator } from '../util/hash/SaltGenerator.mjs'
 
 import { PageManagePasswords } from './ui/PageManagePasswords.mjs'
 import { PagePasswordDialog } from './ui/PagePasswordDialog.mjs'
-import { PagePasswordTrainer } from './ui/PagePasswordTrainer.mjs'
 import { PageImportExport } from './ui/PageImportExport.mjs'
 
 export var App = (function ($) {
@@ -37,7 +43,6 @@ export var App = (function ($) {
       /*
        * page instances
        */
-      this.pageTrainPasswords = new PagePasswordTrainer(this)
       this.pageImportExport = new PageImportExport(this)
       this.pagePasswordManagePasswords = new PageManagePasswords(this)
 
@@ -50,7 +55,18 @@ export var App = (function ($) {
     init() {
       var appInstance = this
 
-      this.pageTrainPasswords.init()
+      // current entry point to vue-js / vuetify
+      const vuetify = createVuetify()
+      const pagePasswordTrainer = createApp(PagePasswordTrainer)
+      pagePasswordTrainer.config.unwrapInjectedRef = true // enables computed provide-props - remove when using vue >= 3.3
+      this.pageTrainPasswords = pagePasswordTrainer
+        .use(vuetify)
+        .provide(
+          'appInstance',
+          computed(() => appInstance),
+        )
+        .mount('#pageTrainPasswords')
+
       this.pageImportExport.init()
       this.pagePasswordManagePasswords.init()
 
@@ -81,7 +97,7 @@ export var App = (function ($) {
       if (this.applicationModel.importJSON(json)) {
         this.writeToLocalStorage()
 
-        this.pageTrainPasswords.update()
+        this.pageTrainPasswords.$forceUpdate()
         if ($) $.mobile.changePage('#pageTrainPasswords')
       }
     }
