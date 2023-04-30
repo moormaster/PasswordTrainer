@@ -1,3 +1,5 @@
+// vi: ts=2 et
+
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
