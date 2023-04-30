@@ -1,7 +1,7 @@
 // vi: ts=2 et
 
 import { assert } from 'chai'
-import { JSONFormatter } from '../../../../js/util/json/JSONFormatter.mjs'
+import { JSONFormatter } from '../../../../src/js/util/json/JSONFormatter.mjs'
 
 describe('JSONFormatter', function () {
   beforeEach(function () {

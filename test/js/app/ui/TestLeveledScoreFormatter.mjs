@@ -1,7 +1,7 @@
 // vi: ts=2 et
 
 import { assert } from 'chai'
-import { LeveledScoreFormatter } from '../../../../js/app/ui/LeveledScoreFormatter.mjs'
+import { LeveledScoreFormatter } from '../../../../src/js/app/ui/LeveledScoreFormatter.mjs'
 
 describe('LeveledScoreFormatter', function () {
   beforeEach(function () {

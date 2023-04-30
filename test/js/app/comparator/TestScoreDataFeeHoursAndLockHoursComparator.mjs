@@ -1,7 +1,7 @@
 // vi: ts=2 et
 
 import { assert } from 'chai'
-import { ScoreDataFeeHoursAndLockHoursComparator } from '../../../../js/app/comparator/ScoreDataFeeHoursAndLockHoursComparator.mjs'
+import { ScoreDataFeeHoursAndLockHoursComparator } from '../../../../src/js/app/comparator/ScoreDataFeeHoursAndLockHoursComparator.mjs'
 
 describe('ScoreDataFeeHoursAndLockHoursComparator', function () {
   beforeEach(function () {

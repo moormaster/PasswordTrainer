@@ -1,7 +1,7 @@
 // vi: ts=2 et
 
 import { assert } from 'chai'
-import { SaltGenerator } from '../../../../js/util/hash/SaltGenerator.mjs'
+import { SaltGenerator } from '../../../../src/js/util/hash/SaltGenerator.mjs'
 
 describe('SaltGenerator', function () {
   ;[

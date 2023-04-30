@@ -1,8 +1,8 @@
 // vi: ts=2 et
 
 import { assert } from 'chai'
-import { MD5PasswordHasher } from '../../../../js/util/hash/MD5PasswordHasher.mjs'
-import { SaltGenerator } from '../../../../js/util/hash/SaltGenerator.mjs'
+import { MD5PasswordHasher } from '../../../../src/js/util/hash/MD5PasswordHasher.mjs'
+import { SaltGenerator } from '../../../../src/js/util/hash/SaltGenerator.mjs'
 
 describe('MD5PasswordHasher', function () {
   beforeEach(function () {
