@@ -1,7 +1,7 @@
 // vi: ts=2 et
 
 import { assert } from 'chai'
-import { PasswordRegistrationCollection } from '../../../../js/app/model/PasswordRegistrationCollection.mjs'
+import { PasswordRegistrationCollection } from '../../../../src/js/app/model/PasswordRegistrationCollection.mjs'
 
 /*
  * scoreDataComparator which simply orders by timestamp

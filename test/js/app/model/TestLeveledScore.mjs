@@ -1,7 +1,7 @@
 // vi: ts=2 et
 
 import { assert } from 'chai'
-import { LeveledScore } from '../../../../js/app/model/LeveledScore.mjs'
+import { LeveledScore } from '../../../../src/js/app/model/LeveledScore.mjs'
 
 describe('LeveledScore', function () {
   beforeEach(function () {
@@ -35,7 +35,6 @@ describe('LeveledScore', function () {
   it('should be 0 initially', function () {
     assert.equal(this.leveledScore.getScore(this.leveledScore.scoreData.lastSuccessTimestamp), 0)
   })
-
   ;[
     { expectedScore: 1, afterNumberOfAttempts: 1 },
     { expectedScore: 2, afterNumberOfAttempts: 2 },
@@ -183,7 +182,6 @@ describe('LeveledScore', function () {
     it('should be 1 initialy', function () {
       assert.equal(this.leveledScore.getLevel(this.leveledScore.scoreData.lastSuccessTimestamp), 1)
     })
-
     ;[
       { expectedLevel: 1, afterNumberOfAttempts: 0 },
       { expectedLevel: 2, afterNumberOfAttempts: 1 },
