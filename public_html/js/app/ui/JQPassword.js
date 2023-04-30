@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 (
     function($) {
         $.fn.JQPassword = function(sub, options) {

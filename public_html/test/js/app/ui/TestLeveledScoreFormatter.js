@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 const assert = require('chai').assert;
 const LeveledScoreFormatter = require('../../../../js/app/ui/LeveledScoreFormatter.js').LeveledScoreFormatter;
 

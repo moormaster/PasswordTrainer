@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 class SaltGenerator {
     constructor(length, charSet) {
         this.length = length;   // the desired length of the salt

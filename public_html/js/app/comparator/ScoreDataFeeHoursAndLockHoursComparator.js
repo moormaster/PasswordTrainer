@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 if (typeof require == "function")
     LeveledScore = require('../model/LeveledScore.js').LeveledScore;
 

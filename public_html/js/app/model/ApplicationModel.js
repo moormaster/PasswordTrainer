@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 class ApplicationModel {
     constructor(passwordRegistrationCollection) {
         this.passwordRegistrations = passwordRegistrationCollection;

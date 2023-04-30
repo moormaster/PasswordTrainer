@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 const assert = require('chai').assert;
 const SaltGenerator = require('../../../../js/util/hash/SaltGenerator.js').SaltGenerator;
 

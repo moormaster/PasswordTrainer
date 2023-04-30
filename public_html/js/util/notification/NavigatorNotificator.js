@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 class NavigatorNotificator {
     constructor() {
         this.navigator = navigator;

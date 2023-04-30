@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 var PasswordNotificator = (
     function() {
         var resetNotifications = function() {

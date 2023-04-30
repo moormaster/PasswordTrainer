@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 var PageManagePasswords = (
     function($) {
         var updateTable = function(tableSelector, passwordRegistrations) {

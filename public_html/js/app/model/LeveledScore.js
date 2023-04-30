@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 var LeveledScore = (
     function() {
         var fib = function(i) {

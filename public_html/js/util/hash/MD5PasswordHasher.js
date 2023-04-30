@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 if (typeof require == "function") {
     SaltGenerator = require('./SaltGenerator.js').SaltGenerator;
     CryptoJS = require('crypto-js');

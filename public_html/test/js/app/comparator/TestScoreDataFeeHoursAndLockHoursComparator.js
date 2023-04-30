@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 const assert = require('chai').assert;
 const ScoreDataFeeHoursAndLockHoursComparator = require('../../../../js/app/comparator/ScoreDataFeeHoursAndLockHoursComparator.js').ScoreDataFeeHoursAndLockHoursComparator
 

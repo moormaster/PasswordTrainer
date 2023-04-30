@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 const assert = require('chai').assert;
 const JSONFormatter = require('../../../../js/util/json/JSONFormatter.js').JSONFormatter;
 

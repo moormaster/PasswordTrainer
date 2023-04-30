@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 var PagePasswordDialog = (
     function($) {
         class PagePasswordDialog {

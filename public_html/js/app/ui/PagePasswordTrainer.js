@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 var PagePasswordTrainer = (
     function($) {
         var activateInterval = function(pageInstance) {

@@ -1,3 +1,5 @@
+// vi: ts=4 et
+
 (
     function($) {
         function elemInit(elem, instance) {
