@@ -59,7 +59,6 @@ var PagePasswordTrainer = (
                 var leveledScore = new LeveledScore(availablePasswordRegistrations[key].scoreData);
                 var description  = availablePasswordRegistrations[key].description;
                 
-                var statusDisplay = formatter.formatStatus(leveledScore);
                 var display = description;
                 
                 // password registrations which are locked are not part of the selection choice
