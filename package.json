@@ -11,7 +11,7 @@
     "author": "moormaster",
     "contributors": [],
     "dependencies": {
-        "crypto-js": "4.0.0",
+        "crypto-js": "4.2.0",
         "jquery": "^2.1.0",
         "jquery-mobile": "1.x"
     },
