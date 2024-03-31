@@ -14,6 +14,8 @@ export default {
     }
   },
 
+  emits: ['passwordEntered'],
+
   computed: {
     colorClass() {
       return {
