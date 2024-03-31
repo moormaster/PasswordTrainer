@@ -58,7 +58,7 @@ var LeveledScoreFormatter = (
 
             return string;
         };
-        
+
         class LeveledScoreFormatter {
             constructor() {
             }

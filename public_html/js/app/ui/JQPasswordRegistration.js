@@ -5,7 +5,7 @@
         function elemInit(elem, instance) {
             elem.passwordRegistration = instance;
         }
-        
+
         function passwordEntered(elem, instance) {
             var desc = instance.passwordDescriptionCollection.val();
             var pwd = instance.passwordCollection.val();
@@ -19,7 +19,7 @@
                     instance.passwordCollection.addClass("bg_anim_red");
                     instance.passwordRepeatCollection.addClass("bg_anim_red");
                 }
-                
+
                 return;
             }
 
@@ -29,15 +29,15 @@
 
             instance.trigger('passwordEntered', [desc, pwd]);
         }
-        
+
         $.fn.JQPasswordRegistration = function(options) {
             if (options == null)
                 options = {};
-            
+
             this.passwordDescriptionCollection = options['passwordDescription'];
             this.passwordCollection = options['password'];
             this.passwordRepeatCollection = options['passwordRepeat'];
-            
+
             if (!this.passwordDescriptionCollection) {
                 this.passwordDescriptionCollection = this.children(".passworddescription");
             }
@@ -46,13 +46,13 @@
 
             if (!this.passwordRepeatCollection)
                 this.passwordRepeatCollection = this.children(".passwordrepeat");            
-            
+
             this.passwordDescriptionCollection.val("");
             this.passwordCollection.val("");
             this.passwordRepeatCollection.val("");
-            
+
             var instance = this;
-            
+
             $(this).each(
                 function() {
                     elemInit(this, instance);
@@ -68,7 +68,7 @@
                     elemInit(this, instance);
                 }
             );
-            
+
             this.passwordCollection.change(
                 function() {
                     passwordEntered(this, instance);

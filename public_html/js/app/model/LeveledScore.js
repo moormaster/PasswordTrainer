@@ -200,7 +200,7 @@ var LeveledScore = (
                 return this.getLevel(new Date());
             }
         };
-        
+
         return LeveledScore;
     }
 )();

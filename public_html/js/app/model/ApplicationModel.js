@@ -31,7 +31,7 @@ class ApplicationModel {
     exportJSON() {
         return JSON.stringify(this.export());
     }
-    
+
     /*
      * import from object structure
      *
@@ -40,7 +40,7 @@ class ApplicationModel {
     import(object) {
         if (!this.passwordRegistrations.import(object))
             return false;
-        
+
         return true;
     }
 
@@ -51,7 +51,7 @@ class ApplicationModel {
      */
     export() {
         var objectStructure = this.passwordRegistrations.export();
-        
+
         return objectStructure;
     }
 };

@@ -8,7 +8,7 @@ class SaltGenerator {
         if (!this.charSet)
             this.charSet = '!§$%&/()=?`´+*#\'~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     }
-    
+
     /*
      * Generates and returns a salt value (as specified by the constructor 
      * parameters)

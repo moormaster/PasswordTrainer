@@ -9,11 +9,11 @@ describe("MD5PasswordHasher", function() {
         this.passwordEmpty = '';
         this.password1 = '12345';
         this.password2 = 'abcde';
-        
+
         this.saltGenerator = new SaltGenerator(10);
         this.passwordHasher = new MD5PasswordHasher(this.saltGenerator);
     });
-    
+
     [   { description: "unsalted",  salt: "" },
         { description: "salted",  salt: "anySalt" }
     ].forEach(({description, salt}) => {
@@ -45,14 +45,14 @@ describe("MD5PasswordHasher", function() {
             });
         });
     });
-    
+
     describe("MD5PasswordHasher.generateSaltedHash() salted", function() {
         it("should generate a salt", function() {
             var password1Hash = this.passwordHasher.generateSaltedHash(this.password1);
             var password1ParsedHash = this.passwordHasher.parseSaltedHash(password1Hash);
             assert.isOk(password1ParsedHash.salt.length > 0);
         });
-        
+
         it("should generate a different salt each time", function() {
             var password1Hash = this.passwordHasher.generateSaltedHash(this.password1);
             assert.isOk(this.passwordHasher.generateSaltedHash(this.password1) != password1Hash,);
