@@ -7,7 +7,7 @@ describe("LeveledScoreFormatter", function() {
     beforeEach(function() {
         this.leveledScoreFormatter = new LeveledScoreFormatter();
     });
-    
+
     describe("formatStatus()", function() {
         [   { args: {fee: 0, lockHoursLeft: 1}, description: "locked password",    expected: "locked for 1h"},
             { args: {fee: 1, lockHoursLeft: 0}, description: "password with a passed fee delay",    expected: "1 fee"}
@@ -17,13 +17,13 @@ describe("LeveledScoreFormatter", function() {
             });
         });
     });
-    
+
     describe("formatLeveledScore()", function() {
         it("should format level and score", function() {
             assert.equal(this.leveledScoreFormatter.formatLeveledScore({score: 42, level: 10}), "Score 42 / Level 10");
         });
     });
-    
+
     describe("formatScore()", function() {
         [   {value: 1.0, expected: "1"},
             {value: 1.2345, expected: "1.23"},
@@ -34,7 +34,7 @@ describe("LeveledScoreFormatter", function() {
             });
         });
     });
-    
+
     describe("formatFee", function() {
         [   {value: 1.0, expected: "1"},
             {value: 1.2345, expected: "1.23"},
@@ -45,7 +45,7 @@ describe("LeveledScoreFormatter", function() {
             });
         });
     });
-    
+
     describe("formatLevel", function() {
         [   {value: 1.0, expected: "1"},
             {value: 5.0, expected: "5"},

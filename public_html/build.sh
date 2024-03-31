@@ -61,7 +61,7 @@ catjsbundle() {
 
     cat js/app/PasswordNotificator.js
     cat js/app/App.js
-    
+
     cat js/init.js
 }
 

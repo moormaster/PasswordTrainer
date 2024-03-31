@@ -17,12 +17,12 @@ describe("SaltGenerator", function() {
                 var salt = this.saltGenerator.generate();
                 assert.equal(salt.length, length);
             });
-            
+
 
             if (charSet) {
                 it("should contain only characters from the defined charSet", function() {
                     var salt = this.saltGenerator.generate();
-                    
+
                     for (var c in salt)
                         assert.isOk(charSet.indexOf(c) >= 0, "salt character '" + c + "' should be part of the char set")
                 });

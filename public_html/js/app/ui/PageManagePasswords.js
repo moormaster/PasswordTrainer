@@ -48,7 +48,7 @@ var PageManagePasswords = (
              */
             init() {
                 var pageInstance = this;
-                
+
                 this.tableSelector = $('#pageManagePasswords .passwordTable');
 
                 $('#pageManagePasswords').on('pageshow', 
@@ -65,7 +65,7 @@ var PageManagePasswords = (
                 updateTable(this.tableSelector, this.appInstance.applicationModel.passwordRegistrations);
             }
         };
-        
+
         return PageManagePasswords;
     }
 )(jQuery);

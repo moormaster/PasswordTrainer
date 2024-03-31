@@ -24,7 +24,7 @@ var PasswordRegistrationCollection = (
 
                 return true;
             };
-            
+
             /*
              * Clones data of a password registration
              */
@@ -42,7 +42,7 @@ var PasswordRegistrationCollection = (
 
                     this.collection = {};
                 }
-                
+
                 /*
                  * import from object structure
                  *
@@ -80,38 +80,38 @@ var PasswordRegistrationCollection = (
                         }
                     };
                 }
-                
+
                 /*
                 * updates password registration from the given structure
                 */
                 update(description, registration) {
                     if (!this.collection[description])
                         return false;
-                   
+
                     if (registration.description != description) {
                         // description was changed
-                       
+
                         // check if slot for new description name is free
                         if (this.collection[registration.description])
                             return false;
-                       
+
                         // move registration to new slot
                         this.collection[registration.description] = this.collection[description];
                         this.collection[description] = null;
                     }
-                   
+
                     // set new values
                     var targetRegistration = this.collection[registration.description];
                     clonePasswordRegistrationData(registration, targetRegistration);
                 }
-                
+
                 /*
                  * returns the cloned password registration for the given description
                  */
                 get(description) {
                     if (!this.collection[description])
                         return null;
-                    
+
                     var registration =  {
                                             description:    null,
                                             hash:           null,
@@ -122,19 +122,19 @@ var PasswordRegistrationCollection = (
                                         };
 
                     clonePasswordRegistrationData(this.collection[description], registration);
-                    
+
                     return registration;
                 }
-                
+
                 /*
                 * returns a map of all registrations
                 */
                 getAll() {
                     var map = [];
-                    
+
                     for (var desc in this.collection)
                         map[desc] = this.get(desc);
-                    
+
                     return map;
                 }
 
@@ -167,7 +167,7 @@ var PasswordRegistrationCollection = (
                     return this.collection[description];
                 }
             };
-            
+
             return PasswordRegistrationCollection;
         }
 )();

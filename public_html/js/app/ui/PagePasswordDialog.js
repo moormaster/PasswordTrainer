@@ -7,13 +7,13 @@ var PagePasswordDialog = (
                 // app instance where this page is displayed in
                 this.appInstance = app;
             }
-            
+
             /*
              * initialize jquery ui widgets
              */
             init() {
                 var pageInstance = this;
-                
+
                 $('#passwordregistration').JQPasswordRegistration(
                     {
                         passwordDescription:            $('#passwordregistration .passworddescription'),
@@ -21,7 +21,7 @@ var PagePasswordDialog = (
                         passwordRepeat:                 $('#passwordregistration .passwordrepeat'),
                     }
                 );
-                
+
                 $('#passwordregistration').on('passwordEntered', 
                     function(e, desc, pwd) {
                         pageInstance.appInstance.addPasswordRegistration(desc, pwd);
@@ -29,7 +29,7 @@ var PagePasswordDialog = (
                 );
             }
         };
-        
+
         return PagePasswordDialog;
     }
 )(jQuery);

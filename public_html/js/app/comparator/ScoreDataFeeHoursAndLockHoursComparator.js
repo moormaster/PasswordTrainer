@@ -6,7 +6,7 @@ if (typeof require == "function")
 class ScoreDataFeeHoursAndLockHoursComparator {
     constructor() {
     }
-    
+
     /*
      * compares obj1 to obj2
      * 
@@ -18,13 +18,13 @@ class ScoreDataFeeHoursAndLockHoursComparator {
     compare(obj1, obj2) {
         if (obj1 == null)
             return -1;
-        
+
         if (obj2 == null)
             return 1;
-        
+
         var leveledScore1 = new LeveledScore(obj1);
         var leveledScore2 = new LeveledScore(obj2);
-        
+
         // maximum fee hours first
         if (leveledScore1.feeHoursPassed > leveledScore2.feeHoursPassed)
             return -1;
