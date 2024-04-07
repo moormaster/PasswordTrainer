@@ -2,6 +2,7 @@
 
 import { createApp, computed } from 'vue'
 import PagePasswordTrainer from '../../components/PagePasswordTrainer.vue'
+import PageManagePasswords from '../../components/PageManagePasswords.vue'
 
 // Vuetify
 import 'vuetify/styles'
@@ -16,8 +17,6 @@ import { MD5PasswordHasher } from '../util/hash/MD5PasswordHasher.mjs'
 import { NavigatorNotificator } from '../util/notification/NavigatorNotificator.mjs'
 import { SaltGenerator } from '../util/hash/SaltGenerator.mjs'
 
-import { PageManagePasswords } from './ui/PageManagePasswords.mjs'
-import { PagePasswordDialog } from './ui/PagePasswordDialog.mjs'
 import { PageImportExport } from './ui/PageImportExport.mjs'
 
 export var App = (function ($) {
