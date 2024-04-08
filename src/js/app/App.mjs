@@ -1,8 +1,9 @@
 // vi: ts=2 et
 
 import { createApp, computed } from 'vue'
-import PagePasswordTrainer from '../../components/PagePasswordTrainer.vue'
+import PageImportExport from '../../components/PageImportExport.vue'
 import PageManagePasswords from '../../components/PageManagePasswords.vue'
+import PagePasswordTrainer from '../../components/PagePasswordTrainer.vue'
 
 // Vuetify
 import 'vuetify/styles'
@@ -16,8 +17,6 @@ import { LeveledScore } from './model/LeveledScore.mjs'
 import { MD5PasswordHasher } from '../util/hash/MD5PasswordHasher.mjs'
 import { NavigatorNotificator } from '../util/notification/NavigatorNotificator.mjs'
 import { SaltGenerator } from '../util/hash/SaltGenerator.mjs'
-
-import { PageImportExport } from './ui/PageImportExport.mjs'
 
 export var App = (function ($) {
   class App {
@@ -38,14 +37,6 @@ export var App = (function ($) {
         passwordRegistrations,
         new NavigatorNotificator(),
       )
-
-      /*
-       * page instances
-       */
-      this.pageImportExport = new PageImportExport(this)
-      this.pagePasswordManagePasswords = new PageManagePasswords(this)
-
-      this.pagePasswordDialog = new PagePasswordDialog(this)
     }
 
     /*
@@ -56,6 +47,7 @@ export var App = (function ($) {
 
       // current entry point to vue-js / vuetify
       const vuetify = createVuetify()
+
       const pagePasswordTrainer = createApp(PagePasswordTrainer)
       pagePasswordTrainer.config.unwrapInjectedRef = true // enables computed provide-props - remove when using vue >= 3.3
       this.pageTrainPasswords = pagePasswordTrainer
@@ -66,10 +58,25 @@ export var App = (function ($) {
         )
         .mount('#pageTrainPasswords')
 
-      this.pageImportExport.init()
-      this.pagePasswordManagePasswords.init()
+      const pageManagePasswords = createApp(PageManagePasswords)
+      pageManagePasswords.config.unwrapInjectedRef = true // enables computed provide-props - remove when using vue >= 3.3
+      this.pageManagePasswords = pageManagePasswords
+        .use(vuetify)
+        .provide(
+          'appInstance',
+          computed(() => appInstance),
+        )
+        .mount('#pageManagePasswords')
 
-      this.pagePasswordDialog.init()
+      const pageImportExport = createApp(PageImportExport)
+      pageImportExport.config.unwrapInjectedRef = true // enables computed provide-props - remove when using vue >= 3.3
+      this.pageImportExport = pageImportExport
+        .use(vuetify)
+        .provide(
+          'appInstance',
+          computed(() => appInstance),
+        )
+        .mount('#pageImportExport')
     }
 
     /*
