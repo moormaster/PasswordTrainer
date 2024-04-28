@@ -41,16 +41,4 @@ export default {
     <v-textarea :model-value="json" @blur="importPasswordRegistrations" max-rows="25" auto-grow>
     </v-textarea>
   </div>
-
-  <div data-role="footer" data-position="fixed">
-    <div data-role="navbar">
-      <ul>
-        <li><a href="#pageTrainPasswords">Train</a></li>
-        <li><a href="#pageManagePasswords">Manage</a></li>
-        <li>
-          <a href="#pageImportExport" class="ui-btn-active ui-state-persist">Import/Export</a>
-        </li>
-      </ul>
-    </div>
-  </div>
 </template>

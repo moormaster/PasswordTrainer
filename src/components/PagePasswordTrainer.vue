@@ -148,14 +148,4 @@ export default {
       />
     </div>
   </div>
-
-  <div data-role="footer" data-position="fixed">
-    <div data-role="navbar">
-      <ul>
-        <li><a href="#pageTrainPasswords" class="ui-btn-active ui-state-persist">Train</a></li>
-        <li><a href="#pageManagePasswords">Manage</a></li>
-        <li><a href="#pageImportExport">Import/Export</a></li>
-      </ul>
-    </div>
-  </div>
 </template>
