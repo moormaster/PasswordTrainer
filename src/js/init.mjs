@@ -1,23 +1,31 @@
 // vi: ts=2 et
 
-// import { createApp } from 'vue'
-// import App from './App.vue'
-//
-// // Vuetify
-// import 'vuetify/styles'
-// import { createVuetify } 'vuetify'
-//
-// const vuetify = createVuetify()
-//
-// create(App).use(vuetify).mount('#app')
-
+import { createApp, computed } from 'vue'
 import { App } from './app/App.mjs'
-;(function ($) {
-  var app
+import VueApp from '../App.vue'
 
-  $(document).ready(function () {
-    app = new App()
-    app.readFromLocalStorage()
-    app.init()
-  })
-})(jQuery)
+import PagePasswordTrainer from '../components/PagePasswordTrainer.vue'
+import PageManagePasswords from '../components/PageManagePasswords.vue'
+import PageImportExport from '../components/PageImportExport.vue'
+
+// Vuetify
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+
+const vuetify = createVuetify()
+
+let app = new App()
+app.readFromLocalStorage()
+
+let vueApp = createApp(VueApp)
+  .use(vuetify)
+  .component('PagePasswordTrainer', PagePasswordTrainer)
+  .component('PageManagePasswords', PageManagePasswords)
+  .component('PageImportExport', PageImportExport)
+  .provide(
+    'appInstance',
+    computed(() => app),
+  )
+
+vueApp.config.unwrapInjectedRef = true // enables computed provide-props - remove when using vue >= 3.3
+vueApp.mount('#app')

@@ -113,14 +113,4 @@ export default {
     "
   >
   </passwordDialog>
-
-  <div data-role="footer" data-position="fixed">
-    <div data-role="navbar">
-      <ul>
-        <li><a href="#pageTrainPasswords">Train</a></li>
-        <li><a href="#pageManagePasswords" class="ui-btn-active ui-state-persist">Manage</a></li>
-        <li><a href="#pageImportExport">Import/Export</a></li>
-      </ul>
-    </div>
-  </div>
 </template>
