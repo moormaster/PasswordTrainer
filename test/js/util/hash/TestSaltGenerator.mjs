@@ -1,7 +1,10 @@
 // vi: ts=2 et
 
 import { assert } from 'chai'
+import { beforeEach, describe, it } from 'vitest'
 import { SaltGenerator } from '../../../../src/js/util/hash/SaltGenerator.mjs'
+
+let saltGenerator
 
 describe('SaltGenerator', function () {
   ;[
@@ -11,17 +14,17 @@ describe('SaltGenerator', function () {
   ].forEach(({ length, charSet, description }) => {
     describe('SaltGenerator.generate() - ' + description, function () {
       beforeEach(function () {
-        this.saltGenerator = new SaltGenerator(length, charSet)
+        saltGenerator = new SaltGenerator(length, charSet)
       })
 
       it('should generate a random string of the correct length', function () {
-        var salt = this.saltGenerator.generate()
+        var salt = saltGenerator.generate()
         assert.equal(salt.length, length)
       })
 
       if (charSet) {
         it('should contain only characters from the defined charSet', function () {
-          var salt = this.saltGenerator.generate()
+          var salt = saltGenerator.generate()
 
           for (var c in salt)
             assert.isOk(

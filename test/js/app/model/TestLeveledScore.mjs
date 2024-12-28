@@ -1,39 +1,42 @@
 // vi: ts=2 et
 
 import { assert } from 'chai'
+import { beforeEach, describe, it } from 'vitest'
 import { LeveledScore } from '../../../../src/js/app/model/LeveledScore.mjs'
+
+function addAttempts(leveledScore, numberOfAttempts) {
+  for (var i = 0; i < numberOfAttempts; i++) addAttempt(leveledScore)
+}
+
+function addAttemptWithFeeTime(leveledScore, feeHours) {
+  addAttempt(leveledScore, feeHours)
+}
+
+function addAttempt(leveledScore, feeHours) {
+  if (!feeHours) feeHours = 0
+
+  var d = leveledScore.scoreData.lastSuccessTimestamp
+  if (d == null) d = new Date(1970, 1, 1, 10, 0).getTime()
+
+  var h = leveledScore.getLockHoursLeft(d) + feeHours
+
+  return leveledScore.addSuccessfulAttempt(d + 1000 * 60 * 60 * h)
+}
+
+function assertNumericEqual(actual, expected, diff) {
+  if (Math.abs(actual - expected) <= diff) assert.isOk(true)
+  else assert.equal(actual, expected)
+}
+
+let leveledScore
 
 describe('LeveledScore', function () {
   beforeEach(function () {
-    var addAttempt = function (leveledScore, feeHours) {
-      if (!feeHours) feeHours = 0
-
-      var d = leveledScore.scoreData.lastSuccessTimestamp
-      if (d == null) d = new Date(1970, 1, 1, 10, 0).getTime()
-
-      var h = leveledScore.getLockHoursLeft(d) + feeHours
-
-      return leveledScore.addSuccessfulAttempt(d + 1000 * 60 * 60 * h)
-    }
-
-    this.addAttempts = function (leveledScore, numberOfAttempts) {
-      for (var i = 0; i < numberOfAttempts; i++) addAttempt(leveledScore)
-    }
-
-    this.addAttemptWithFeeTime = function (leveledScore, feeHours) {
-      addAttempt(leveledScore, feeHours)
-    }
-
-    this.assertNumEqual = function (actual, expected, diff) {
-      if (Math.abs(actual - expected) <= diff) assert.isOk(true)
-      else assert.equal(actual, expected)
-    }
-
-    this.leveledScore = new LeveledScore()
+    leveledScore = new LeveledScore()
   })
 
   it('should be 0 initially', function () {
-    assert.equal(this.leveledScore.getScore(this.leveledScore.scoreData.lastSuccessTimestamp), 0)
+    assert.equal(leveledScore.getScore(leveledScore.scoreData.lastSuccessTimestamp), 0)
   })
   ;[
     { expectedScore: 1, afterNumberOfAttempts: 1 },
@@ -44,10 +47,10 @@ describe('LeveledScore', function () {
     it(
       'should be ' + expectedScore + ' after ' + afterNumberOfAttempts + ' attempt(s)',
       function () {
-        this.addAttempts(this.leveledScore, afterNumberOfAttempts)
+        addAttempts(leveledScore, afterNumberOfAttempts)
 
         assert.equal(
-          this.leveledScore.getScore(this.leveledScore.scoreData.lastSuccessTimestamp),
+          leveledScore.getScore(leveledScore.scoreData.lastSuccessTimestamp),
           expectedScore,
         )
       },
@@ -96,12 +99,12 @@ describe('LeveledScore', function () {
         it(
           'should be 0 after ' + afterNumberOfAttempts + ' attempt(s) with 0h fee time passed',
           function () {
-            this.addAttempts(this.leveledScore, afterNumberOfAttempts)
+            addAttempts(leveledScore, afterNumberOfAttempts)
 
-            this.assertNumEqual(
-              this.leveledScore.getFee(
-                this.leveledScore.scoreData.lastSuccessTimestamp +
-                  this.leveledScore.lockHours * 60 * 60 * 1000,
+            assertNumericEqual(
+              leveledScore.getFee(
+                leveledScore.scoreData.lastSuccessTimestamp +
+                  leveledScore.lockHours * 60 * 60 * 1000,
               ),
               0,
               0.001,
@@ -116,12 +119,12 @@ describe('LeveledScore', function () {
             afterNumberOfAttempts +
             ' attempt(s) with 1h fee time passed',
           function () {
-            this.addAttempts(this.leveledScore, afterNumberOfAttempts)
+            addAttempts(leveledScore, afterNumberOfAttempts)
 
-            this.assertNumEqual(
-              this.leveledScore.getFee(
-                this.leveledScore.scoreData.lastSuccessTimestamp +
-                  (this.leveledScore.lockHours + 1) * 60 * 60 * 1000,
+            assertNumericEqual(
+              leveledScore.getFee(
+                leveledScore.scoreData.lastSuccessTimestamp +
+                  (leveledScore.lockHours + 1) * 60 * 60 * 1000,
               ),
               expectedFeePerHour,
               0.001,
@@ -138,12 +141,12 @@ describe('LeveledScore', function () {
             afterHoursPassed +
             'h fee time passed',
           function () {
-            this.addAttempts(this.leveledScore, afterNumberOfAttempts)
+            addAttempts(leveledScore, afterNumberOfAttempts)
 
-            this.assertNumEqual(
-              this.leveledScore.getFee(
-                this.leveledScore.scoreData.lastSuccessTimestamp +
-                  (this.leveledScore.lockHours + afterHoursPassed) * 60 * 60 * 1000,
+            assertNumericEqual(
+              leveledScore.getFee(
+                leveledScore.scoreData.lastSuccessTimestamp +
+                  (leveledScore.lockHours + afterHoursPassed) * 60 * 60 * 1000,
               ),
               afterHoursPassed * expectedFeePerHour,
               0.001,
@@ -161,12 +164,12 @@ describe('LeveledScore', function () {
               scoreReachesZeroAfterHours +
               'h fee time passed',
             function () {
-              this.addAttempts(this.leveledScore, afterNumberOfAttempts)
+              addAttempts(leveledScore, afterNumberOfAttempts)
 
-              this.assertNumEqual(
-                this.leveledScore.getFee(
-                  this.leveledScore.scoreData.lastSuccessTimestamp +
-                    (this.leveledScore.lockHours + scoreReachesZeroAfterHours) * 60 * 60 * 1000,
+              assertNumericEqual(
+                leveledScore.getFee(
+                  leveledScore.scoreData.lastSuccessTimestamp +
+                    (leveledScore.lockHours + scoreReachesZeroAfterHours) * 60 * 60 * 1000,
                 ),
                 scoreReachesZeroAfterHours * expectedFeePerHour,
                 0.001,
@@ -180,7 +183,7 @@ describe('LeveledScore', function () {
 
   describe('LevelScore.getLevel()', function () {
     it('should be 1 initialy', function () {
-      assert.equal(this.leveledScore.getLevel(this.leveledScore.scoreData.lastSuccessTimestamp), 1)
+      assert.equal(leveledScore.getLevel(leveledScore.scoreData.lastSuccessTimestamp), 1)
     })
     ;[
       { expectedLevel: 1, afterNumberOfAttempts: 0 },
@@ -196,10 +199,10 @@ describe('LeveledScore', function () {
           (afterNumberOfAttempts + 1) +
           ' attempt(s)',
         function () {
-          this.addAttempts(this.leveledScore, afterNumberOfAttempts)
+          addAttempts(leveledScore, afterNumberOfAttempts)
 
           assert.equal(
-            this.leveledScore.getLevel(this.leveledScore.scoreData.lastSuccessTimestamp),
+            leveledScore.getLevel(leveledScore.scoreData.lastSuccessTimestamp),
             expectedLevel,
           )
         },
@@ -216,9 +219,9 @@ describe('LeveledScore', function () {
       { expectedLockHours: 3, forLevel: 4, afterNumberOfAttempts: 4 },
     ].forEach(({ expectedLockHours, forLevel, afterNumberOfAttempts }) => {
       it('should be ' + expectedLockHours + ' in level ' + forLevel, function () {
-        this.addAttempts(this.leveledScore, afterNumberOfAttempts)
+        addAttempts(leveledScore, afterNumberOfAttempts)
 
-        assert.equal(this.leveledScore.lockHours, expectedLockHours)
+        assert.equal(leveledScore.lockHours, expectedLockHours)
       })
     })
   })
@@ -232,69 +235,69 @@ describe('LeveledScore', function () {
       { expectedFeePerHour: 1 / 5.0, forLevel: 4, afterNumberOfAttempts: 4 },
     ].forEach(({ expectedFeePerHour, forLevel, afterNumberOfAttempts }) => {
       it('should be ' + expectedFeePerHour + ' in level ' + forLevel, function () {
-        this.addAttempts(this.leveledScore, afterNumberOfAttempts)
+        addAttempts(leveledScore, afterNumberOfAttempts)
 
-        assert.equal(this.leveledScore.feePerHour, expectedFeePerHour)
+        assert.equal(leveledScore.feePerHour, expectedFeePerHour)
       })
     })
   })
 
   describe('LevelScore.addSuccessfulAttempt()', function () {
     it('should allow the first attempt', function () {
-      assert.isOk(this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0)))
+      assert.isOk(leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0)))
     })
 
     it('should increase score to 1 after first attempt', function () {
-      this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
-      assert.equal(this.leveledScore.getScore(new Date(1970, 1, 1, 10, 0)), 1)
+      leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
+      assert.equal(leveledScore.getScore(new Date(1970, 1, 1, 10, 0)), 1)
     })
 
     it('should deny second attempt when lock time is not up', function () {
-      this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
+      leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
 
-      assert.isNotOk(this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 59)))
+      assert.isNotOk(leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 59)))
     })
 
     it('should allow second attempt after lock time has passed', function () {
-      this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
+      leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
 
-      assert.isOk(this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 0)))
+      assert.isOk(leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 0)))
     })
 
     it('score should increase score to 2 after second successful attempt', function () {
-      this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
-      this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 0))
+      leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
+      leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 0))
 
-      assert.equal(this.leveledScore.getScore(new Date(1970, 1, 1, 11, 0)), 2)
+      assert.equal(leveledScore.getScore(new Date(1970, 1, 1, 11, 0)), 2)
     })
 
     it('should deny third attempt when lock time is not up', function () {
-      this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
-      this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 0))
+      leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
+      leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 0))
 
-      assert.isNotOk(this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 59)))
+      assert.isNotOk(leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 59)))
     })
 
     it('should deny third attempt when increased lock time is not up', function () {
-      this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
-      this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 0))
+      leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
+      leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 0))
 
-      assert.isNotOk(this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 12, 59)))
+      assert.isNotOk(leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 12, 59)))
     })
 
     it('should allow third attempt after increased lock time has passed', function () {
-      this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
-      this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 0))
+      leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
+      leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 0))
 
-      assert.isOk(this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 13, 0)))
+      assert.isOk(leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 13, 0)))
     })
 
     it('should increase score to 3 after third successful attempt', function () {
-      this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
-      this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 0))
-      this.leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 13, 0))
+      leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 10, 0))
+      leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 11, 0))
+      leveledScore.addSuccessfulAttempt(new Date(1970, 1, 1, 13, 0))
 
-      assert.equal(this.leveledScore.getScore(new Date(1970, 1, 1, 13, 0)), 3)
+      assert.equal(leveledScore.getScore(new Date(1970, 1, 1, 13, 0)), 3)
     })
   })
 
@@ -312,11 +315,11 @@ describe('LeveledScore', function () {
           afterNumberOfAttempts +
           ' attempt(s)',
         function () {
-          this.addAttempts(this.leveledScore, afterNumberOfAttempts - 1)
-          this.addAttemptWithFeeTime(this.leveledScore, 1)
+          addAttempts(leveledScore, afterNumberOfAttempts - 1)
+          addAttemptWithFeeTime(leveledScore, 1)
 
-          this.assertNumEqual(
-            this.leveledScore.getScore(this.leveledScore.scoreData.lastSuccessTimestamp),
+          assertNumericEqual(
+            leveledScore.getScore(leveledScore.scoreData.lastSuccessTimestamp),
             expectedScore,
             0.001,
           )
