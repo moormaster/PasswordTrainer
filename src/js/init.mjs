@@ -11,8 +11,17 @@ import PageImportExport from '../components/PageImportExport.vue'
 // Vuetify
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
+import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 
-const vuetify = createVuetify()
+const vuetify = createVuetify({
+  icons: {
+    defaultSet: 'mdi',
+    aliases,
+    sets: {
+      mdi,
+    },
+  },
+})
 
 let app = new App()
 app.readFromLocalStorage()

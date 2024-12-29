@@ -54,10 +54,10 @@ export var App = (function () {
       if (this.applicationModel.importJSON(json)) {
         this.writeToLocalStorage()
 
-        // TODO: move this logic to App.vue
-        this.pageTrainPasswords.$forceUpdate()
-        if ($) $.mobile.changePage('#pageTrainPasswords')
+        return true
       }
+
+      return false
     }
 
     /*

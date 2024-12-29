@@ -6,28 +6,36 @@ import { JSONFormatter } from '../js/util/json/JSONFormatter.mjs'
 export default {
   data() {
     return {
-      json: '',
+      json: null,
+      download: {
+        url: null,
+        filename: 'PasswordTrainer.json',
+      },
+      uploadedFile: null,
     }
   },
   inject: ['appInstance'],
   methods: {
-    exportPasswordRegistrations() {
+    getExportJson() {
       let json = this.appInstance.exportJSON()
       let formatter = new JSONFormatter()
-      this.json = formatter.format(json)
+      return formatter.format(json)
     },
 
-    async importPasswordRegistrations(event) {
-      this.appInstance.importJSON(event.target.value)
+    onExportClicked() {
+      this.json = this.getExportJson()
+      this.download.url = URL.createObjectURL(
+        new Blob([this.json], { type: 'application/octet-stream' }),
+      )
     },
-  },
 
-  mounted() {
-    this.exportPasswordRegistrations()
-  },
+    async onFileUploaded() {
+      this.json = await this.uploadedFile.text()
+    },
 
-  beforeUpdate() {
-    this.exportPasswordRegistrations()
+    onImportClicked() {
+      if (this.appInstance.importJSON(this.json)) this.$emit('importSuccess')
+    },
   },
 }
 </script>
@@ -38,7 +46,28 @@ export default {
   </div>
 
   <div data-role="content">
-    <v-textarea :model-value="json" @blur="importPasswordRegistrations" max-rows="25" auto-grow>
-    </v-textarea>
+    <div>
+      <v-btn @click="onExportClicked" color="primary">Export</v-btn>
+      <a
+        v-if="download.url"
+        :href="download.url"
+        :download="download.filename"
+        style="margin-left: 40px"
+        >{{ download.filename }}</a
+      >
+    </div>
+    <div>
+      <v-file-input
+        label="Upload file"
+        accept=".json"
+        v-model="uploadedFile"
+        @update:modelValue="onFileUploaded"
+      >
+        <template v-slot:prepend>
+          <v-btn :disabled="!json" @click="onImportClicked" color="primary">Import</v-btn>
+        </template>
+      </v-file-input>
+    </div>
+    <v-textarea v-model="json" max-rows="15" auto-grow> </v-textarea>
   </div>
 </template>
