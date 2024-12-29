@@ -13,6 +13,11 @@ export default {
       },
     }
   },
+  methods: {
+    onImportSuccess() {
+      this.currentTabKey = 'pageTrainPasswords'
+    },
+  },
 }
 </script>
 
@@ -38,7 +43,7 @@ export default {
           </v-window-item>
 
           <v-window-item value="pageImportExport">
-            <PageImportExport />
+            <PageImportExport @importSuccess="onImportSuccess" />
           </v-window-item>
         </v-window>
       </v-main>
