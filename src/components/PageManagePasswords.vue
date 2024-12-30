@@ -74,6 +74,11 @@ export default {
       return passwordRegistrations
     },
 
+    async onDelete(description) {
+      if (await this.confirm(`Delete ${description}?`))
+        this.appInstance.deletePasswordRegistration(description)
+    },
+
     onEdit(description) {
       this.editDialog.descriptionToEdit = description
       this.editDialog.newDescription = description
@@ -116,6 +121,7 @@ export default {
         <th>Score / Level</th>
         <th>Status</th>
         <th></th>
+        <th></th>
       </tr>
     </thead>
 
@@ -150,6 +156,9 @@ export default {
         </td>
         <td style="padding-left: 16px">
           <v-btn icon="$edit" @click="onEdit(passwordRegistration.description)"></v-btn>
+        </td>
+        <td style="padding-left: 16px">
+          <v-btn icon="$delete" @click="onDelete(passwordRegistration.description)"></v-btn>
         </td>
       </tr>
     </tbody>

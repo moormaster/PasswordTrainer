@@ -75,6 +75,16 @@ export var PasswordRegistrationCollection = (function () {
     }
 
     /*
+     * deletes password registration having the given description
+     */
+    delete(description) {
+      if (!this.collection[description]) return false
+
+      delete this.collection[description]
+
+      return true
+    }
+    /*
      * updates password registration from the given structure
      */
     update(description, registration) {
