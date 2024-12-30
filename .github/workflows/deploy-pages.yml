@@ -23,8 +23,11 @@ jobs:
         id: build
         run: |
           npm install
-          cd public_html
-          ./build.sh ../dist
+          npm run test:unit
+          npm run lint
+          npx prettier --check public_html/src/ public_html/test/
+          npm run build -- --base=/PasswordTrainer/
+          scripts/gen-manifest-appcache.sh > dist/manifest.appcache
 
       - name: Upload static files as artifact
         id: deployment
