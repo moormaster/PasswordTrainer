@@ -66,7 +66,7 @@ export default {
             <v-text-field
               label="Description*:"
               :rules="descriptionRules"
-              :value="description"
+              :model-value="description"
               @input="$emit('update:description', $event.target.value)"
             >
             </v-text-field>
