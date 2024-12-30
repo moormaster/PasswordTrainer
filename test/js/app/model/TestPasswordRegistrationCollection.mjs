@@ -65,6 +65,14 @@ describe('PasswordRegistrationCollection', function () {
   })
 
   describe('getAll()', function () {
+    it('should return copies of password registrations', function () {
+      var originalRegistrations = passwordRegistrationCollection.getAll()
+      var registrations = passwordRegistrationCollection.getAll()
+
+      assert.isOk(originalRegistrations['description1'] !== registrations['description1'])
+      assert.isOk(originalRegistrations['description2'] !== registrations['description2'])
+    })
+
     it('should return a map containing all registrations', function () {
       var registrationsMap = passwordRegistrationCollection.getAll()
 
@@ -164,6 +172,20 @@ describe('PasswordRegistrationCollection', function () {
   })
 
   describe('getMostRecentPasswordRegistration()', function () {
+    it('should return copies of password registration', function () {
+      var passwordRegistration = passwordRegistrationCollection.get('description1')
+
+      passwordRegistration.scoreData.lastSuccessScore = 1
+      passwordRegistration.scoreData.lastSuccessTimestamp = new Date().getTime()
+
+      passwordRegistrationCollection.update('description1', passwordRegistration)
+
+      var originalRegistration = passwordRegistrationCollection.getMostRecentPasswordRegistration()
+      var registration = passwordRegistrationCollection.getMostRecentPasswordRegistration()
+
+      assert.isOk(originalRegistration !== registration)
+    })
+
     it('should return password registration for description2 as most recent after a successful attempt was made on the other password registration', function () {
       var passwordRegistration = passwordRegistrationCollection.get('description1')
 

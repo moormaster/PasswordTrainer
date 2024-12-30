@@ -102,18 +102,13 @@ export var PasswordRegistrationCollection = (function () {
     get(description) {
       if (!this.collection[description]) return null
 
-      var registration = {
-        description: null,
-        hash: null,
-        scoreData: {
-          lastSuccessScore: null,
-          lastSuccessTimestamp: null,
-        },
+      let registration = this.collection[description]
+      if (registration == null) return null
+
+      return {
+        ...registration,
+        scoreData: { ...registration.scoreData },
       }
-
-      clonePasswordRegistrationData(this.collection[description], registration)
-
-      return registration
     }
 
     /*
@@ -148,14 +143,12 @@ export var PasswordRegistrationCollection = (function () {
           mostRecentInstance = passwordRegistration
       }
 
-      return mostRecentInstance
-    }
+      if (mostRecentInstance == null) return null
 
-    /*
-     * find password registration by description
-     */
-    getPasswordRegistrationByDescription(description) {
-      return this.collection[description]
+      return {
+        ...mostRecentInstance,
+        scoreData: { ...mostRecentInstance.scoreData },
+      }
     }
   }
 
