@@ -97,6 +97,20 @@ export var PasswordRegistrationCollection = (function () {
     }
 
     /*
+     * Resets score data on the given password registration
+     */
+    resetScoreData(description) {
+      let existingRegistration = this.collection[description]
+
+      if (!existingRegistration) return false
+
+      existingRegistration.scoreData = {
+        lastSuccessScore: null,
+        lastSuccessTimestamp: null,
+      }
+    }
+
+    /*
      * returns the cloned password registration for the given description
      */
     get(description) {

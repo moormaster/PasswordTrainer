@@ -21,7 +21,8 @@ export default {
 
       editDialog: {
         isVisible: false,
-        description: '',
+        descriptionToEdit: null,
+        newDescription: '',
       },
     }
   },
@@ -73,13 +74,35 @@ export default {
       return passwordRegistrations
     },
 
-    async onAddPasswordRegistration(description, password) {
-      let registrations = this.appInstance.applicationModel.passwordRegistrations.getAll()
-      if (!(description in registrations) || (await this.confirm(`Overwrite "${description}"?`)))
-        this.appInstance.addPasswordRegistration(description, password)
+    onEdit(description) {
+      this.editDialog.descriptionToEdit = description
+      this.editDialog.newDescription = description
+      this.editDialog.isVisible = true
+    },
+
+    onEditDialogClose() {
+      this.editDialog.descriptionToEdit = null
+      this.editDialog.newDescription = ''
+    },
+
+    async onAddOrSavePasswordRegistration(newDescription, password) {
+      if (!this.editDialog.descriptionToEdit) {
+        // add
+        let registrations = this.appInstance.applicationModel.passwordRegistrations.getAll()
+        if (
+          !(newDescription in registrations) ||
+          (await this.confirm(`Overwrite "${newDescription}"?`))
+        )
+          this.appInstance.addPasswordRegistration(newDescription, password)
+      } else {
+        this.appInstance.updatePasswordRegistration(
+          this.editDialog.descriptionToEdit,
+          newDescription,
+          password,
+        )
+      }
 
       this.editDialog.isVisible = false
-      this.editDialog.description = ''
     },
   },
 }
@@ -92,6 +115,7 @@ export default {
         <th>Description</th>
         <th>Score / Level</th>
         <th>Status</th>
+        <th></th>
       </tr>
     </thead>
 
@@ -124,15 +148,20 @@ export default {
             {{ formatPasswordStatus(passwordRegistration) }}
           </span>
         </td>
+        <td style="padding-left: 16px">
+          <v-btn icon="$edit" @click="onEdit(passwordRegistration.description)"></v-btn>
+        </td>
       </tr>
     </tbody>
   </table>
 
   <passwordDialog
     v-model:dialogVisible="editDialog.isVisible"
-    v-model:description="editDialog.description"
+    v-model:description="editDialog.newDescription"
+    :mode="editDialog.descriptionToEdit == null ? 'add' : 'edit'"
+    @after-leave="onEditDialogClose()"
     @onAddOrSave="
-      (dialogData) => onAddPasswordRegistration(dialogData.description, dialogData.password)
+      (dialogData) => onAddOrSavePasswordRegistration(dialogData.description, dialogData.password)
     "
   >
   </passwordDialog>

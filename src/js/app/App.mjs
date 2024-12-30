@@ -92,13 +92,7 @@ export var App = (function () {
 
       var leveledScore = new LeveledScore(passwordRegistration.scoreData)
 
-      // parse salt value from stored hash
-      var saltedHash = this.passwordHasher.parseSaltedHash(passwordRegistration.hash)
-
-      if (!saltedHash) return false
-
-      var hash = this.passwordHasher.generateSaltedHash(password, saltedHash.salt)
-      if (hash != passwordRegistration.hash) return false
+      if (!this.validatePassword(password, passwordRegistration.hash)) return false
 
       if (!leveledScore.addSuccessfulAttempt()) return false
 
@@ -107,6 +101,21 @@ export var App = (function () {
       this.applicationModel.passwordRegistrations.update(desc, passwordRegistration)
 
       this.writeToLocalStorage()
+
+      return true
+    }
+
+    /*
+     * Validates the given password against a stored hash value.
+     */
+    validatePassword(password, storedHash) {
+      // parse salt value from stored hash
+      var saltedHash = this.passwordHasher.parseSaltedHash(storedHash)
+
+      if (!saltedHash) return false
+
+      var hash = this.passwordHasher.generateSaltedHash(password, saltedHash.salt)
+      if (hash != storedHash) return false
 
       return true
     }
@@ -131,6 +140,31 @@ export var App = (function () {
       if (!this.applicationModel.passwordRegistrations) return null
 
       return this.applicationModel.passwordRegistrations.get(description)
+    }
+
+    /*
+     * Update an existing password registration
+     */
+    updatePasswordRegistration(description, newDescription, newPassword) {
+      let existingRegistration = this.applicationModel.passwordRegistrations.get(description)
+
+      if (!existingRegistration) return false
+
+      existingRegistration.description = newDescription
+
+      let hasPasswordChanged =
+        newPassword && !this.validatePassword(newPassword, existingRegistration.hash)
+      if (hasPasswordChanged)
+        existingRegistration.hash = this.passwordHasher.generateSaltedHash(newPassword, null)
+
+      this.applicationModel.passwordRegistrations.update(description, existingRegistration)
+
+      if (hasPasswordChanged)
+        this.applicationModel.passwordRegistrations.resetScoreData(newDescription)
+
+      this.writeToLocalStorage()
+
+      return true
     }
   }
 
