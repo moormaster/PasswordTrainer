@@ -135,6 +135,7 @@ describe('PasswordRegistrationCollection', function () {
       passwordRegistrationCollection.update('rehash', registration)
 
       registration = passwordRegistrationCollection.get('newdescription')
+      let registrationByDescription = passwordRegistrationCollection.getAll()
 
       assert.isOk(
         originalRegistration.description != registration.description,
@@ -149,6 +150,11 @@ describe('PasswordRegistrationCollection', function () {
         originalRegistration.scoreData.lastSuccessTimestamp ==
           registration.scoreData.lastSuccessTimestamp,
         'rehash should not change scoreData',
+      )
+
+      assert.isFalse(
+        'rehash' in registrationByDescription,
+        'old registration key should have been removed',
       )
       assert.isOk(
         passwordRegistrationCollection.get('rehash') == null,
