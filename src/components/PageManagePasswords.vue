@@ -11,12 +11,33 @@ export default {
   },
   data() {
     return {
-      dialogVisible: false,
-      dialogDescription: '',
+      confirmDialog: {
+        title: '',
+        text: '',
+
+        isVisible: false,
+        resolveFn: () => {},
+      },
+
+      editDialog: {
+        isVisible: false,
+        description: '',
+      },
     }
   },
   inject: ['appInstance'],
   methods: {
+    confirm(title, text) {
+      this.confirmDialog.title = title
+      this.confirmDialog.text = text
+
+      this.confirmDialog.isVisible = true
+
+      return new Promise((resolve) => {
+        this.confirmDialog.resolveFn = resolve
+      })
+    },
+
     formatPasswordLevel(passwordRegistration) {
       return new LeveledScoreFormatter().formatLevel(
         new LeveledScore(passwordRegistration.scoreData),
@@ -52,11 +73,13 @@ export default {
       return passwordRegistrations
     },
 
-    onAddOrSavePasswordRegistration(description, password) {
-      this.appInstance.addPasswordRegistration(description, password)
+    async onAddPasswordRegistration(description, password) {
+      let registrations = this.appInstance.applicationModel.passwordRegistrations.getAll()
+      if (!(description in registrations) || (await this.confirm(`Overwrite "${description}"?`)))
+        this.appInstance.addPasswordRegistration(description, password)
 
-      this.dialogVisible = false
-      this.dialogDescription = ''
+      this.editDialog.isVisible = false
+      this.editDialog.description = ''
     },
   },
 }
@@ -106,11 +129,41 @@ export default {
   </table>
 
   <passwordDialog
-    v-model:dialogVisible="dialogVisible"
-    v-model:description="dialogDescription"
+    v-model:dialogVisible="editDialog.isVisible"
+    v-model:description="editDialog.description"
     @onAddOrSave="
-      (dialogData) => onAddOrSavePasswordRegistration(dialogData.description, dialogData.password)
+      (dialogData) => onAddPasswordRegistration(dialogData.description, dialogData.password)
     "
   >
   </passwordDialog>
+
+  <v-dialog v-model="confirmDialog.isVisible">
+    <v-card :title="confirmDialog.title" :text="confirmDialog.text">
+      <template v-slot:actions>
+        <v-spacer></v-spacer>
+
+        <v-btn
+          @click="
+            () => {
+              confirmDialog.resolveFn(false)
+              confirmDialog.isVisible = false
+            }
+          "
+        >
+          Abort
+        </v-btn>
+
+        <v-btn
+          @click="
+            () => {
+              confirmDialog.resolveFn(true)
+              confirmDialog.isVisible = false
+            }
+          "
+        >
+          Confirm
+        </v-btn>
+      </template>
+    </v-card>
+  </v-dialog>
 </template>
