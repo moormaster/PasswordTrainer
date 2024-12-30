@@ -123,16 +123,14 @@ export var App = (function () {
     }
 
     /*
-     * find password registration by description
+     * get password registration by description
      */
     getPasswordRegistrationByDescription(description) {
       if (!this.applicationModel) return null
 
       if (!this.applicationModel.passwordRegistrations) return null
 
-      return this.applicationModel.passwordRegistrations.getPasswordRegistrationByDescription(
-        description,
-      )
+      return this.applicationModel.passwordRegistrations.get(description)
     }
   }
 
