@@ -88,7 +88,7 @@ export var PasswordRegistrationCollection = (function () {
 
         // move registration to new slot
         this.collection[registration.description] = this.collection[description]
-        this.collection[description] = null
+        delete this.collection[description]
       }
 
       // set new values
