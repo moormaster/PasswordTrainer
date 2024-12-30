@@ -5,6 +5,7 @@ export default {
   props: {
     dialogVisible: Boolean,
     description: String,
+    mode: String,
   },
   emits: ['update:dialogVisible', 'update:description', 'onAddOrSave'],
   data() {
@@ -52,9 +53,11 @@ export default {
   <v-dialog
     :model-value="dialogVisible"
     @update:model-value="(value) => $emit('update:dialogVisible', value)"
+    @after-enter="$emit('afterEnter')"
+    @after-leave="$emit('afterLeave')"
   >
     <template v-slot:activator="{ props: activatorProps }">
-      <v-btn color="primary" dark v-bind="activatorProps">Add/Edit password</v-btn>
+      <v-btn color="primary" dark v-bind="activatorProps">Add password</v-btn>
     </template>
     <v-form validate-on="submit lazy" @submit.prevent="onSubmit">
       <v-card>
@@ -98,7 +101,9 @@ export default {
             >Abort</v-btn
           >
           <v-spacer></v-spacer>
-          <v-btn tabindex="0" color="blue darken-1" flat type="submit">Add/Save</v-btn>
+          <v-btn tabindex="0" color="blue darken-1" flat type="submit">{{
+            mode == 'add' ? 'Add' : 'Save'
+          }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-form>
