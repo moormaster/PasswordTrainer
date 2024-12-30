@@ -101,6 +101,22 @@ describe('PasswordRegistrationCollection', function () {
     })
   })
 
+  describe('delete()', function () {
+    it('should delete password registration', function () {
+      passwordRegistrationCollection.delete('description1')
+
+      let registrationsMap = passwordRegistrationCollection.getAll()
+      assert.isFalse(
+        'description1' in registrationsMap,
+        'did not remove key for deleted registration',
+      )
+      assert.isNull(
+        passwordRegistrationCollection.get('description1'),
+        'did not delete registration',
+      )
+    })
+  })
+
   describe('update()', function () {
     beforeEach(function () {
       passwordRegistrationCollection.add('rehash', 'hash:salt')

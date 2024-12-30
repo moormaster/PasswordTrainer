@@ -121,6 +121,17 @@ export var App = (function () {
     }
 
     /*
+     * deletes password registration having the given description
+     */
+    deletePasswordRegistration(description) {
+      if (!this.applicationModel.passwordRegistrations.delete(description)) return false
+
+      this.writeToLocalStorage()
+
+      return true
+    }
+
+    /*
      * find the password registration with minimum lock time and maximum fee time
      */
     getMostRecentPasswordRegistration() {
