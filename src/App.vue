@@ -6,6 +6,10 @@ export default {
     return {
       currentTabKey: 'pageTrainPasswords',
 
+      // hack to refresh PageManagePasswords tab when it gets visited
+      // even though the data it is showing is not reactive.
+      renderCount: 0,
+
       tabs: {
         pageTrainPasswords: { title: 'Train' },
         pageManagePasswords: { title: 'Manage' },
@@ -16,6 +20,9 @@ export default {
   methods: {
     onImportSuccess() {
       this.currentTabKey = 'pageTrainPasswords'
+    },
+    onNavigate(tabKey) {
+      if (tabKey == 'pageManagePasswords') this.renderCount++
     },
   },
 }
@@ -39,7 +46,7 @@ export default {
           </v-window-item>
 
           <v-window-item value="pageManagePasswords">
-            <PageManagePasswords />
+            <PageManagePasswords :render-count="renderCount" />
           </v-window-item>
 
           <v-window-item value="pageImportExport">
@@ -54,8 +61,10 @@ export default {
           :key="key"
           :value="key"
           :max-width="`${100 / Object.keys(tabs).length}%`"
-          >{{ item.title }}</v-btn
+          @click="onNavigate(key)"
         >
+          {{ item.title }}
+        </v-btn>
       </v-bottom-navigation>
     </v-layout>
   </v-app>
