@@ -17,12 +17,25 @@ export default {
       },
     }
   },
+  watch: {
+    currentTabKey(newTabKey) {
+      this.onNavigate(newTabKey)
+    },
+  },
   methods: {
     onImportSuccess() {
       this.currentTabKey = 'pageTrainPasswords'
     },
     onNavigate(tabKey) {
+      // ensure that PageManagePassword contents refresh once
+      // when switching to that tab
       if (tabKey == 'pageManagePasswords') this.renderCount++
+
+      if (tabKey == 'pageTrainPasswords') {
+        // ensure that the "next pending" password is selected
+        // when returning to the PagePasswordTrainer tab
+        this.$refs.pagePasswordTrainer.setMostRecentPasswordRegistration()
+      }
     },
   },
 }
@@ -42,7 +55,7 @@ export default {
       <v-main>
         <v-window v-model="currentTabKey">
           <v-window-item value="pageTrainPasswords">
-            <PagePasswordTrainer />
+            <PagePasswordTrainer ref="pagePasswordTrainer" />
           </v-window-item>
 
           <v-window-item value="pageManagePasswords">
@@ -61,7 +74,6 @@ export default {
           :key="key"
           :value="key"
           :max-width="`${100 / Object.keys(tabs).length}%`"
-          @click="onNavigate(key)"
         >
           {{ item.title }}
         </v-btn>
