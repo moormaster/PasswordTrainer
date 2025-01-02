@@ -93,9 +93,6 @@ export var PasswordRegistrationCollection = (function () {
       if (registration.description != description) {
         // description was changed
 
-        // check if slot for new description name is free
-        if (this.collection[registration.description]) return false
-
         // move registration to new slot
         this.collection[registration.description] = this.collection[description]
         delete this.collection[description]

@@ -91,14 +91,13 @@ export default {
     },
 
     async onAddOrSavePasswordRegistration(newDescription, password) {
+      let registrations = this.appInstance.applicationModel.passwordRegistrations.getAll()
+
+      if (this.editDialog.descriptionToEdit != newDescription && newDescription in registrations)
+        if (!(await this.confirm(`Overwrite "${newDescription}"?`))) return
+
       if (!this.editDialog.descriptionToEdit) {
-        // add
-        let registrations = this.appInstance.applicationModel.passwordRegistrations.getAll()
-        if (
-          !(newDescription in registrations) ||
-          (await this.confirm(`Overwrite "${newDescription}"?`))
-        )
-          this.appInstance.addPasswordRegistration(newDescription, password)
+        this.appInstance.addPasswordRegistration(newDescription, password)
       } else {
         this.appInstance.updatePasswordRegistration(
           this.editDialog.descriptionToEdit,
