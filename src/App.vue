@@ -68,7 +68,7 @@ export default {
         </v-window>
       </v-main>
 
-      <v-bottom-navigation v-model="currentTabKey" grow bg-color="primary">
+      <v-bottom-navigation v-model="currentTabKey" grow bg-color="primary" mandatory>
         <v-btn
           v-for="(item, key) in tabs"
           :key="key"
