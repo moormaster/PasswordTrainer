@@ -86,6 +86,11 @@ export default {
     onPasswordEntered(password) {
       if (!password?.length) return
 
+      // workaround: @keydown.enter gets triggered twice on mobile devices
+      //             ignore second trigger to prevent state from changing to 'failure'
+      //             right after success
+      if (this.state != null) return
+
       this.passwordInputValue = ''
 
       // TODO: How to implement auto update?
