@@ -54,6 +54,7 @@ export default {
       :model-value="modelValue"
       @update:model-value="(v) => (lastModelValue = v)"
       @blur="emitPasswordEntered(lastModelValue)"
+      @keydown.enter="emitPasswordEntered(lastModelValue)"
     /><br />
     <span class="passwordscore">{{ message }}</span>
   </div>
