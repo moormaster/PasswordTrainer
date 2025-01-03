@@ -64,6 +64,8 @@ export var LeveledScoreFormatter = (function () {
 
       if (leveledScore.lockHoursLeft)
         return 'locked for ' + formatTime(leveledScore.lockHoursLeft * 60 * 60 * 1000)
+
+      return 'ready'
     }
 
     /*

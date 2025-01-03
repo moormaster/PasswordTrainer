@@ -113,66 +113,60 @@ export default {
 </script>
 
 <template>
-  <table class="passwordTable">
-    <thead>
-      <tr>
-        <th>Description</th>
-        <th>Score / Level</th>
-        <th>Status</th>
-        <th></th>
-        <th></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr
-        class="password"
-        v-for="passwordRegistration in getPasswordRegistrations()"
-        :key="passwordRegistration.description"
-      >
-        <td class="passworddescription">{{ passwordRegistration.description }}</td>
-        <td>
-          <span class="passwordscore">{{ formatPasswordScore(passwordRegistration) }}</span> /
-          <span class="passwordlevel">{{ formatPasswordLevel(passwordRegistration) }}</span>
-        </td>
-        <td style="background-color: lightgrey; padding-top: 3px; padding-bottom: 3px">
-          <span
-            class="passwordlockprogressbar passwordstatus"
-            :style="{
-              backgroundColor: 'white',
-              display: 'block',
-              whiteSpace: 'nowrap',
-              width:
-                100 *
-                  (1 -
-                    this.getLockHoursLeft(passwordRegistration) /
-                      this.getLockHours(passwordRegistration)) +
-                '%',
-            }"
-          >
-            {{ formatPasswordStatus(passwordRegistration) }}
-          </span>
-        </td>
-        <td style="padding-left: 16px">
-          <v-btn icon="$edit" @click="onEdit(passwordRegistration.description)"></v-btn>
-        </td>
-        <td style="padding-left: 16px">
-          <v-btn icon="$delete" @click="onDelete(passwordRegistration.description)"></v-btn>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <passwordDialog
-    v-model:dialogVisible="editDialog.isVisible"
-    v-model:description="editDialog.newDescription"
-    :mode="editDialog.descriptionToEdit == null ? 'add' : 'edit'"
-    @after-leave="onEditDialogClose()"
-    @onAddOrSave="
-      (dialogData) => onAddOrSavePasswordRegistration(dialogData.description, dialogData.password)
-    "
+  <v-card
+    :style="{ margin: '16px', maxWidth: '512px' }"
+    variant="outlined"
+    v-for="passwordRegistration in getPasswordRegistrations()"
+    :key="passwordRegistration.description"
   >
-  </passwordDialog>
+    <v-card-title>{{ passwordRegistration.description }}</v-card-title>
+    <v-card-subtitle
+      >Score: {{ formatPasswordScore(passwordRegistration) }} Level:
+      {{ formatPasswordLevel(passwordRegistration) }}</v-card-subtitle
+    >
+
+    <v-card-text
+      :style="{
+        backgroundColor: 'lightgrey',
+        paddingTop: '3px',
+        paddingBottom: '3px',
+      }"
+    >
+      <span
+        class="passwordlockprogressbar passwordstatus"
+        :style="{
+          backgroundColor: 'white',
+          display: 'block',
+          whiteSpace: 'nowrap',
+          width:
+            100 *
+              (1 -
+                this.getLockHoursLeft(passwordRegistration) /
+                  this.getLockHours(passwordRegistration)) +
+            '%',
+        }"
+      >
+        {{ formatPasswordStatus(passwordRegistration) }}
+      </span>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer />
+      <v-btn icon="$edit" @click="onEdit(passwordRegistration.description)"></v-btn>
+      <v-btn icon="$delete" @click="onDelete(passwordRegistration.description)"></v-btn>
+    </v-card-actions>
+  </v-card>
+  <div :style="{ margin: '16px' }">
+    <passwordDialog
+      v-model:dialogVisible="editDialog.isVisible"
+      v-model:description="editDialog.newDescription"
+      :mode="editDialog.descriptionToEdit == null ? 'add' : 'edit'"
+      @after-leave="onEditDialogClose()"
+      @onAddOrSave="
+        (dialogData) => onAddOrSavePasswordRegistration(dialogData.description, dialogData.password)
+      "
+    >
+    </passwordDialog>
+  </div>
 
   <v-dialog v-model="confirmDialog.isVisible">
     <v-card :title="confirmDialog.title" :text="confirmDialog.text">
