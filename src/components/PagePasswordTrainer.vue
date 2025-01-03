@@ -125,11 +125,11 @@ export default {
 </script>
 
 <template>
-  <div data-role="header" data-position="fixed">
+  <div data-role="header" data-position="fixed" :style="{ margin: '16px' }">
     <h1>Train passwords</h1>
   </div>
 
-  <div data-role="content">
+  <div data-role="content" :style="{ margin: '16px' }">
     <div>
       <label for="select-password" class="select">Select password:</label>
       <v-select
