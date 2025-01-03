@@ -41,11 +41,11 @@ export default {
 </script>
 
 <template>
-  <div data-role="header" data-position="fixed">
+  <div data-role="header" data-position="fixed" :style="{ margin: '16px' }">
     <h1>Import/Export</h1>
   </div>
 
-  <div data-role="content">
+  <div data-role="content" :style="{ margin: '16px' }">
     <div>
       <v-btn @click="onExportClicked" color="primary">Export</v-btn>
       <a
