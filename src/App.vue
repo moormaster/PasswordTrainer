@@ -44,7 +44,7 @@ export default {
 <template>
   <v-app>
     <v-layout full-height>
-      <v-app-bar>
+      <v-app-bar style="position: fixed">
         <v-app-bar-title class="mx-auto" style="text-align: center"
           >Password Trainer{{
             currentTabKey in tabs ? `: ${tabs[currentTabKey].title}` : null
@@ -68,7 +68,13 @@ export default {
         </v-window>
       </v-main>
 
-      <v-bottom-navigation v-model="currentTabKey" grow bg-color="primary" mandatory>
+      <v-bottom-navigation
+        v-model="currentTabKey"
+        grow
+        bg-color="primary"
+        mandatory
+        style="position: fixed"
+      >
         <v-btn
           v-for="(item, key) in tabs"
           :key="key"
