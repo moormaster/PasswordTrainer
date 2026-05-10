@@ -131,6 +131,12 @@ export default {
 
   <div data-role="content" :style="{ margin: '16px' }">
     <div>
+      <div class="banner">
+        ⚠ This page moved to codeberg:
+        <a href="https://moormaster.codeberg.pages/PasswordTrainer"
+          >https://moormaster.codeberg.pages/PasswordTrainer</a
+        >
+      </div>
       <label for="select-password" class="select">Select password:</label>
       <v-select
         id="select-password"
