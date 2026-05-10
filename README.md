@@ -1,4 +1,8 @@
 # HTML5 PasswordTrainer
+
+> [!WARNING]
+> This repository has been archived and migrated to https://codeberg.org/moormaster/PasswordTrainer
+
 ## Features
 - add / change passwords
 - import / export passwords as JSON string
